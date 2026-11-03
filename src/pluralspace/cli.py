@@ -23,6 +23,7 @@ import argparse
 import getpass
 import json
 import sys
+from datetime import datetime, timezone
 from typing import Callable, TypeVar
 
 from . import __version__
@@ -177,7 +178,16 @@ def _emit_json(data) -> int:
 
 
 def _day(ts: str) -> str:
-    return ts[:16].replace("T", " ") if ts else "-"
+    """Format an API timestamp (UTC) in the system's local timezone."""
+    if not ts:
+        return "-"
+    try:
+        dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
+    except ValueError:
+        return ts[:16].replace("T", " ")
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return dt.astimezone().strftime("%Y-%m-%d %H:%M")
 
 
 def cmd_members(args, api: PluralspaceAPI, store: PassStore) -> int:

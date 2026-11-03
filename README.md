@@ -11,7 +11,8 @@ Command Line Interface for [Pluralspace](https://pluralspace.app).
 ## Install
 
 Requires Python 3.9+ and [`pass`](https://www.passwordstore.org/) with a working
-GPG setup. There are no Python dependencies.
+GPG setup. There are no Python dependencies (standard library only). Times are
+shown in your system's local timezone.
 
 ```
 pip install -e .
