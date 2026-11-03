@@ -29,3 +29,16 @@ def test_resolve_mood_exact_then_prefix():
     assert resolve_mood(moods, "ti")["id"] == "3"
     with pytest.raises(CredentialError):
         resolve_mood(moods, "c")
+
+
+def test_editorjs_text_and_relationship():
+    from pluralspace.cli import _field_value, _format_relationship
+    doc = ('{"blocks":[{"type":"header","data":{"text":"gender"}},'
+           '{"type":"list","data":{"style":"unordered","items":[{"content":"<b>pan:</b> a&amp;b","items":[]}]}},'
+           '{"type":"delimiter","data":{}}]}')
+    assert _field_value(doc) == "gender\n- pan: a&b\n---"
+    assert _field_value('{"blocks":[{"type":"delimiter","data":{}}]}') == ""
+    assert _field_value("plain") == "plain"
+    r = {"label": "Sibling", "notes": None, "cross_system": False,
+         "other_member": {"display_label": "Chara"}}
+    assert _format_relationship(r) == "Sibling: Chara"

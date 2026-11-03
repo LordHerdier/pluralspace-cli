@@ -21,8 +21,11 @@ Credentials live in pass at pluralspace/<profile>:
 
 import argparse
 import getpass
+import html
 import json
+import re
 import sys
+import textwrap
 from datetime import datetime, timezone
 from typing import Callable, TypeVar
 
@@ -207,11 +210,80 @@ def cmd_members(args, api: PluralspaceAPI, store: PassStore) -> int:
     return 0
 
 
+def _strip_html(text: str) -> str:
+    text = re.sub(r"<br\s*/?>", "\n", text or "")
+    return html.unescape(re.sub(r"<[^>]+>", "", text)).replace("\xa0", " ").strip()
+
+
+def _list_lines(items, style: str, depth: int = 0):
+    for i, item in enumerate(items or [], 1):
+        if isinstance(item, str):
+            item = {"content": item}
+        marker = f"{i}." if style == "ordered" else "-"
+        yield "  " * depth + f"{marker} {_strip_html(item.get('content', ''))}"
+        yield from _list_lines(item.get("items"), style, depth + 1)
+
+
+def _block_lines(block: dict):
+    """Render one Editor.js block as plain-text lines (media become a marker/URL)."""
+    kind, data = block.get("type"), block.get("data") or {}
+    if kind in ("paragraph", "header"):
+        yield _strip_html(data.get("text", ""))
+    elif kind == "quote":
+        yield f"> {_strip_html(data.get('text', ''))}"
+        if data.get("caption"):
+            yield f"  — {_strip_html(data['caption'])}"
+    elif kind == "list":
+        yield from _list_lines(data.get("items"), data.get("style", "unordered"))
+    elif kind == "table":
+        for row in data.get("content", []):
+            yield " | ".join(_strip_html(c) for c in row)
+    elif kind == "columns":
+        for col in data.get("cols", []):
+            for b in col.get("blocks", []):
+                yield from _block_lines(b)
+    elif kind == "image":
+        yield f"[image: {(data.get('file') or {}).get('url', '')}]"
+    elif kind == "gallery":
+        for img in data.get("images", []):
+            yield f"[image: {(img.get('file') or {}).get('url', '')}]"
+    elif kind == "delimiter":
+        yield "---"
+
+
+def editorjs_text(value) -> str:
+    """Plain text for an Editor.js document (dict or JSON string); "" if empty or not one."""
+    if isinstance(value, str):
+        if not value.lstrip().startswith("{"):
+            return value
+        try:
+            value = json.loads(value)
+        except ValueError:
+            return value
+    if not isinstance(value, dict) or "blocks" not in value:
+        return ""
+    lines = [ln for b in value["blocks"] for ln in _block_lines(b)]
+    # a document of nothing but delimiters/blank lines is empty
+    if not any(ln and ln != "---" for ln in lines):
+        return ""
+    return "\n".join(ln for ln in lines if ln)
+
+
 def _field_value(value):
-    """Custom field values are a string, or a list (padded with "") when multiple."""
+    """Custom field values are a string, a list (padded with "") when multiple, or rich text."""
     if isinstance(value, list):
         return ", ".join(v for v in value if v)
-    return value or ""
+    return editorjs_text(value) if value else ""
+
+
+def _format_relationship(r: dict) -> str:
+    other = r.get("other_member") or {}
+    line = f"{r.get('label', '?')}: {other.get('display_label', '(hidden)')}"
+    if r.get("cross_system"):
+        line += "  [cross-system]"
+    if r.get("notes"):
+        line += f"  - {r['notes']}"
+    return line
 
 
 def cmd_member(args, api: PluralspaceAPI, store: PassStore) -> int:
@@ -247,11 +319,15 @@ def cmd_member(args, api: PluralspaceAPI, store: PassStore) -> int:
     if fields:
         print("\nFields:")
         for name, value in fields:
-            print(f"  {name}: {value}")
+            if "\n" in value:
+                print(f"  {name}:")
+                print(textwrap.indent(value, "    "))
+            else:
+                print(f"  {name}: {value}")
     if props.get("relationships"):
         print("\nRelationships:")
         for r in props["relationships"]:
-            print("  " + json.dumps(r))  # shape not yet seen in a capture
+            print("  " + _format_relationship(r))
     history = props.get("frontHistory") or []
     if history:
         print("\nRecent fronts:")
