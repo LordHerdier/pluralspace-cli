@@ -82,6 +82,10 @@ pluralspace switch Briar --dry-run            # print the request, change nothin
 
 Fronters already in the new set keep their original start time.
 
+## Acknowledgements
+
+Thank you so much to [@SiteRelEnby](https://github.com/SiteRelEnby) for their [simplyplural-cli](https://github.com/SiteRelEnby/simplyplural-cli) that I took inspiration for this project from. If you used their tool, this will feel right at home!
+
 ## Development
 
 ```
