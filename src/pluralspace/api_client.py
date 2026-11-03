@@ -270,6 +270,22 @@ class PluralspaceAPI:
         """Full profile props for one member (by full id)."""
         return self.page_deferred(f"/members/{urllib.parse.quote(member_id)}")
 
+    # -- moods ------------------------------------------------------------
+
+    def moods(self) -> List[Dict[str, Any]]:
+        return self._get_json("/system/moods/search?q=")["data"]
+
+    def atmosphere(self) -> Dict[str, Any]:
+        """The dashboard's headspace summary, including the current mood."""
+        payload = self.page("/space", component="App/Dashboard", partial=["atmosphere"])
+        return payload["props"]["atmosphere"]
+
+    def set_mood(self, mood_id: str) -> None:
+        self._mutate("/space/mood", {"mood": mood_id})
+
+    def clear_mood(self) -> None:
+        self._mutate("/space/mood", {}, method="DELETE")
+
     # -- switching --------------------------------------------------------
 
     def front_types(self) -> List[Dict[str, Any]]:
@@ -312,14 +328,14 @@ class PluralspaceAPI:
         self._save_jar()
         return data
 
-    def _mutate(self, path: str, body: dict) -> None:
+    def _mutate(self, path: str, body: dict, method: str = "POST") -> None:
         if not self.has_session():
             raise AuthError("not logged in")
         if self.version is None:
             self._bootstrap_version()
-        status, headers, text = self._request("POST", path, json_body=body)
+        status, headers, text = self._request(method, path, json_body=body)
         self._check_session(status, headers)
-        # Inertia answers a successful form post with a redirect back to /space.
+        # Inertia answers a successful form post with a redirect (302, or 303 for DELETE).
         if status not in (200, 204, 302, 303):
             detail = ""
             try:
@@ -327,7 +343,7 @@ class PluralspaceAPI:
                                    json.loads(text).get("errors", {}).items())
             except (ValueError, AttributeError):
                 pass
-            raise APIError(f"POST {path} returned {status} {detail}".strip())
+            raise APIError(f"{method} {path} returned {status} {detail}".strip())
         self._save_jar()
 
     @staticmethod

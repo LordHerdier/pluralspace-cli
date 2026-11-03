@@ -8,6 +8,7 @@ Usage:
     pluralspace whoami                  Show the logged-in account
     pluralspace members [-q TEXT]       List members (--archived, --fronting, --json)
     pluralspace member NAME             Show one member's profile (--json for everything)
+    pluralspace mood [NAME]             Show, set (NAME), --list, or --clear the mood
     pluralspace fronting                Show current fronters (alias: who)
     pluralspace history [--month YYYY-MM]  Front history for a month
     pluralspace switch NAME[:TYPE]...   Set the front (--add keeps current fronters)
@@ -129,6 +130,38 @@ def cmd_switch(args, api: PluralspaceAPI, store: PassStore) -> int:
     _authed(api, store, run)
     if not args.dry_run:
         return cmd_fronting(argparse.Namespace(json=False), api, store)
+    return 0
+
+
+def resolve_mood(moods, ref: str) -> dict:
+    """Match a mood by name: exact first, then a unique prefix."""
+    low = ref.lower()
+    hits = ([m for m in moods if m["name"].lower() == low]
+            or [m for m in moods if m["name"].lower().startswith(low)])
+    if len(hits) != 1:
+        names = ", ".join(m["name"] for m in moods)
+        raise CredentialError(f"mood '{ref}' " + ("not found" if not hits else "is ambiguous")
+                              + f"; available: {names}")
+    return hits[0]
+
+
+def cmd_mood(args, api: PluralspaceAPI, store: PassStore) -> int:
+    if args.list:
+        moods = _authed(api, store, api.moods)
+        if args.json:
+            return _emit_json(moods)
+        for m in moods:
+            print(f"{m['name']:<12} {m.get('tagline', '')}")
+        return 0
+    if args.clear:
+        _authed(api, store, api.clear_mood)
+    elif args.name:
+        _authed(api, store, lambda: api.set_mood(resolve_mood(api.moods(), args.name)["id"]))
+    atmosphere = _authed(api, store, api.atmosphere)
+    if args.json:
+        return _emit_json(atmosphere)
+    print(f"Mood: {atmosphere.get('mood_label') or '(none)'}")
+    print(atmosphere.get("tagline", ""))
     return 0
 
 
@@ -286,6 +319,12 @@ def main(argv=None) -> int:
     p.add_argument("--silent", action="store_true", help="no notifications")
     p.add_argument("--dry-run", action="store_true", help="print the request, change nothing")
     p.set_defaults(func=cmd_switch)
+    p = sub.add_parser("mood", help="show, set or clear the system mood")
+    p.add_argument("name", nargs="?", help="mood to set (name or unique prefix)")
+    p.add_argument("--list", action="store_true", help="list available moods")
+    p.add_argument("--clear", action="store_true", help="clear the current mood")
+    p.add_argument("--json", action="store_true")
+    p.set_defaults(func=cmd_mood)
     sub.add_parser("end", help="end all fronts").set_defaults(func=cmd_end)
     p = sub.add_parser("history", help="front history for a month")
     p.add_argument("--month", help="YYYY-MM (default: current)")

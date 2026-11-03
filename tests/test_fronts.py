@@ -18,3 +18,14 @@ def test_resolve_front_type_by_name_or_slug():
     types = [{"id": "1", "name": "Co-Front", "slug": "co_front"}, {"id": "2", "name": "Front", "slug": "front"}]
     assert resolve_front_type(types, "front")["id"] == "2"
     assert resolve_front_type(types, "co_front")["id"] == "1"
+
+
+def test_resolve_mood_exact_then_prefix():
+    import pytest
+    from pluralspace.cli import resolve_mood
+    from pluralspace.credentials import CredentialError
+    moods = [{"id": "1", "name": "Calm"}, {"id": "2", "name": "Content"}, {"id": "3", "name": "Tired"}]
+    assert resolve_mood(moods, "calm")["id"] == "1"
+    assert resolve_mood(moods, "ti")["id"] == "3"
+    with pytest.raises(CredentialError):
+        resolve_mood(moods, "c")
