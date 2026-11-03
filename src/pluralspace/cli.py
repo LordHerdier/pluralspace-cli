@@ -7,6 +7,7 @@ Usage:
     pluralspace logout                  Drop the local session
     pluralspace whoami                  Show the logged-in account
     pluralspace members [-q TEXT]       List members (--archived, --fronting, --json)
+    pluralspace member NAME             Show one member's profile (--json for everything)
     pluralspace fronting                Show current fronters (alias: who)
     pluralspace history [--month YYYY-MM]  Front history for a month
     pluralspace switch NAME[:TYPE]...   Set the front (--add keeps current fronters)
@@ -163,6 +164,63 @@ def cmd_members(args, api: PluralspaceAPI, store: PassStore) -> int:
     return 0
 
 
+def _field_value(value):
+    """Custom field values are a string, or a list (padded with "") when multiple."""
+    if isinstance(value, list):
+        return ", ".join(v for v in value if v)
+    return value or ""
+
+
+def cmd_member(args, api: PluralspaceAPI, store: PassStore) -> int:
+    def run():
+        member = resolve_member(api, args.name)
+        return api.member(member["id"])
+
+    props = _authed(api, store, run)
+    if args.json:
+        keys = ("member", "customFields", "assignedGroups", "relationships",
+                "frontHistory", "connectedSystems", "currentLocation")
+        return _emit_json({k: props.get(k) for k in keys})
+    m = props["member"]
+    flags = [f for f, on in (("custom front", m.get("is_custom_front")),
+                             ("pinned", m.get("is_pinned")),
+                             ("archived", m.get("is_archived"))) if on]
+    print(m["display_label"] + (f" ({m['pronouns']})" if m.get("pronouns") else "")
+          + (f"  [{', '.join(flags)}]" if flags else ""))
+    print(f"id: {m['id']}")
+    if m.get("aliases"):
+        print("aliases:", ", ".join(m["aliases"]))
+    if m.get("role"):
+        print("roles:", ", ".join(m["role"]))
+    if props.get("assignedGroups"):
+        print("groups:", ", ".join(g["name"] for g in props["assignedGroups"]))
+    desc = (props.get("editState") or {}).get("description")
+    if desc:
+        if not args.full and len(desc) > 400:
+            desc = desc[:400] + " … (--full for the rest)"
+        print(f"\n{desc}")
+    fields = [(c["name"], _field_value(c["value"])) for c in props.get("customFields", [])]
+    fields = [(n, v) for n, v in fields if v]
+    if fields:
+        print("\nFields:")
+        for name, value in fields:
+            print(f"  {name}: {value}")
+    if props.get("relationships"):
+        print("\nRelationships:")
+        for r in props["relationships"]:
+            print("  " + json.dumps(r))  # shape not yet seen in a capture
+    history = props.get("frontHistory") or []
+    if history:
+        print("\nRecent fronts:")
+        for h in history[:args.history]:
+            end = "now" if not h.get("ended_at") else _day(h["ended_at"])
+            others = [x["display_label"] for x in h["members"] if x["id"] != m["id"]]
+            with_ = f"  with {', '.join(others)}" if others else ""
+            print(f"  {_day(h['started_at'])} -> {end}  ({h.get('duration_human', '')})"
+                  f"  [{(h.get('front_type') or {}).get('name', '')}]{with_}")
+    return 0
+
+
 def cmd_fronting(args, api: PluralspaceAPI, store: PassStore) -> int:
     fronts = _authed(api, store, api.current_fronts)
     if args.json:
@@ -209,6 +267,12 @@ def main(argv=None) -> int:
     p.add_argument("--type", help="raw server-side type filter (default: alter)")
     p.add_argument("--json", action="store_true")
     p.set_defaults(func=cmd_members)
+    p = sub.add_parser("member", help="show one member's profile")
+    p.add_argument("name", help="member name or id suffix")
+    p.add_argument("--full", action="store_true", help="don't truncate the description")
+    p.add_argument("--history", type=int, default=5, help="recent fronts to show (default 5)")
+    p.add_argument("--json", action="store_true")
+    p.set_defaults(func=cmd_member)
     for name in ("fronting", "who"):
         p = sub.add_parser(name, help="show current fronters")
         p.add_argument("--json", action="store_true")

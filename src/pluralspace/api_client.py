@@ -266,6 +266,10 @@ class PluralspaceAPI:
         path = "/space/fronts" + (f"?month={urllib.parse.quote(month)}" if month else "")
         return dedupe_fronts(self.page_deferred(path)["weeks"])
 
+    def member(self, member_id: str) -> Dict[str, Any]:
+        """Full profile props for one member (by full id)."""
+        return self.page_deferred(f"/members/{urllib.parse.quote(member_id)}")
+
     # -- switching --------------------------------------------------------
 
     def front_types(self) -> List[Dict[str, Any]]:
@@ -295,6 +299,8 @@ class PluralspaceAPI:
     def _get_json(self, path: str):
         if not self.has_session():
             raise AuthError("not logged in")
+        if self.version is None:
+            self._bootstrap_version()
         status, headers, body = self._request("GET", path)
         self._check_session(status, headers)
         if status != 200:
