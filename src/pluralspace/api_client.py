@@ -223,3 +223,119 @@ class PluralspaceAPI:
         if not user:
             raise AuthError("session expired")
         return user
+
+    def page_deferred(self, path: str) -> Dict[str, Any]:
+        """Fetch a page plus the props Inertia defers to a follow-up request."""
+        first = self.page(path)
+        names = [n for group in first.get("deferredProps", {}).values() for n in group]
+        if not names:
+            return first.get("props", {})
+        second = self.page(path, partial=names, component=first["component"])
+        return {**first.get("props", {}), **second.get("props", {})}
+
+    # -- members / fronts -------------------------------------------------
+
+    def members(self, query: str = "", archived: bool = False, fronting: bool = False,
+                member_type: Optional[str] = None) -> List[Dict[str, Any]]:
+        params: Dict[str, Any] = {}
+        if query:
+            params["q"] = query
+        if archived:
+            params["status"] = "archived"
+        if fronting:
+            params["fronting"] = "1"
+        if member_type:
+            params["type"] = member_type
+        out: List[Dict[str, Any]] = []
+        page = 1
+        while True:
+            qs = urllib.parse.urlencode({**params, "page": page})
+            members = self.page_deferred(f"/members?{qs}")["members"]
+            out.extend(members["data"])
+            if page >= members["meta"]["last_page"]:
+                return out
+            page += 1
+
+    def current_fronts(self) -> List[Dict[str, Any]]:
+        payload = self.page("/space", component="App/Dashboard",
+                            partial=["currentFronts", "currentFrontsTotal"])
+        return payload["props"]["currentFronts"]
+
+    def front_history(self, month: Optional[str] = None) -> List[Dict[str, Any]]:
+        """Fronts touching the given YYYY-MM month (default: current), newest first."""
+        path = "/space/fronts" + (f"?month={urllib.parse.quote(month)}" if month else "")
+        return dedupe_fronts(self.page_deferred(path)["weeks"])
+
+    # -- switching --------------------------------------------------------
+
+    def front_types(self) -> List[Dict[str, Any]]:
+        payload = self.page("/space", component="App/Dashboard",
+                            partial=["frontTypes", "subsystemFrontTypes"])
+        props = payload["props"]
+        return props["frontTypes"] + props.get("subsystemFrontTypes", [])
+
+    def search_members(self, query: str) -> List[Dict[str, Any]]:
+        """The front picker's search; includes custom fronts, unlike /members."""
+        qs = urllib.parse.urlencode({"tree": "front", "q": query})
+        return self._get_json(f"/space/members/search?{qs}")
+
+    def set_fronts(self, fronters: Dict[str, str], comment: Optional[str] = None,
+                   silent: bool = False) -> None:
+        """Replace the whole front set. fronters maps member id -> front type id.
+
+        The server diffs against the current set: unchanged fronters keep
+        their start time, so this is safe to send with the full list.
+        """
+        self._mutate("/space/fronts/start-multi",
+                     {"fronters": fronters, "comment": comment, "silent": silent})
+
+    def end_all(self) -> None:
+        self._mutate("/space/fronts/end-all", {})
+
+    def _get_json(self, path: str):
+        if not self.has_session():
+            raise AuthError("not logged in")
+        status, headers, body = self._request("GET", path)
+        self._check_session(status, headers)
+        if status != 200:
+            raise APIError(f"GET {path} returned {status}")
+        try:
+            data = json.loads(body)
+        except ValueError:
+            raise AuthError("session expired") from None
+        self._save_jar()
+        return data
+
+    def _mutate(self, path: str, body: dict) -> None:
+        if not self.has_session():
+            raise AuthError("not logged in")
+        if self.version is None:
+            self._bootstrap_version()
+        status, headers, text = self._request("POST", path, json_body=body)
+        self._check_session(status, headers)
+        # Inertia answers a successful form post with a redirect back to /space.
+        if status not in (200, 204, 302, 303):
+            detail = ""
+            try:
+                detail = "; ".join(f"{k}: {v}" for k, v in
+                                   json.loads(text).get("errors", {}).items())
+            except (ValueError, AttributeError):
+                pass
+            raise APIError(f"POST {path} returned {status} {detail}".strip())
+        self._save_jar()
+
+    @staticmethod
+    def _check_session(status: int, headers) -> None:
+        if status in (401, 419) or (
+                status in (301, 302, 303) and "/login" in (headers.get("Location") or "")):
+            raise AuthError("session expired")
+
+
+def dedupe_fronts(weeks: List[List[Dict[str, Any]]]) -> List[Dict[str, Any]]:
+    """The calendar repeats a front on every day it spans; keep each once."""
+    seen: Dict[str, Dict[str, Any]] = {}
+    for week in weeks:
+        for day in week:
+            for front in day["fronts"]:
+                seen.setdefault(front["id"], front)
+    return sorted(seen.values(), key=lambda f: f["started_at"], reverse=True)

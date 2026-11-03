@@ -1,0 +1,20 @@
+from pluralspace.api_client import dedupe_fronts
+
+
+def _front(id_, started):
+    return {"id": id_, "started_at": started}
+
+
+def test_dedupe_keeps_each_front_once_newest_first():
+    weeks = [[
+        {"fronts": [_front("a", "2026-09-08T00:00:00+00:00")]},
+        {"fronts": [_front("a", "2026-09-08T00:00:00+00:00"), _front("b", "2026-10-01T00:00:00+00:00")]},
+    ]]
+    assert [f["id"] for f in dedupe_fronts(weeks)] == ["b", "a"]
+
+
+def test_resolve_front_type_by_name_or_slug():
+    from pluralspace.cli import resolve_front_type
+    types = [{"id": "1", "name": "Co-Front", "slug": "co_front"}, {"id": "2", "name": "Front", "slug": "front"}]
+    assert resolve_front_type(types, "front")["id"] == "2"
+    assert resolve_front_type(types, "co_front")["id"] == "1"
