@@ -53,10 +53,10 @@ Use `--profile NAME` to keep separate accounts (`pluralspace/NAME` in pass).
 | Command                                                             | What it does                       |
 | ------------------------------------------------------------------- | ---------------------------------- |
 | `members [-q TEXT] [--archived] [--fronting] [--json]`              | List members                       |
-| `member NAME [--history N] [--full] [--json]`                       | Show one member's profile          |
-| `fronting` (alias `who`) `[--json]`                                 | Show who is fronting now           |
+| `member` (alias `m`) `NAME [--history N] [--full] [--json]`         | Show one member's profile          |
+| `fronting` (aliases `who`, `w`) `[--json]`                          | Show who is fronting now           |
 | `history [--month YYYY-MM] [--json]`                                | Front history for this month          |
-| `switch NAME[:TYPE]... [--add] [-c COMMENT] [--silent] [--dry-run]` | Set the current front              |
+| `switch` (alias `sw`) `NAME[:TYPE]... [--add] [-c COMMENT] [--silent] [--dry-run]` | Set the current front              |
 | `end`                                                               | End all fronts                     |
 | `mood [NAME] [--list] [--clear] [--json]`                           | Show, set or clear the system mood |
 
