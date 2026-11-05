@@ -25,10 +25,11 @@ real account with no undo, so they need to be properly safeguarded.
       search hit, so `plsp switch Al` can front "Alex". Writes should require an
       exact name or ID match, but fuzzy matching can stay for reads.
 
-- [ ] **Make `--dry-run` useful and universal.** Today it only prints the
-      request body as raw IDs, but it _should_ show a readable diff against the
-      current state (e.g., who gets added, ended, keeps their start time, etc.).
-      Needs added to `end` and `mood` as well.
+- [x] **Make `--dry-run` useful and universal.** On `switch`, `end` and
+      `mood`, it prints a readable diff against the current state (who starts,
+      ends, keeps their start time, or changes type; or the old -> new mood)
+      instead of the raw request body. Still to do: `--json` output for dry
+      runs, and confirming whether a type change keeps the start time.
 
 - [ ] **Make replace-vs-add hard to hit by accident.** `switch` currently
       replaces the whole front set unless `--add` is passed. We either need a

@@ -167,28 +167,99 @@ def resolve_member(api: PluralspaceAPI, ref: str, exact: bool = False) -> dict:
     return hits[0]
 
 
+def plan_fronts(current, fronters: dict) -> dict:
+    """Diff the current front list against the requested {member_id: type_id}.
+
+    Returns member-id lists: `start`, `keep` (same type, keeps its start time),
+    `retype` (already fronting, different type) and `end`, plus `current`
+    ({member_id: front} for naming).
+    """
+    now = {f["member_id"]: f for f in current}
+    return {
+        "start": [m for m in fronters if m not in now],
+        "keep": [
+            m
+            for m in fronters
+            if m in now and now[m]["system_front_type_id"] == fronters[m]
+        ],
+        "retype": [
+            m
+            for m in fronters
+            if m in now and now[m]["system_front_type_id"] != fronters[m]
+        ],
+        "end": [m for m in now if m not in fronters],
+        "current": now,
+        "target": fronters,
+    }
+
+
+def format_front_plan(plan, labels, type_names, comment=None, silent=False):
+    """Human-readable lines for a plan_fronts result. `labels` names members
+    that were resolved from arguments; the rest come from the current fronts."""
+    now = plan["current"]
+
+    def name(mid):
+        """display_label everywhere, so a member reads the same on every line."""
+        shown = (now.get(mid, {}).get("member") or {}).get("display_label")
+        return shown or labels.get(mid) or "(hidden)"
+
+    def tname(tid):
+        return type_names.get(tid, tid)
+
+    lines = ["Dry run: no changes made. Would:"]
+    for mid in plan["start"]:
+        lines.append(f"  + start  {name(mid)}  [{tname(plan['target'][mid])}]")
+    for mid in plan["retype"]:
+        old = tname(now[mid]["system_front_type_id"])
+        lines.append(f"  ~ retype {name(mid)}  [{old} -> {tname(plan['target'][mid])}]")
+    for mid in plan["keep"]:
+        lines.append(
+            f"  = keep   {name(mid)}  [{tname(plan['target'][mid])}]"
+            f"  since {_day(now[mid]['started_at'])}"
+        )
+    for mid in plan["end"]:
+        lines.append(
+            f"  - end    {name(mid)}  [{(now[mid].get('front_type') or {}).get('name', '')}]"
+        )
+    if not any(plan[k] for k in ("start", "retype", "keep", "end")):
+        lines.append("  (nobody fronting before or after)")
+    if comment:
+        lines.append(f"  comment: {comment}")
+    if silent:
+        lines.append("  silent: no notifications")
+    return lines
+
+
 def cmd_switch(args, api: PluralspaceAPI, store: PassStore) -> int:
     def run():
         types = api.front_types()
         default = resolve_front_type(types, args.type or DEFAULT_FRONT_TYPE)
+        current = api.current_fronts() if args.add or args.dry_run else []
         fronters = {}
         if args.add:
-            for f in api.current_fronts():
+            for f in current:
                 fronters[f["member_id"]] = f["system_front_type_id"]
+        labels = {}
         for ref in args.members:
             name, _, type_ref = ref.partition(":")
             member = resolve_member(api, name, exact=True)
             ftype = resolve_front_type(types, type_ref) if type_ref else default
             fronters[member["id"]] = ftype["id"]
+            labels[member["id"]] = (
+                member.get("display_label")
+                or member.get("display_name")
+                or member.get("name")
+            )
         if args.dry_run:
             print(
-                json.dumps(
-                    {
-                        "fronters": fronters,
-                        "comment": args.comment,
-                        "silent": args.silent,
-                    },
-                    indent=2,
+                "\n".join(
+                    format_front_plan(
+                        plan_fronts(current, fronters),
+                        labels,
+                        {t["id"]: t["name"] for t in types},
+                        args.comment,
+                        args.silent,
+                    )
                 )
             )
             return
@@ -222,6 +293,24 @@ def cmd_mood(args, api: PluralspaceAPI, store: PassStore) -> int:
         for m in moods:
             print(f"{m['name']:<12} {m.get('tagline', '')}")
         return 0
+    if args.dry_run and not (args.clear or args.name):
+        raise CredentialError("--dry-run needs a mood NAME or --clear")
+    if args.dry_run:
+
+        def preview():
+            before = api.atmosphere().get("mood_label") or "(none)"
+            after = (
+                "(none)" if args.clear else resolve_mood(api.moods(), args.name)["name"]
+            )
+            return before, after
+
+        before, after = _authed(api, store, preview)
+        print("Dry run: no changes made. Would:")
+        if before.casefold() == after.casefold():
+            print(f"  mood: {before} (unchanged)")
+        else:
+            print(f"  mood: {before} -> {after}")
+        return 0
     if args.clear:
         _authed(api, store, api.clear_mood)
     elif args.name:
@@ -237,6 +326,10 @@ def cmd_mood(args, api: PluralspaceAPI, store: PassStore) -> int:
 
 
 def cmd_end(args, api: PluralspaceAPI, store: PassStore) -> int:
+    if args.dry_run:
+        current = _authed(api, store, api.current_fronts)
+        print("\n".join(format_front_plan(plan_fronts(current, {}), {}, {})))
+        return 0
     _authed(api, store, api.end_all)
     print("Nobody is fronting")
     return 0
@@ -516,16 +609,23 @@ def main(argv=None) -> int:
     p.add_argument("-c", "--comment")
     p.add_argument("--silent", action="store_true", help="no notifications")
     p.add_argument(
-        "--dry-run", action="store_true", help="print the request, change nothing"
+        "--dry-run", action="store_true", help="show what would change, change nothing"
     )
     p.set_defaults(func=cmd_switch)
     p = sub.add_parser("mood", help="show, set or clear the system mood")
     p.add_argument("name", nargs="?", help="mood to set (exact name)")
     p.add_argument("--list", action="store_true", help="list available moods")
     p.add_argument("--clear", action="store_true", help="clear the current mood")
+    p.add_argument(
+        "--dry-run", action="store_true", help="show what would change, change nothing"
+    )
     p.add_argument("--json", action="store_true")
     p.set_defaults(func=cmd_mood)
-    sub.add_parser("end", help="end all fronts").set_defaults(func=cmd_end)
+    p = sub.add_parser("end", help="end all fronts")
+    p.add_argument(
+        "--dry-run", action="store_true", help="show what would change, change nothing"
+    )
+    p.set_defaults(func=cmd_end)
     p = sub.add_parser("history", help="front history for this month")
     p.add_argument("--month", help="YYYY-MM (default: current)")
     p.add_argument("--json", action="store_true")

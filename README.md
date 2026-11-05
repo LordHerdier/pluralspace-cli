@@ -59,8 +59,8 @@ Use `--profile NAME` to keep separate accounts (`pluralspace/NAME` in pass).
 | `fronting` (aliases `who`, `w`) `[--json]`                                         | Show who is fronting now           |
 | `history [--month YYYY-MM] [--json]`                                               | Front history for this month       |
 | `switch` (alias `sw`) `NAME[:TYPE]... [--add] [-c COMMENT] [--silent] [--dry-run]` | Set the current front              |
-| `end`                                                                              | End all fronts                     |
-| `mood [NAME] [--list] [--clear] [--json]`                                          | Show, set or clear the system mood |
+| `end [--dry-run]`                                                                  | End all fronts                     |
+| `mood [NAME] [--list] [--clear] [--dry-run] [--json]`                              | Show, set or clear the system mood |
 
 Global flags: `--profile NAME`, `--debug` (print request status codes).
 
@@ -87,10 +87,14 @@ default is `Front`.
 plsp switch Briar                      # only Briar fronts
 plsp switch Briar --add -c "tired"     # add Briar to whoever is fronting
 plsp switch 5a1925c1:co-front Mari     # Ada (by id) as Co-Front, Mari as Front
-plsp switch Briar --dry-run            # print the request, change nothing
+plsp switch Briar --dry-run            # show who starts/ends/keeps, change nothing
 ```
 
 Fronters already in the new set keep their original start time.
+
+`--dry-run` (on `switch`, `end` and `mood`) fetches the current state and prints
+a diff instead of writing anything: `+ start`, `- end`, `= keep` (with the
+original start time) and `~ retype` for each fronter, or `mood: old -> new`.
 
 ## Acknowledgements
 

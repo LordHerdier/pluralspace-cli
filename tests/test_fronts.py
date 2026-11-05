@@ -101,3 +101,34 @@ def test_match_member_exact_rejects_partial_and_empty():
 
     for ref in ("Al", "Char", "lex", "", "  "):
         assert match_member_exact(FUZZY_MEMBERS, ref) == []
+
+
+def _cur(mid, tid, label="X"):
+    return {
+        "member_id": mid,
+        "system_front_type_id": tid,
+        "started_at": "2026-11-03T03:04:19+00:00",
+        "member": {"display_label": label},
+        "front_type": {"name": tid},
+    }
+
+
+def test_plan_fronts_classifies_changes():
+    from pluralspace.cli import plan_fronts
+
+    current = [_cur("a", "t1"), _cur("b", "t1"), _cur("c", "t1")]
+    plan = plan_fronts(current, {"a": "t1", "b": "t2", "d": "t1"})
+    assert plan["keep"] == ["a"]
+    assert plan["retype"] == ["b"]
+    assert plan["start"] == ["d"]
+    assert plan["end"] == ["c"]
+
+
+def test_format_front_plan_names_and_end_all():
+    from pluralspace.cli import format_front_plan, plan_fronts
+
+    current = [_cur("a", "t1", "Alex")]
+    lines = format_front_plan(plan_fronts(current, {}), {}, {"t1": "Front"})
+    assert any("end" in ln and "Alex" in ln for ln in lines)
+    empty = format_front_plan(plan_fronts([], {}), {}, {})
+    assert "nobody fronting" in empty[-1]
