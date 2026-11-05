@@ -38,7 +38,7 @@
             (pkgs.lib.makeBinPath [ pkgs.pass ])
           ];
 
-          meta.mainProgram = "pluralspace";
+          meta.mainProgram = "plsp";
         };
         default = pluralspace;
       });

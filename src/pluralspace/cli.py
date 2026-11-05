@@ -367,7 +367,7 @@ def cmd_history(args, api: PluralspaceAPI, store: PassStore) -> int:
 
 
 def main(argv=None) -> int:
-    parser = argparse.ArgumentParser(prog="pluralspace", description="Pluralspace CLI")
+    parser = argparse.ArgumentParser(prog="plsp", description="Pluralspace CLI")
     parser.add_argument("--version", action="version", version=__version__)
     parser.add_argument("--profile", default="default")
     parser.add_argument("--debug", action="store_true")

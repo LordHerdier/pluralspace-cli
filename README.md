@@ -16,7 +16,7 @@ shown in your system's local timezone.
 
 ```
 pip install -e .
-pluralspace --help
+plsp --help
 ```
 
 Or run it straight from a checkout:
@@ -28,9 +28,9 @@ PYTHONPATH=src python3 -m pluralspace.cli --help
 ## Authentication
 
 ```
-pluralspace login      # prompts for email/password, offers to save them to pass
-pluralspace whoami     # show the logged-in account
-pluralspace logout     # drop the local session (the pass entry is kept)
+plsp login      # prompts for email/password, offers to save them to pass
+plsp whoami     # show the logged-in account
+plsp logout     # drop the local session (the pass entry is kept)
 ```
 
 Credentials are stored in `pass` at `pluralspace/<profile>`: the password on the
@@ -75,10 +75,10 @@ fronters. Append `:TYPE` to give a member a front type by name or slug. The
 default is `Front`.
 
 ```
-pluralspace switch Briar                      # only Briar fronts
-pluralspace switch Briar --add -c "tired"     # add Briar to whoever is fronting
-pluralspace switch 5a1925c1:co-front Mari     # Ada (by id) as Co-Front, Mari as Front
-pluralspace switch Briar --dry-run            # print the request, change nothing
+plsp switch Briar                      # only Briar fronts
+plsp switch Briar --add -c "tired"     # add Briar to whoever is fronting
+plsp switch 5a1925c1:co-front Mari     # Ada (by id) as Co-Front, Mari as Front
+plsp switch Briar --dry-run            # print the request, change nothing
 ```
 
 Fronters already in the new set keep their original start time.
