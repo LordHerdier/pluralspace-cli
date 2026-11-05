@@ -1,5 +1,7 @@
 # Pluralspace CLI
 
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
+
 Command Line Interface for [Pluralspace](https://pluralspace.app).
 
 > **Unofficial and experimental.** Pluralspace's public API isn't released yet,
@@ -102,3 +104,7 @@ The layout:
 
 Endpoints were worked out from browser HAR captures. Keep captures out of git:
 they contain live session cookies, and `*.har` is already in `.gitignore`.
+
+## License
+
+GPL-3.0-or-later. See [LICENSE](LICENSE).

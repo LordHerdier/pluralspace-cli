@@ -39,6 +39,7 @@
           ];
 
           meta.mainProgram = "plsp";
+          meta.license = pkgs.lib.licenses.gpl3Plus;
         };
         default = pluralspace;
       });
