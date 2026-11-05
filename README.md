@@ -55,7 +55,7 @@ Use `--profile NAME` to keep separate accounts (`pluralspace/NAME` in pass).
 | `members [-q TEXT] [--archived] [--fronting] [--json]`              | List members                       |
 | `member NAME [--history N] [--full] [--json]`                       | Show one member's profile          |
 | `fronting` (alias `who`) `[--json]`                                 | Show who is fronting now           |
-| `history [--month YYYY-MM] [--json]`                                | Front history for a month          |
+| `history [--month YYYY-MM] [--json]`                                | Front history for this month          |
 | `switch NAME[:TYPE]... [--add] [-c COMMENT] [--silent] [--dry-run]` | Set the current front              |
 | `end`                                                               | End all fronts                     |
 | `mood [NAME] [--list] [--clear] [--json]`                           | Show, set or clear the system mood |

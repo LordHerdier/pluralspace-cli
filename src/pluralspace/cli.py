@@ -10,7 +10,7 @@ Usage:
     pluralspace member NAME             Show one member's profile (--json for everything)
     pluralspace mood [NAME]             Show, set (NAME), --list, or --clear the mood
     pluralspace fronting                Show current fronters (alias: who)
-    pluralspace history [--month YYYY-MM]  Front history for a month
+    pluralspace history [--month YYYY-MM]  Front history for this month
     pluralspace switch NAME[:TYPE]...   Set the front (--add keeps current fronters)
     pluralspace end                     End all fronts
 
@@ -412,7 +412,7 @@ def main(argv=None) -> int:
     p.add_argument("--json", action="store_true")
     p.set_defaults(func=cmd_mood)
     sub.add_parser("end", help="end all fronts").set_defaults(func=cmd_end)
-    p = sub.add_parser("history", help="front history for a month")
+    p = sub.add_parser("history", help="front history for this month")
     p.add_argument("--month", help="YYYY-MM (default: current)")
     p.add_argument("--json", action="store_true")
     p.set_defaults(func=cmd_history)
