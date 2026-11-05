@@ -132,3 +132,32 @@ def test_format_front_plan_names_and_end_all():
     assert any("end" in ln and "Alex" in ln for ln in lines)
     empty = format_front_plan(plan_fronts([], {}), {}, {})
     assert "nobody fronting" in empty[-1]
+
+
+def test_confirm_replace_non_tty_errors():
+    import io
+
+    import pytest
+
+    from pluralspace.cli import confirm_replace
+    from pluralspace.credentials import CredentialError
+
+    with pytest.raises(CredentialError, match="--replace"):
+        confirm_replace(["Ada"], stdin=io.StringIO("y\n"), stdout=io.StringIO())
+
+
+def test_confirm_replace_prompt():
+    import io
+
+    import pytest
+
+    from pluralspace.cli import confirm_replace
+    from pluralspace.credentials import CredentialError
+
+    class TTY(io.StringIO):
+        def isatty(self):
+            return True
+
+    confirm_replace(["Ada"], stdin=TTY("y\n"), stdout=io.StringIO())
+    with pytest.raises(CredentialError, match="aborted"):
+        confirm_replace(["Ada"], stdin=TTY("\n"), stdout=io.StringIO())

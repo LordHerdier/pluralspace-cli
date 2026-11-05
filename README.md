@@ -52,15 +52,15 @@ Use `--profile NAME` to keep separate accounts (`pluralspace/NAME` in pass).
 
 ## Commands
 
-| Command                                                                            | What it does                       |
-| ---------------------------------------------------------------------------------- | ---------------------------------- |
-| `members [-q TEXT] [--archived] [--fronting] [--json]`                             | List members                       |
-| `member` (alias `m`) `NAME [--history N] [--full] [--json]`                        | Show one member's profile          |
-| `fronting` (aliases `who`, `w`) `[--json]`                                         | Show who is fronting now           |
-| `history [--month YYYY-MM] [--json]`                                               | Front history for this month       |
-| `switch` (alias `sw`) `NAME[:TYPE]... [--add] [-c COMMENT] [--silent] [--dry-run]` | Set the current front              |
-| `end [--dry-run]`                                                                  | End all fronts                     |
-| `mood [NAME] [--list] [--clear] [--dry-run] [--json]`                              | Show, set or clear the system mood |
+| Command                                                                                       | What it does                       |
+| --------------------------------------------------------------------------------------------- | ---------------------------------- |
+| `members [-q TEXT] [--archived] [--fronting] [--json]`                                        | List members                       |
+| `member` (alias `m`) `NAME [--history N] [--full] [--json]`                                   | Show one member's profile          |
+| `fronting` (aliases `who`, `w`) `[--json]`                                                    | Show who is fronting now           |
+| `history [--month YYYY-MM] [--json]`                                                          | Front history for this month       |
+| `switch` (alias `sw`) `NAME[:TYPE]... [--add\|--replace] [-c COMMENT] [--silent] [--dry-run]` | Set the current front              |
+| `end [--dry-run]`                                                                             | End all fronts                     |
+| `mood [NAME] [--list] [--clear] [--dry-run] [--json]`                                         | Show, set or clear the system mood |
 
 Global flags: `--profile NAME`, `--debug` (print request status codes).
 
@@ -80,11 +80,15 @@ Pluralspace gives each member a plain `name` and a (possibly) decorated `display
 ### Switching
 
 `switch` **replaces** the whole front set; pass `--add` to keep the current
-fronters. Append `:TYPE` to give a member a front type by name or slug. The
+fronters. If the switch would end anyone who is fronting, it asks for
+confirmation first; pass `--replace` to skip the prompt (required when stdin is
+not a terminal, e.g. in scripts). `--add` and `--replace` are mutually
+exclusive, and `--dry-run` never prompts. Append `:TYPE` to give a member a front type by name or slug. The
 default is `Front`.
 
 ```
-plsp switch Briar                      # only Briar fronts
+plsp switch Briar                      # only Briar fronts (asks first)
+plsp switch Briar --replace            # same, no prompt
 plsp switch Briar --add -c "tired"     # add Briar to whoever is fronting
 plsp switch 5a1925c1:co-front Mari     # Ada (by id) as Co-Front, Mari as Front
 plsp switch Briar --dry-run            # show who starts/ends/keeps, change nothing

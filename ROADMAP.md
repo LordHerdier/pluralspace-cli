@@ -31,7 +31,7 @@ real account with no undo, so they need to be properly safeguarded.
       instead of the raw request body. Still to do: `--json` output for dry
       runs, and confirming whether a type change keeps the start time.
 
-- [ ] **Make replace-vs-add hard to hit by accident.** `switch` currently
+- [x] **Make replace-vs-add hard to hit by accident.** `switch` currently
       replaces the whole front set unless `--add` is passed. We either need a
       confirmation or a explicit flag (`--replace`).
 

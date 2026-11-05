@@ -11,7 +11,7 @@ Usage:
     pluralspace mood [NAME]             Show, set (NAME), --list, or --clear the mood
     pluralspace fronting                Show current fronters (alias: who)
     pluralspace history [--month YYYY-MM]  Front history for this month
-    pluralspace switch NAME[:TYPE]...   Set the front (--add keeps current fronters)
+    pluralspace switch NAME[:TYPE]...   Set the front (--add keeps, --replace skips the confirmation)
     pluralspace end                     End all fronts
 
 Credentials live in pass at pluralspace/<profile>:
@@ -193,6 +193,33 @@ def plan_fronts(current, fronters: dict) -> dict:
     }
 
 
+def replaced_names(plan) -> list:
+    """Names of current fronters a plain `switch` would end."""
+    return [
+        (plan["current"][mid].get("member") or {}).get("display_label") or "(hidden)"
+        for mid in plan["end"]
+    ]
+
+
+def confirm_replace(names, stdin=None, stdout=None) -> None:
+    """Refuse to silently end fronters. Prompts on a terminal; otherwise errors."""
+    stdin = stdin or sys.stdin
+    stdout = stdout or sys.stderr
+    listed = ", ".join(names)
+    hint = "pass --replace to confirm, or --add to keep them"
+    if not stdin.isatty():
+        raise CredentialError(
+            f"this switch would end current fronters ({listed}); {hint}"
+        )
+    stdout.write(
+        f"This will end current fronters: {listed}\n(or use --add to keep them)\n"
+    )
+    stdout.write("Replace the front set? [y/N] ")
+    stdout.flush()
+    if stdin.readline().strip().lower() not in ("y", "yes"):
+        raise CredentialError("aborted; nothing changed")
+
+
 def format_front_plan(plan, labels, type_names, comment=None, silent=False):
     """Human-readable lines for a plan_fronts result. `labels` names members
     that were resolved from arguments; the rest come from the current fronts."""
@@ -234,7 +261,7 @@ def cmd_switch(args, api: PluralspaceAPI, store: PassStore) -> int:
     def run():
         types = api.front_types()
         default = resolve_front_type(types, args.type or DEFAULT_FRONT_TYPE)
-        current = api.current_fronts() if args.add or args.dry_run else []
+        current = api.current_fronts()
         fronters = {}
         if args.add:
             for f in current:
@@ -263,6 +290,10 @@ def cmd_switch(args, api: PluralspaceAPI, store: PassStore) -> int:
                 )
             )
             return
+        if not args.add and not args.replace:
+            plan = plan_fronts(current, fronters)
+            if plan["end"]:
+                confirm_replace(replaced_names(plan))
         api.set_fronts(fronters, args.comment, args.silent)
 
     _authed(api, store, run)
@@ -605,7 +636,13 @@ def main(argv=None) -> int:
         help="exact member name or id suffix, optionally with a front type",
     )
     p.add_argument("--type", help="default front type (default: Front)")
-    p.add_argument("--add", action="store_true", help="keep current fronters")
+    grp = p.add_mutually_exclusive_group()
+    grp.add_argument("--add", action="store_true", help="keep current fronters")
+    grp.add_argument(
+        "--replace",
+        action="store_true",
+        help="end current fronters not listed, without asking",
+    )
     p.add_argument("-c", "--comment")
     p.add_argument("--silent", action="store_true", help="no notifications")
     p.add_argument(
