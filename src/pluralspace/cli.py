@@ -59,7 +59,9 @@ def cmd_login(args, api: PluralspaceAPI, store: PassStore) -> int:
     user = api.whoami()
     print(f"Logged in as {user.get('name')} ({user.get('email')})")
     if not store.exists() or args.email:
-        if input(f"Save credentials to pass ({store.entry})? [Y/n] ").strip().lower() in ("", "y", "yes"):
+        if input(
+            f"Save credentials to pass ({store.entry})? [Y/n] "
+        ).strip().lower() in ("", "y", "yes"):
             store.save(creds)
             print(f"Saved to pass: {store.entry}")
     return 0
@@ -82,16 +84,25 @@ DEFAULT_FRONT_TYPE = "front"
 
 def _id_matches(member_id: str, ref: str) -> bool:
     ref = ref.lower()
-    return member_id.lower() == ref or (len(ref) >= 6 and member_id.lower().endswith(ref))
+    return member_id.lower() == ref or (
+        len(ref) >= 6 and member_id.lower().endswith(ref)
+    )
 
 
 def resolve_front_type(types, ref: str) -> dict:
     """Match a front type by name or slug, case-insensitively."""
-    hits = [t for t in types if ref.lower() in (t["name"].lower(), (t.get("slug") or "").lower())]
+    hits = [
+        t
+        for t in types
+        if ref.lower() in (t["name"].lower(), (t.get("slug") or "").lower())
+    ]
     if len(hits) != 1:
         names = ", ".join(t["name"] for t in types)
-        raise CredentialError(f"front type '{ref}' not found; available: {names}"
-                              if not hits else f"front type '{ref}' is ambiguous")
+        raise CredentialError(
+            f"front type '{ref}' not found; available: {names}"
+            if not hits
+            else f"front type '{ref}' is ambiguous"
+        )
     return hits[0]
 
 
@@ -102,10 +113,17 @@ def match_member_exact(candidates, ref: str) -> list:
     low = ref.strip().lower()
     if not low:
         return []
-    return [m for m in candidates
-            if _id_matches(m["id"], low)
-            or low in {(m.get(k) or "").strip().lower()
-                       for k in ("name", "display_name", "display_label")} - {""}]
+    return [
+        m
+        for m in candidates
+        if _id_matches(m["id"], low)
+        or low
+        in {
+            (m.get(k) or "").strip().lower()
+            for k in ("name", "display_name", "display_label")
+        }
+        - {""}
+    ]
 
 
 def _describe_member(m: dict) -> str:
@@ -133,7 +151,8 @@ def resolve_member(api: PluralspaceAPI, ref: str, exact: bool = False) -> dict:
             near = ", ".join(_describe_member(m) for m in search)
             raise CredentialError(
                 f"no member exactly matches '{ref}' (writes need an exact name or id)"
-                + (f"; did you mean: {near}" if near else ""))
+                + (f"; did you mean: {near}" if near else "")
+            )
     else:
         exact_hits = match_member_exact(search, ref)
         hits = exact_hits or (search if len(search) == 1 else [])
@@ -162,8 +181,16 @@ def cmd_switch(args, api: PluralspaceAPI, store: PassStore) -> int:
             ftype = resolve_front_type(types, type_ref) if type_ref else default
             fronters[member["id"]] = ftype["id"]
         if args.dry_run:
-            print(json.dumps({"fronters": fronters, "comment": args.comment,
-                              "silent": args.silent}, indent=2))
+            print(
+                json.dumps(
+                    {
+                        "fronters": fronters,
+                        "comment": args.comment,
+                        "silent": args.silent,
+                    },
+                    indent=2,
+                )
+            )
             return
         api.set_fronts(fronters, args.comment, args.silent)
 
@@ -179,8 +206,11 @@ def resolve_mood(moods, ref: str) -> dict:
     hits = [m for m in moods if m["name"].lower() == low]
     if len(hits) != 1:
         names = ", ".join(m["name"] for m in moods)
-        raise CredentialError(f"mood '{ref}' " + ("not found" if not hits else "is ambiguous")
-                              + f" (moods must match exactly); available: {names}")
+        raise CredentialError(
+            f"mood '{ref}' "
+            + ("not found" if not hits else "is ambiguous")
+            + f" (moods must match exactly); available: {names}"
+        )
     return hits[0]
 
 
@@ -195,7 +225,9 @@ def cmd_mood(args, api: PluralspaceAPI, store: PassStore) -> int:
     if args.clear:
         _authed(api, store, api.clear_mood)
     elif args.name:
-        _authed(api, store, lambda: api.set_mood(resolve_mood(api.moods(), args.name)["id"]))
+        _authed(
+            api, store, lambda: api.set_mood(resolve_mood(api.moods(), args.name)["id"])
+        )
     atmosphere = _authed(api, store, api.atmosphere)
     if args.json:
         return _emit_json(atmosphere)
@@ -229,18 +261,31 @@ def _day(ts: str) -> str:
 
 
 def cmd_members(args, api: PluralspaceAPI, store: PassStore) -> int:
-    members = _authed(api, store, lambda: api.members(
-        args.query or "", args.archived, args.fronting, args.type))
+    members = _authed(
+        api,
+        store,
+        lambda: api.members(args.query or "", args.archived, args.fronting, args.type),
+    )
     if args.json:
         return _emit_json(members)
     for m in members:
-        flags = [f for f, on in (("fronting", m.get("active_front")),
-                                 ("custom", m.get("is_custom_front")),
-                                 ("pinned", m.get("is_pinned")),
-                                 ("archived", m.get("is_archived"))) if on]
+        flags = [
+            f
+            for f, on in (
+                ("fronting", m.get("active_front")),
+                ("custom", m.get("is_custom_front")),
+                ("pinned", m.get("is_pinned")),
+                ("archived", m.get("is_archived")),
+            )
+            if on
+        ]
         pronouns = f" ({m['pronouns']})" if m.get("pronouns") else ""
         suffix = f"  [{', '.join(flags)}]" if flags else ""
-        plain = f"  name: {m['name']}" if m.get("name") and m["name"] != m["display_label"] else ""
+        plain = (
+            f"  name: {m['name']}"
+            if m.get("name") and m["name"] != m["display_label"]
+            else ""
+        )
         print(f"{m['id'][-8:]}  {m['display_label']}{pronouns}{plain}{suffix}")
     print(f"{len(members)} members", file=sys.stderr)
     return 0
@@ -329,15 +374,31 @@ def cmd_member(args, api: PluralspaceAPI, store: PassStore) -> int:
 
     props = _authed(api, store, run)
     if args.json:
-        keys = ("member", "customFields", "assignedGroups", "relationships",
-                "frontHistory", "connectedSystems", "currentLocation")
+        keys = (
+            "member",
+            "customFields",
+            "assignedGroups",
+            "relationships",
+            "frontHistory",
+            "connectedSystems",
+            "currentLocation",
+        )
         return _emit_json({k: props.get(k) for k in keys})
     m = props["member"]
-    flags = [f for f, on in (("custom front", m.get("is_custom_front")),
-                             ("pinned", m.get("is_pinned")),
-                             ("archived", m.get("is_archived"))) if on]
-    print(m["display_label"] + (f" ({m['pronouns']})" if m.get("pronouns") else "")
-          + (f"  [{', '.join(flags)}]" if flags else ""))
+    flags = [
+        f
+        for f, on in (
+            ("custom front", m.get("is_custom_front")),
+            ("pinned", m.get("is_pinned")),
+            ("archived", m.get("is_archived")),
+        )
+        if on
+    ]
+    print(
+        m["display_label"]
+        + (f" ({m['pronouns']})" if m.get("pronouns") else "")
+        + (f"  [{', '.join(flags)}]" if flags else "")
+    )
     if m.get("name") and m["name"] != m["display_label"]:
         print(f"name: {m['name']}")
     print(f"id: {m['id']}")
@@ -352,7 +413,9 @@ def cmd_member(args, api: PluralspaceAPI, store: PassStore) -> int:
         if not args.full and len(desc) > 400:
             desc = desc[:400] + " … (--full for the rest)"
         print(f"\n{desc}")
-    fields = [(c["name"], _field_value(c["value"])) for c in props.get("customFields", [])]
+    fields = [
+        (c["name"], _field_value(c["value"])) for c in props.get("customFields", [])
+    ]
     fields = [(n, v) for n, v in fields if v]
     if fields:
         print("\nFields:")
@@ -369,12 +432,14 @@ def cmd_member(args, api: PluralspaceAPI, store: PassStore) -> int:
     history = props.get("frontHistory") or []
     if history:
         print("\nRecent fronts:")
-        for h in history[:args.history]:
+        for h in history[: args.history]:
             end = "now" if not h.get("ended_at") else _day(h["ended_at"])
             others = [x["display_label"] for x in h["members"] if x["id"] != m["id"]]
             with_ = f"  with {', '.join(others)}" if others else ""
-            print(f"  {_day(h['started_at'])} -> {end}  ({h.get('duration_human', '')})"
-                  f"  [{(h.get('front_type') or {}).get('name', '')}]{with_}")
+            print(
+                f"  {_day(h['started_at'])} -> {end}  ({h.get('duration_human', '')})"
+                f"  [{(h.get('front_type') or {}).get('name', '')}]{with_}"
+            )
     return 0
 
 
@@ -414,8 +479,12 @@ def main(argv=None) -> int:
     p = sub.add_parser("login", help="log in and optionally store credentials in pass")
     p.add_argument("--email")
     p.set_defaults(func=cmd_login)
-    sub.add_parser("logout", help="drop the local session").set_defaults(func=cmd_logout)
-    sub.add_parser("whoami", help="show the logged-in account").set_defaults(func=cmd_whoami)
+    sub.add_parser("logout", help="drop the local session").set_defaults(
+        func=cmd_logout
+    )
+    sub.add_parser("whoami", help="show the logged-in account").set_defaults(
+        func=cmd_whoami
+    )
 
     p = sub.add_parser("members", help="list members")
     p.add_argument("-q", "--query")
@@ -427,20 +496,28 @@ def main(argv=None) -> int:
     p = sub.add_parser("member", aliases=["m"], help="show one member's profile")
     p.add_argument("name", help="member name or id suffix")
     p.add_argument("--full", action="store_true", help="don't truncate the description")
-    p.add_argument("--history", type=int, default=5, help="recent fronts to show (default 5)")
+    p.add_argument(
+        "--history", type=int, default=5, help="recent fronts to show (default 5)"
+    )
     p.add_argument("--json", action="store_true")
     p.set_defaults(func=cmd_member)
     p = sub.add_parser("fronting", aliases=["who", "w"], help="show current fronters")
     p.add_argument("--json", action="store_true")
     p.set_defaults(func=cmd_fronting)
     p = sub.add_parser("switch", aliases=["sw"], help="set the current front")
-    p.add_argument("members", nargs="+", metavar="NAME[:TYPE]",
-                   help="exact member name or id suffix, optionally with a front type")
+    p.add_argument(
+        "members",
+        nargs="+",
+        metavar="NAME[:TYPE]",
+        help="exact member name or id suffix, optionally with a front type",
+    )
     p.add_argument("--type", help="default front type (default: Front)")
     p.add_argument("--add", action="store_true", help="keep current fronters")
     p.add_argument("-c", "--comment")
     p.add_argument("--silent", action="store_true", help="no notifications")
-    p.add_argument("--dry-run", action="store_true", help="print the request, change nothing")
+    p.add_argument(
+        "--dry-run", action="store_true", help="print the request, change nothing"
+    )
     p.set_defaults(func=cmd_switch)
     p = sub.add_parser("mood", help="show, set or clear the system mood")
     p.add_argument("name", nargs="?", help="mood to set (exact name)")

@@ -22,9 +22,7 @@ from . import __version__
 BASE_URL = "https://pluralspace.app"
 USER_AGENT = f"pluralspace-cli/{__version__}"
 
-_PAGE_RE = re.compile(
-    r'<script[^>]*data-page="app"[^>]*>(.*?)</script>', re.DOTALL
-)
+_PAGE_RE = re.compile(r'<script[^>]*data-page="app"[^>]*>(.*?)</script>', re.DOTALL)
 
 
 class APIError(Exception):
@@ -46,7 +44,9 @@ def _state_dir() -> Path:
 
 
 class PluralspaceAPI:
-    def __init__(self, profile: str = "default", base_url: str = BASE_URL, debug: bool = False):
+    def __init__(
+        self, profile: str = "default", base_url: str = BASE_URL, debug: bool = False
+    ):
         self.base_url = base_url.rstrip("/")
         self.debug = debug
         self.version: Optional[str] = None
@@ -91,12 +91,21 @@ class PluralspaceAPI:
 
     # -- transport --------------------------------------------------------
 
-    def _request(self, method: str, path: str, *, inertia: bool = True,
-                 json_body: Optional[dict] = None,
-                 partial: Optional[List[str]] = None,
-                 component: Optional[str] = None):
-        headers = {"User-Agent": USER_AGENT, "Origin": self.base_url,
-                   "Referer": self.base_url + "/"}
+    def _request(
+        self,
+        method: str,
+        path: str,
+        *,
+        inertia: bool = True,
+        json_body: Optional[dict] = None,
+        partial: Optional[List[str]] = None,
+        component: Optional[str] = None,
+    ):
+        headers = {
+            "User-Agent": USER_AGENT,
+            "Origin": self.base_url,
+            "Referer": self.base_url + "/",
+        }
         data = None
         if inertia:
             headers["Accept"] = "text/html, application/xhtml+xml"
@@ -116,8 +125,9 @@ class PluralspaceAPI:
             data = json.dumps(json_body).encode()
             headers["Content-Type"] = "application/json"
 
-        req = urllib.request.Request(self.base_url + path, data=data,
-                                     headers=headers, method=method)
+        req = urllib.request.Request(
+            self.base_url + path, data=data, headers=headers, method=method
+        )
         try:
             resp = self._opener.open(req, timeout=30)
         except urllib.error.HTTPError as e:
@@ -144,7 +154,8 @@ class PluralspaceAPI:
         self.clear_session()
         self._bootstrap()
         status, headers, body = self._request(
-            "POST", "/login",
+            "POST",
+            "/login",
             json_body={"email": email, "password": password, "remember": remember},
         )
         location = headers.get("X-Inertia-Location")
@@ -156,8 +167,12 @@ class PluralspaceAPI:
         if status == 422:
             raise AuthError(self._login_error(headers, body))
         if status in (419, 429):
-            raise AuthError({419: "CSRF/session mismatch (419)",
-                             429: "too many attempts (429), try later"}[status])
+            raise AuthError(
+                {
+                    419: "CSRF/session mismatch (419)",
+                    429: "too many attempts (429), try later",
+                }[status]
+            )
         raise AuthError(f"unexpected login response: HTTP {status}")
 
     def _login_error(self, headers, body: str) -> str:
@@ -183,21 +198,27 @@ class PluralspaceAPI:
 
     # -- inertia pages ----------------------------------------------------
 
-    def page(self, path: str, partial: Optional[List[str]] = None,
-             component: Optional[str] = None) -> Dict[str, Any]:
+    def page(
+        self,
+        path: str,
+        partial: Optional[List[str]] = None,
+        component: Optional[str] = None,
+    ) -> Dict[str, Any]:
         """Fetch an Inertia page and return its decoded JSON payload."""
         if not self.has_session():
             raise AuthError("not logged in")
         if self.version is None:
             self._bootstrap_version()
-        status, headers, body = self._request("GET", path, partial=partial,
-                                              component=component)
+        status, headers, body = self._request(
+            "GET", path, partial=partial, component=component
+        )
         if status == 409 and headers.get("X-Inertia-Location"):
             # Asset version changed under us: refresh once and retry.
             self.version = None
             self._bootstrap_version()
-            status, headers, body = self._request("GET", path, partial=partial,
-                                                  component=component)
+            status, headers, body = self._request(
+                "GET", path, partial=partial, component=component
+            )
         if status in (301, 302, 303) and "/login" in (headers.get("Location") or ""):
             raise AuthError("session expired")
         if status in (401, 419):
@@ -218,7 +239,9 @@ class PluralspaceAPI:
             self.version = json.loads(html.unescape(m.group(1))).get("version")
 
     def whoami(self) -> Dict[str, Any]:
-        payload = self.page("/space", partial=["currentUser"], component="App/Dashboard")
+        payload = self.page(
+            "/space", partial=["currentUser"], component="App/Dashboard"
+        )
         user = payload.get("props", {}).get("currentUser")
         if not user:
             raise AuthError("session expired")
@@ -235,8 +258,13 @@ class PluralspaceAPI:
 
     # -- members / fronts -------------------------------------------------
 
-    def members(self, query: str = "", archived: bool = False, fronting: bool = False,
-                member_type: Optional[str] = None) -> List[Dict[str, Any]]:
+    def members(
+        self,
+        query: str = "",
+        archived: bool = False,
+        fronting: bool = False,
+        member_type: Optional[str] = None,
+    ) -> List[Dict[str, Any]]:
         params: Dict[str, Any] = {}
         if query:
             params["q"] = query
@@ -257,13 +285,18 @@ class PluralspaceAPI:
             page += 1
 
     def current_fronts(self) -> List[Dict[str, Any]]:
-        payload = self.page("/space", component="App/Dashboard",
-                            partial=["currentFronts", "currentFrontsTotal"])
+        payload = self.page(
+            "/space",
+            component="App/Dashboard",
+            partial=["currentFronts", "currentFrontsTotal"],
+        )
         return payload["props"]["currentFronts"]
 
     def front_history(self, month: Optional[str] = None) -> List[Dict[str, Any]]:
         """Fronts touching the given YYYY-MM month (default: current), newest first."""
-        path = "/space/fronts" + (f"?month={urllib.parse.quote(month)}" if month else "")
+        path = "/space/fronts" + (
+            f"?month={urllib.parse.quote(month)}" if month else ""
+        )
         return dedupe_fronts(self.page_deferred(path)["weeks"])
 
     def member(self, member_id: str) -> Dict[str, Any]:
@@ -289,8 +322,11 @@ class PluralspaceAPI:
     # -- switching --------------------------------------------------------
 
     def front_types(self) -> List[Dict[str, Any]]:
-        payload = self.page("/space", component="App/Dashboard",
-                            partial=["frontTypes", "subsystemFrontTypes"])
+        payload = self.page(
+            "/space",
+            component="App/Dashboard",
+            partial=["frontTypes", "subsystemFrontTypes"],
+        )
         props = payload["props"]
         return props["frontTypes"] + props.get("subsystemFrontTypes", [])
 
@@ -299,15 +335,21 @@ class PluralspaceAPI:
         qs = urllib.parse.urlencode({"tree": "front", "q": query})
         return self._get_json(f"/space/members/search?{qs}")
 
-    def set_fronts(self, fronters: Dict[str, str], comment: Optional[str] = None,
-                   silent: bool = False) -> None:
+    def set_fronts(
+        self,
+        fronters: Dict[str, str],
+        comment: Optional[str] = None,
+        silent: bool = False,
+    ) -> None:
         """Replace the whole front set. fronters maps member id -> front type id.
 
         The server diffs against the current set: unchanged fronters keep
         their start time, so this is safe to send with the full list.
         """
-        self._mutate("/space/fronts/start-multi",
-                     {"fronters": fronters, "comment": comment, "silent": silent})
+        self._mutate(
+            "/space/fronts/start-multi",
+            {"fronters": fronters, "comment": comment, "silent": silent},
+        )
 
     def end_all(self) -> None:
         self._mutate("/space/fronts/end-all", {})
@@ -339,8 +381,9 @@ class PluralspaceAPI:
         if status not in (200, 204, 302, 303):
             detail = ""
             try:
-                detail = "; ".join(f"{k}: {v}" for k, v in
-                                   json.loads(text).get("errors", {}).items())
+                detail = "; ".join(
+                    f"{k}: {v}" for k, v in json.loads(text).get("errors", {}).items()
+                )
             except (ValueError, AttributeError):
                 pass
             raise APIError(f"{method} {path} returned {status} {detail}".strip())
@@ -349,7 +392,8 @@ class PluralspaceAPI:
     @staticmethod
     def _check_session(status: int, headers) -> None:
         if status in (401, 419) or (
-                status in (301, 302, 303) and "/login" in (headers.get("Location") or "")):
+            status in (301, 302, 303) and "/login" in (headers.get("Location") or "")
+        ):
             raise AuthError("session expired")
 
 

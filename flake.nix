@@ -48,12 +48,16 @@
         default = pkgs.mkShell {
           packages = [
             pkgs.pass
+            pkgs.nixfmt
+            pkgs.prettier
+            pkgs.ruff
+            pkgs.treefmt
             (pkgs.python3.withPackages (ps: [ ps.pytest ]))
           ];
           env.PYTHONPATH = "src";
         };
       });
 
-      formatter = forAllSystems (pkgs: pkgs.nixfmt-rfc-style);
+      formatter = forAllSystems (pkgs: pkgs.nixfmt);
     };
 }

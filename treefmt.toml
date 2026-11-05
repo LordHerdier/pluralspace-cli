@@ -1,0 +1,14 @@
+[formatter.prettier]
+command = "prettier"
+options = ["--write", "--ignore-unknown"]
+includes = ["*.md", "*.json", "*.yaml", "*.yml"]
+
+[formatter.ruff]
+command = "ruff"
+options = ["format"]
+includes = ["*.py"]
+
+[formatter.nixfmt]
+command = "nixfmt"
+includes = ["*.nix"]
+excludes = ["flake.lock"]

@@ -1,0 +1,23 @@
+#!/usr/bin/env sh
+# Format staged files with treefmt (prettier, ruff, nixfmt; see treefmt.toml).
+# Enable with: git config core.hooksPath .githooks
+set -eu
+
+if ! command -v treefmt >/dev/null 2>&1; then
+  echo "pre-commit: treefmt not found on PATH (enter the dev shell), skipping" >&2
+  exit 0
+fi
+
+files=$(git diff --cached --name-only --diff-filter=ACM)
+[ -n "$files" ] || exit 0
+
+# Don't clobber unstaged edits: bail if any staged file also has unstaged changes.
+for f in $files; do
+  if ! git diff --quiet -- "$f"; then
+    echo "pre-commit: $f has unstaged changes; stage or stash them first" >&2
+    exit 1
+  fi
+done
+
+echo "$files" | xargs -d '\n' treefmt --no-cache --quiet --allow-missing-formatter --
+echo "$files" | xargs -d '\n' git add --
