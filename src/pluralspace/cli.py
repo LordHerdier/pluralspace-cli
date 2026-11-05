@@ -7,7 +7,7 @@ Usage:
     pluralspace logout                  Drop the local session
     pluralspace whoami                  Show the logged-in account
     pluralspace members [-q TEXT]       List members (--archived, --fronting, --json)
-    pluralspace member NAME             Show one member's profile (--json for everything)
+    pluralspace member NAME             Show one member's profile (fuzzy match ok) (--json for everything)
     pluralspace mood [NAME]             Show, set (NAME), --list, or --clear the mood
     pluralspace fronting                Show current fronters (alias: who)
     pluralspace history [--month YYYY-MM]  Front history for this month
@@ -95,19 +95,55 @@ def resolve_front_type(types, ref: str) -> dict:
     return hits[0]
 
 
-def resolve_member(api: PluralspaceAPI, ref: str) -> dict:
-    """Resolve a name or id (or id suffix, as shown by `members`) to one member."""
-    candidates = api.search_members(ref)
-    exact = [m for m in candidates if m["display_label"].lower() == ref.lower()
-             or _id_matches(m["id"], ref)]
-    hits = exact or (candidates if len(candidates) == 1 else [])
-    if not hits:
-        # `members` lists ids by suffix; fall back to that listing for id lookups
-        hits = [m for m in api.members() if _id_matches(m["id"], ref)]
-    if not hits:
-        raise CredentialError(f"no member matches '{ref}'")
+def match_member_exact(candidates, ref: str) -> list:
+    """Members whose `name`, `display_name`, or `display_label` equals ref
+    (case-insensitive, whole string), or whose id matches ref. No prefix or
+    substring matching; this is what writes use."""
+    low = ref.strip().lower()
+    if not low:
+        return []
+    return [m for m in candidates
+            if _id_matches(m["id"], low)
+            or low in {(m.get(k) or "").strip().lower()
+                       for k in ("name", "display_name", "display_label")} - {""}]
+
+
+def _describe_member(m: dict) -> str:
+    label = m.get("display_label") or m.get("display_name") or m.get("name") or "?"
+    plain = m.get("name")
+    named = f" aka {plain!r}" if plain and plain != label else ""
+    return f"{label}{named} ({m['id'][-8:]})"
+
+
+def resolve_member(api: PluralspaceAPI, ref: str, exact: bool = False) -> dict:
+    """Resolve a name or id (or id suffix, as shown by `members`) to one member.
+
+    exact=False (reads) falls back to a lone fuzzy search hit. exact=True
+    (writes) only accepts a whole-string match on name/display name or an id;
+    near misses are listed in the error but never used.
+    """
+    search = api.search_members(ref)
+    if exact:
+        # /members has the plain `name` but omits custom fronts; the search
+        # has custom fronts but only the display label. Use both, keyed by id.
+        merged = {m["id"]: m for m in search}
+        merged.update({m["id"]: m for m in api.members()})
+        hits = match_member_exact(merged.values(), ref)
+        if not hits:
+            near = ", ".join(_describe_member(m) for m in search)
+            raise CredentialError(
+                f"no member exactly matches '{ref}' (writes need an exact name or id)"
+                + (f"; did you mean: {near}" if near else ""))
+    else:
+        exact_hits = match_member_exact(search, ref)
+        hits = exact_hits or (search if len(search) == 1 else [])
+        if not hits:
+            # `members` lists ids by suffix; fall back to that listing for id lookups
+            hits = [m for m in api.members() if _id_matches(m["id"], ref)]
+        if not hits:
+            raise CredentialError(f"no member matches '{ref}'")
     if len(hits) > 1:
-        ids = ", ".join(f"{m['display_label']} ({m['id'][-8:]})" for m in hits)
+        ids = ", ".join(_describe_member(m) for m in hits)
         raise CredentialError(f"'{ref}' is ambiguous: {ids}; use the id suffix")
     return hits[0]
 
@@ -122,7 +158,7 @@ def cmd_switch(args, api: PluralspaceAPI, store: PassStore) -> int:
                 fronters[f["member_id"]] = f["system_front_type_id"]
         for ref in args.members:
             name, _, type_ref = ref.partition(":")
-            member = resolve_member(api, name)
+            member = resolve_member(api, name, exact=True)
             ftype = resolve_front_type(types, type_ref) if type_ref else default
             fronters[member["id"]] = ftype["id"]
         if args.dry_run:
@@ -138,14 +174,13 @@ def cmd_switch(args, api: PluralspaceAPI, store: PassStore) -> int:
 
 
 def resolve_mood(moods, ref: str) -> dict:
-    """Match a mood by name: exact first, then a unique prefix."""
-    low = ref.lower()
-    hits = ([m for m in moods if m["name"].lower() == low]
-            or [m for m in moods if m["name"].lower().startswith(low)])
+    """Match a mood by exact name (case-insensitive). Prefixes are not accepted."""
+    low = ref.strip().lower()
+    hits = [m for m in moods if m["name"].lower() == low]
     if len(hits) != 1:
         names = ", ".join(m["name"] for m in moods)
         raise CredentialError(f"mood '{ref}' " + ("not found" if not hits else "is ambiguous")
-                              + f"; available: {names}")
+                              + f" (moods must match exactly); available: {names}")
     return hits[0]
 
 
@@ -205,7 +240,8 @@ def cmd_members(args, api: PluralspaceAPI, store: PassStore) -> int:
                                  ("archived", m.get("is_archived"))) if on]
         pronouns = f" ({m['pronouns']})" if m.get("pronouns") else ""
         suffix = f"  [{', '.join(flags)}]" if flags else ""
-        print(f"{m['id'][-8:]}  {m['display_label']}{pronouns}{suffix}")
+        plain = f"  name: {m['name']}" if m.get("name") and m["name"] != m["display_label"] else ""
+        print(f"{m['id'][-8:]}  {m['display_label']}{pronouns}{plain}{suffix}")
     print(f"{len(members)} members", file=sys.stderr)
     return 0
 
@@ -302,6 +338,8 @@ def cmd_member(args, api: PluralspaceAPI, store: PassStore) -> int:
                              ("archived", m.get("is_archived"))) if on]
     print(m["display_label"] + (f" ({m['pronouns']})" if m.get("pronouns") else "")
           + (f"  [{', '.join(flags)}]" if flags else ""))
+    if m.get("name") and m["name"] != m["display_label"]:
+        print(f"name: {m['name']}")
     print(f"id: {m['id']}")
     if m.get("aliases"):
         print("aliases:", ", ".join(m["aliases"]))
@@ -397,7 +435,7 @@ def main(argv=None) -> int:
     p.set_defaults(func=cmd_fronting)
     p = sub.add_parser("switch", aliases=["sw"], help="set the current front")
     p.add_argument("members", nargs="+", metavar="NAME[:TYPE]",
-                   help="member name or id suffix, optionally with a front type")
+                   help="exact member name or id suffix, optionally with a front type")
     p.add_argument("--type", help="default front type (default: Front)")
     p.add_argument("--add", action="store_true", help="keep current fronters")
     p.add_argument("-c", "--comment")
@@ -405,7 +443,7 @@ def main(argv=None) -> int:
     p.add_argument("--dry-run", action="store_true", help="print the request, change nothing")
     p.set_defaults(func=cmd_switch)
     p = sub.add_parser("mood", help="show, set or clear the system mood")
-    p.add_argument("name", nargs="?", help="mood to set (name or unique prefix)")
+    p.add_argument("name", nargs="?", help="mood to set (exact name)")
     p.add_argument("--list", action="store_true", help="list available moods")
     p.add_argument("--clear", action="store_true", help="clear the current mood")
     p.add_argument("--json", action="store_true")

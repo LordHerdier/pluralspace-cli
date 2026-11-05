@@ -66,9 +66,16 @@ Global flags: `--profile NAME`, `--debug` (print request status codes).
 
 ### Names and IDs
 
-Members are matched by display name, case-insensitively. Names aren't unique, so
-an ambiguous name stops with an error listing the candidates; use the ID suffix
-that `members` prints (`5a1925c1`) or a full ID instead.
+Pluralspace gives each member a plain `name` and a (possibly) decorated `display_name`
+(e.g. `Amanda` vs `⊹˚₊ Amanda  ₊˚⊹`). `members` shows both when they differ.
+
+- **Writes** (`switch`, `mood`) need an **exact** match, case-insensitive, on the
+  `name`, the `display_name`, or an ID (full, or the suffix `members` prints,
+  e.g. `3b2a29c2`). Partial names never match; a near miss errors out and lists
+  candidates. Moods likewise must match by full name.
+- **Reads** (`member`) still allow fuzzy search.
+- Names aren't unique, so an ambiguous name stops with an error listing the
+  candidates; use the ID suffix instead.
 
 ### Switching
 

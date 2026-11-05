@@ -21,7 +21,7 @@ Once these three are satisfied, _only then_ will more features be added.
 Every write the CLI makes is `switch`, `end`, and `mood`. All of them act on the
 real account with no undo, so they need to be properly safeguarded.
 
-- [ ] **Require exact Names/IDs on writes.** `resolve_member` accepts a fuzzy
+- [x] **Require exact Names/IDs on writes.** `resolve_member` accepts a fuzzy
       search hit, so `plsp switch Al` can front "Alex". Writes should require an
       exact name or ID match, but fuzzy matching can stay for reads.
 
