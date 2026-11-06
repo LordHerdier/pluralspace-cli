@@ -78,7 +78,9 @@ def test_editorjs_text_edge_cases():
 
 @pytest.fixture
 def utc_plus_2(monkeypatch):
-    monkeypatch.setenv("TZ", "Etc/GMT-2")  # POSIX sign: this is UTC+2
+    # POSIX TZ string (no tzdata needed, so it works in the Nix build sandbox).
+    # POSIX signs are inverted: "UTC-2" means UTC+2.
+    monkeypatch.setenv("TZ", "UTC-2")
     time.tzset()
     yield
     monkeypatch.undo()
