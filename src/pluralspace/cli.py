@@ -32,6 +32,7 @@ from typing import Callable, TypeVar
 from . import __version__
 from .api_client import APIError, AuthError, PluralspaceAPI
 from .credentials import CredentialError, Credentials, PassStore
+from .errors import UsageError
 
 T = TypeVar("T")
 
@@ -98,7 +99,7 @@ def resolve_front_type(types, ref: str) -> dict:
     ]
     if len(hits) != 1:
         names = ", ".join(t["name"] for t in types)
-        raise CredentialError(
+        raise UsageError(
             f"front type '{ref}' not found; available: {names}"
             if not hits
             else f"front type '{ref}' is ambiguous"
@@ -149,7 +150,7 @@ def resolve_member(api: PluralspaceAPI, ref: str, exact: bool = False) -> dict:
         hits = match_member_exact(merged.values(), ref)
         if not hits:
             near = ", ".join(_describe_member(m) for m in search)
-            raise CredentialError(
+            raise UsageError(
                 f"no member exactly matches '{ref}' (writes need an exact name or id)"
                 + (f"; did you mean: {near}" if near else "")
             )
@@ -160,10 +161,10 @@ def resolve_member(api: PluralspaceAPI, ref: str, exact: bool = False) -> dict:
             # `members` lists ids by suffix; fall back to that listing for id lookups
             hits = [m for m in api.members() if _id_matches(m["id"], ref)]
         if not hits:
-            raise CredentialError(f"no member matches '{ref}'")
+            raise UsageError(f"no member matches '{ref}'")
     if len(hits) > 1:
         ids = ", ".join(_describe_member(m) for m in hits)
-        raise CredentialError(f"'{ref}' is ambiguous: {ids}; use the id suffix")
+        raise UsageError(f"'{ref}' is ambiguous: {ids}; use the id suffix")
     return hits[0]
 
 
@@ -208,7 +209,7 @@ def confirm_replace(names, stdin=None, stdout=None) -> None:
     listed = ", ".join(names)
     hint = "pass --replace to confirm, or --add to keep them"
     if not stdin.isatty():
-        raise CredentialError(
+        raise UsageError(
             f"this switch would end current fronters ({listed}); {hint}"
         )
     stdout.write(
@@ -217,7 +218,7 @@ def confirm_replace(names, stdin=None, stdout=None) -> None:
     stdout.write("Replace the front set? [y/N] ")
     stdout.flush()
     if stdin.readline().strip().lower() not in ("y", "yes"):
-        raise CredentialError("aborted; nothing changed")
+        raise UsageError("aborted; nothing changed")
 
 
 def format_front_plan(plan, labels, type_names, comment=None, silent=False):
@@ -308,7 +309,7 @@ def resolve_mood(moods, ref: str) -> dict:
     hits = [m for m in moods if m["name"].lower() == low]
     if len(hits) != 1:
         names = ", ".join(m["name"] for m in moods)
-        raise CredentialError(
+        raise UsageError(
             f"mood '{ref}' "
             + ("not found" if not hits else "is ambiguous")
             + f" (moods must match exactly); available: {names}"
@@ -325,7 +326,7 @@ def cmd_mood(args, api: PluralspaceAPI, store: PassStore) -> int:
             print(f"{m['name']:<12} {m.get('tagline', '')}")
         return 0
     if args.dry_run and not (args.clear or args.name):
-        raise CredentialError("--dry-run needs a mood NAME or --clear")
+        raise UsageError("--dry-run needs a mood NAME or --clear")
     if args.dry_run:
 
         def preview():
@@ -673,7 +674,7 @@ def main(argv=None) -> int:
     store = PassStore(args.profile)
     try:
         return args.func(args, api, store)
-    except (AuthError, CredentialError) as e:
+    except (AuthError, CredentialError, UsageError) as e:
         print(f"error: {e}", file=sys.stderr)
         return 1
     except APIError as e:
