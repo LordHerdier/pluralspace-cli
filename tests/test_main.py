@@ -22,6 +22,7 @@ class FakeAPI:
     fronts = []
     moods_ = [{"id": "m1", "name": "Calm", "tagline": "ok"}]
     mood_label = "Tired"
+    mood_id = "m-tired"
     raises = None
     calls = []
 
@@ -43,18 +44,28 @@ class FakeAPI:
         return FakeAPI.moods_
 
     def atmosphere(self):
-        return {"mood_label": FakeAPI.mood_label, "tagline": ""}
+        return {
+            "mood": FakeAPI.mood_id,
+            "mood_label": FakeAPI.mood_label,
+            "tagline": "",
+        }
 
     def set_mood(self, mood_id):
         FakeAPI.calls.append(("set_mood", mood_id))
+        FakeAPI.mood_id = mood_id
+        FakeAPI.mood_label = next(
+            m["name"] for m in FakeAPI.moods_ if m["id"] == mood_id
+        )
 
     def clear_mood(self):
         FakeAPI.calls.append("clear_mood")
+        FakeAPI.mood_id, FakeAPI.mood_label = None, None
 
 
 @pytest.fixture(autouse=True)
 def fake(monkeypatch):
     FakeAPI.fronts, FakeAPI.raises, FakeAPI.calls = [], None, []
+    FakeAPI.mood_id, FakeAPI.mood_label = "m-tired", "Tired"
     monkeypatch.setattr(app, "PluralspaceAPI", FakeAPI)
     monkeypatch.setattr(app, "PassStore", FakeStore)
 
@@ -134,6 +145,12 @@ def test_mood_set_resolves_by_exact_name(capsys):
     assert FakeAPI.calls == [("set_mood", "m1")]
     assert cli.main(["mood", "cal"]) == 1  # prefixes rejected
     assert FakeAPI.calls == [("set_mood", "m1")]
+
+
+def test_mood_write_that_did_not_take_is_an_error(monkeypatch, capsys):
+    monkeypatch.setattr(FakeAPI, "set_mood", lambda self, mood_id: None)
+    assert cli.main(["mood", "calm"]) == 2
+    assert "mood isn't as expected" in capsys.readouterr().err
 
 
 def test_mood_list_json(capsys):

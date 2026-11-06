@@ -147,3 +147,34 @@ def test_failing_to_record_the_result_only_warns(server, monkeypatch, capsys):
     assert cli.main(["end"]) == 0
     assert "warning: disk full" in capsys.readouterr().err
     assert server.live() == []
+
+
+def test_a_switch_that_did_not_take_fails_loudly_but_records_what_is_there(
+    server, monkeypatch, capsys
+):
+    server.start("m-ada")
+    monkeypatch.setattr(server, "set_fronts", lambda *a, **kw: None)  # 200, no-op
+    assert cli.main(["switch", "Bo", "--replace"]) == 2
+    err = capsys.readouterr().err
+    assert "Bo is not fronting" in err and "Ada is still fronting" in err
+    assert [r["member_id"] for r in snap()["after"]] == ["m-ada"]
+
+
+def test_a_kept_fronter_whose_start_time_changed_is_flagged(
+    server, monkeypatch, capsys
+):
+    ada = server.start("m-ada")
+
+    def restart(fronters, comment=None, silent=False):
+        server.rows[ada["id"]]["started_at"] = server.tick()
+
+    monkeypatch.setattr(server, "set_fronts", restart)
+    assert cli.main(["switch", "Ada", "Bo", "--replace"]) == 2
+    assert "Ada's start time changed" in capsys.readouterr().err
+
+
+def test_an_end_that_did_not_take_fails_loudly(server, monkeypatch, capsys):
+    server.start("m-ada")
+    monkeypatch.setattr(server, "end_all", lambda: None)
+    assert cli.main(["end"]) == 2
+    assert "Ada is still fronting" in capsys.readouterr().err

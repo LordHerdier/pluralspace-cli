@@ -2,10 +2,16 @@
 
 import sys
 
-from ...api_client import PluralspaceAPI
+from ...api_client import APIError, PluralspaceAPI
 from ...credentials import PassStore
 from ...errors import UsageError
-from ...fronts import format_front_plan, plan_fronts, replaced_names, row_from_current
+from ...fronts import (
+    format_front_plan,
+    front_discrepancies,
+    plan_fronts,
+    replaced_names,
+    row_from_current,
+)
 from ...render import _day, front_member_label, front_type_name
 from ...resolve import resolve_front_type, resolve_member
 from ..common import (
@@ -37,19 +43,33 @@ def confirm_replace(names, stdin=None, stdout=None) -> None:
         raise UsageError("aborted; nothing changed")
 
 
+def _verify_fronts(before, after, expected, labels=None) -> None:
+    problems = front_discrepancies(before, after, expected, labels)
+    if problems:
+        raise APIError(
+            "the write was accepted but fronts aren't as expected: "
+            + "; ".join(problems)
+            + ". Check the app before changing anything else"
+        )
+
+
 def cmd_switch(args, api: PluralspaceAPI, store: PassStore) -> int:
     recorded = False
+    before = []
+    fronters = {}
+    labels = {}
 
     def run():
-        nonlocal recorded
+        nonlocal recorded, before, fronters, labels
         types = api.front_types()
         default = resolve_front_type(types, args.type or DEFAULT_FRONT_TYPE)
         current = api.current_fronts()
+        before = current
         fronters = {}
+        labels = {}
         if args.add:
             for f in current:
                 fronters[f["member_id"]] = f["system_front_type_id"]
-        labels = {}
         for ref in args.members:
             name, _, type_ref = ref.partition(":")
             member = resolve_member(api, name, exact=True)
@@ -90,6 +110,7 @@ def cmd_switch(args, api: PluralspaceAPI, store: PassStore) -> int:
         _print_fronting(fronts)
         if recorded:
             snapshot_after(args, [row_from_current(f) for f in fronts])
+        _verify_fronts(before, fronts, fronters, labels)
     return 0
 
 
@@ -102,8 +123,10 @@ def cmd_end(args, api: PluralspaceAPI, store: PassStore) -> int:
     if current:
         snapshot_before(args, "fronts", "end", [row_from_current(f) for f in current])
     _authed(api, store, api.end_all)
+    after = _authed(api, store, api.current_fronts)
     if current:
-        snapshot_after(args, [])
+        snapshot_after(args, [row_from_current(f) for f in after])
+    _verify_fronts(current, after, {})
     print("Nobody is fronting")
     return 0
 

@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 
 from .render import _day, front_member_label, front_type_name
-from .timeutil import to_viewer_naive
+from .timeutil import parse_iso, to_viewer_naive
 
 DRY_RUN_HEADER = "Dry run: no changes made. Would:"
 
@@ -134,3 +134,36 @@ def format_front_plan(plan, labels, type_names, comment=None, silent=False):
     if silent:
         lines.append("  silent: no notifications")
     return lines
+
+
+def front_discrepancies(before, after, fronters: dict, labels=None) -> list:
+    """After a write: how does the re-read front list differ from the one we
+    asked for? `before`/`after` are `currentFronts` lists and `fronters` the
+    requested {member_id: type_id}. Empty means exactly as intended.
+
+    A fronter whose type didn't change must still have its original start
+    time; that is what tells a real "keep" from a silent restart.
+    """
+    labels = labels or {}
+    was = {f["member_id"]: f for f in before}
+    now = {f["member_id"]: f for f in after}
+
+    def name(mid):
+        src = now.get(mid) or was.get(mid)
+        return (front_member_label(src) if src else None) or labels.get(mid) or mid
+
+    out = []
+    for mid, tid in fronters.items():
+        f = now.get(mid)
+        if f is None:
+            out.append(f"{name(mid)} is not fronting")
+        elif f["system_front_type_id"] != tid:
+            out.append(f"{name(mid)} is fronting as a different type")
+        elif (
+            mid in was
+            and was[mid]["system_front_type_id"] == tid
+            and parse_iso(f["started_at"]) != parse_iso(was[mid]["started_at"])
+        ):
+            out.append(f"{name(mid)}'s start time changed")
+    out += [f"{name(mid)} is still fronting" for mid in now if mid not in fronters]
+    return out

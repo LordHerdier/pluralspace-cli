@@ -75,3 +75,24 @@ def test_format_front_plan_prefers_current_label_over_argument_label():
     lines = format_front_plan(plan, {"a": "Typed"}, {"t1": "Front"})
     assert any("Shown" in ln for ln in lines)
     assert not any("Typed" in ln for ln in lines)
+
+
+def test_front_discrepancies_empty_when_exactly_as_requested():
+    from pluralspace.fronts import front_discrepancies
+
+    before = [_cur("a", "t1", "Ada")]
+    after = [_cur("a", "t1", "Ada"), _cur("b", "t2", "Bo")]
+    assert front_discrepancies(before, after, {"a": "t1", "b": "t2"}) == []
+
+
+def test_front_discrepancies_names_each_kind_of_mismatch():
+    from pluralspace.fronts import front_discrepancies
+
+    before = [_cur("a", "t1", "Ada"), _cur("c", "t1", "Cy")]
+    after = [_cur("a", "t9", "Ada"), _cur("c", "t1", "Cy")]
+    got = front_discrepancies(before, after, {"a": "t1", "b": "t1"}, {"b": "Bo"})
+    assert got == [
+        "Ada is fronting as a different type",
+        "Bo is not fronting",
+        "Cy is still fronting",
+    ]

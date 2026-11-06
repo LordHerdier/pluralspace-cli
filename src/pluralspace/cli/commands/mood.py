@@ -1,6 +1,6 @@
 """mood."""
 
-from ...api_client import PluralspaceAPI
+from ...api_client import APIError, PluralspaceAPI
 from ...credentials import PassStore
 from ...errors import UsageError
 from ...fronts import DRY_RUN_HEADER
@@ -49,9 +49,11 @@ def mood_state(atmosphere: dict) -> dict:
 
 def _mood_apply(args, api, store) -> int:
     recorded = False
+    wrote = False
+    target_id = None
 
     def write():
-        nonlocal recorded
+        nonlocal recorded, wrote, target_id
         target_id = None
         if args.name and not args.clear:
             target_id = resolve_mood(api.moods(), args.name)["id"]
@@ -59,6 +61,7 @@ def _mood_apply(args, api, store) -> int:
         if before["id"] != target_id:
             snapshot_before(args, "mood", "mood", before)
             recorded = True
+        wrote = True
         if args.clear:
             api.clear_mood()
         else:
@@ -69,6 +72,11 @@ def _mood_apply(args, api, store) -> int:
     atmosphere = _authed(api, store, api.atmosphere)
     if recorded:
         snapshot_after(args, mood_state(atmosphere))
+    if wrote and atmosphere.get("mood") != target_id:
+        raise APIError(
+            "the write was accepted but the mood isn't as expected (now "
+            f"{atmosphere.get('mood_label') or '(none)'}). Check the app"
+        )
     if args.json:
         return _emit_json(atmosphere)
     print(f"Mood: {atmosphere.get('mood_label') or '(none)'}")

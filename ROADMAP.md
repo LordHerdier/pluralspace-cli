@@ -39,13 +39,15 @@ real account with no undo, so they need to be properly safeguarded.
 - [x] **Record the previous state.** Save the prior front/mood to
       `$XDG_STATE_HOME/pluralspace/<profile>.last-state.json` and add
       `plsp undo`. Undo reopens the original front row, so the original start
-      time and comment are restored. Undo re-reads and checks its own result;
-      `switch`, `end` and `mood` themselves are not verified yet (see below).
+      time and comment are restored. Undo re-reads and checks its own result,
+      as do `switch`, `end` and `mood` (see below).
 
-- [ ] **Verify writes.** Currently, `_mutate` treats any 200/204/302/303 as a
-      success, and the 302/303 case only checks that the redirect isn't to
-      '/login'. Need to re-read that state after a write and report a fail if it
-      doesn't match what was expected.
+- [x] **Verify writes.** `_mutate` still treats any 200/204/302/303 as a
+      success (it can't know more), so `switch`, `end` and `mood` now re-read
+      the state afterwards and exit 2 with what differs if it isn't what was
+      asked for: wrong or missing fronters, a kept fronter whose start time
+      changed, or a mood that didn't take. The re-read state is still saved
+      for `plsp undo`, so a bad write can be rolled back.
 
 - [ ] **Handle a 409 version mismatch on mutations.** `page()` refreshes the
       Intertia version and retries, but `_mutate` doesn't. A site deploy while
