@@ -21,18 +21,24 @@ Credentials live in pass at pluralspace/<profile>:
 
 import argparse
 import getpass
-import html
 import json
-import re
 import sys
 import textwrap
-from datetime import datetime, timezone
 from typing import Callable, TypeVar
 
 from . import __version__
 from .api_client import APIError, AuthError, PluralspaceAPI
 from .credentials import CredentialError, Credentials, PassStore
 from .errors import UsageError
+from .render import (
+    _day,
+    _field_value,
+    _format_relationship,
+    editorjs_text,
+    front_member_label,
+    front_type_name,
+    member_flags,
+)
 
 T = TypeVar("T")
 
@@ -196,10 +202,7 @@ def plan_fronts(current, fronters: dict) -> dict:
 
 def replaced_names(plan) -> list:
     """Names of current fronters a plain `switch` would end."""
-    return [
-        (plan["current"][mid].get("member") or {}).get("display_label") or "(hidden)"
-        for mid in plan["end"]
-    ]
+    return [front_member_label(plan["current"][mid]) for mid in plan["end"]]
 
 
 def confirm_replace(names, stdin=None, stdout=None) -> None:
@@ -209,9 +212,7 @@ def confirm_replace(names, stdin=None, stdout=None) -> None:
     listed = ", ".join(names)
     hint = "pass --replace to confirm, or --add to keep them"
     if not stdin.isatty():
-        raise UsageError(
-            f"this switch would end current fronters ({listed}); {hint}"
-        )
+        raise UsageError(f"this switch would end current fronters ({listed}); {hint}")
     stdout.write(
         f"This will end current fronters: {listed}\n(or use --add to keep them)\n"
     )
@@ -246,9 +247,7 @@ def format_front_plan(plan, labels, type_names, comment=None, silent=False):
             f"  since {_day(now[mid]['started_at'])}"
         )
     for mid in plan["end"]:
-        lines.append(
-            f"  - end    {name(mid)}  [{(now[mid].get('front_type') or {}).get('name', '')}]"
-        )
+        lines.append(f"  - end    {name(mid)}  [{front_type_name(now[mid])}]")
     if not any(plan[k] for k in ("start", "retype", "keep", "end")):
         lines.append("  (nobody fronting before or after)")
     if comment:
@@ -372,19 +371,6 @@ def _emit_json(data) -> int:
     return 0
 
 
-def _day(ts: str) -> str:
-    """Format an API timestamp (UTC) in the system's local timezone."""
-    if not ts:
-        return "-"
-    try:
-        dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
-    except ValueError:
-        return ts[:16].replace("T", " ")
-    if dt.tzinfo is None:
-        dt = dt.replace(tzinfo=timezone.utc)
-    return dt.astimezone().strftime("%Y-%m-%d %H:%M")
-
-
 def cmd_members(args, api: PluralspaceAPI, store: PassStore) -> int:
     members = _authed(
         api,
@@ -394,16 +380,7 @@ def cmd_members(args, api: PluralspaceAPI, store: PassStore) -> int:
     if args.json:
         return _emit_json(members)
     for m in members:
-        flags = [
-            f
-            for f, on in (
-                ("fronting", m.get("active_front")),
-                ("custom", m.get("is_custom_front")),
-                ("pinned", m.get("is_pinned")),
-                ("archived", m.get("is_archived")),
-            )
-            if on
-        ]
+        flags = member_flags(m, fronting=True)
         pronouns = f" ({m['pronouns']})" if m.get("pronouns") else ""
         suffix = f"  [{', '.join(flags)}]" if flags else ""
         plain = (
@@ -414,82 +391,6 @@ def cmd_members(args, api: PluralspaceAPI, store: PassStore) -> int:
         print(f"{m['id'][-8:]}  {m['display_label']}{pronouns}{plain}{suffix}")
     print(f"{len(members)} members", file=sys.stderr)
     return 0
-
-
-def _strip_html(text: str) -> str:
-    text = re.sub(r"<br\s*/?>", "\n", text or "")
-    return html.unescape(re.sub(r"<[^>]+>", "", text)).replace("\xa0", " ").strip()
-
-
-def _list_lines(items, style: str, depth: int = 0):
-    for i, item in enumerate(items or [], 1):
-        if isinstance(item, str):
-            item = {"content": item}
-        marker = f"{i}." if style == "ordered" else "-"
-        yield "  " * depth + f"{marker} {_strip_html(item.get('content', ''))}"
-        yield from _list_lines(item.get("items"), style, depth + 1)
-
-
-def _block_lines(block: dict):
-    """Render one Editor.js block as plain-text lines (media become a marker/URL)."""
-    kind, data = block.get("type"), block.get("data") or {}
-    if kind in ("paragraph", "header"):
-        yield _strip_html(data.get("text", ""))
-    elif kind == "quote":
-        yield f"> {_strip_html(data.get('text', ''))}"
-        if data.get("caption"):
-            yield f"  — {_strip_html(data['caption'])}"
-    elif kind == "list":
-        yield from _list_lines(data.get("items"), data.get("style", "unordered"))
-    elif kind == "table":
-        for row in data.get("content", []):
-            yield " | ".join(_strip_html(c) for c in row)
-    elif kind == "columns":
-        for col in data.get("cols", []):
-            for b in col.get("blocks", []):
-                yield from _block_lines(b)
-    elif kind == "image":
-        yield f"[image: {(data.get('file') or {}).get('url', '')}]"
-    elif kind == "gallery":
-        for img in data.get("images", []):
-            yield f"[image: {(img.get('file') or {}).get('url', '')}]"
-    elif kind == "delimiter":
-        yield "---"
-
-
-def editorjs_text(value) -> str:
-    """Plain text for an Editor.js document (dict or JSON string); "" if empty or not one."""
-    if isinstance(value, str):
-        if not value.lstrip().startswith("{"):
-            return value
-        try:
-            value = json.loads(value)
-        except ValueError:
-            return value
-    if not isinstance(value, dict) or "blocks" not in value:
-        return ""
-    lines = [ln for b in value["blocks"] for ln in _block_lines(b)]
-    # a document of nothing but delimiters/blank lines is empty
-    if not any(ln and ln != "---" for ln in lines):
-        return ""
-    return "\n".join(ln for ln in lines if ln)
-
-
-def _field_value(value):
-    """Custom field values are a string, a list (padded with "") when multiple, or rich text."""
-    if isinstance(value, list):
-        return ", ".join(v for v in value if v)
-    return editorjs_text(value) if value else ""
-
-
-def _format_relationship(r: dict) -> str:
-    other = r.get("other_member") or {}
-    line = f"{r.get('label', '?')}: {other.get('display_label', '(hidden)')}"
-    if r.get("cross_system"):
-        line += "  [cross-system]"
-    if r.get("notes"):
-        line += f"  - {r['notes']}"
-    return line
 
 
 def cmd_member(args, api: PluralspaceAPI, store: PassStore) -> int:
@@ -510,15 +411,7 @@ def cmd_member(args, api: PluralspaceAPI, store: PassStore) -> int:
         )
         return _emit_json({k: props.get(k) for k in keys})
     m = props["member"]
-    flags = [
-        f
-        for f, on in (
-            ("custom front", m.get("is_custom_front")),
-            ("pinned", m.get("is_pinned")),
-            ("archived", m.get("is_archived")),
-        )
-        if on
-    ]
+    flags = member_flags(m, custom_label="custom front")
     print(
         m["display_label"]
         + (f" ({m['pronouns']})" if m.get("pronouns") else "")
@@ -563,7 +456,7 @@ def cmd_member(args, api: PluralspaceAPI, store: PassStore) -> int:
             with_ = f"  with {', '.join(others)}" if others else ""
             print(
                 f"  {_day(h['started_at'])} -> {end}  ({h.get('duration_human', '')})"
-                f"  [{(h.get('front_type') or {}).get('name', '')}]{with_}"
+                f"  [{front_type_name(h)}]{with_}"
             )
     return 0
 
@@ -575,8 +468,8 @@ def cmd_fronting(args, api: PluralspaceAPI, store: PassStore) -> int:
     if not fronts:
         print("Nobody is fronting")
     for f in fronts:
-        name = (f.get("member") or {}).get("display_label", "(hidden)")
-        kind = (f.get("front_type") or {}).get("name", "")
+        name = front_member_label(f)
+        kind = front_type_name(f)
         note = f"  - {f['comment']}" if f.get("comment") else ""
         print(f"{name}  [{kind}]  since {_day(f['started_at'])}{note}")
     return 0
@@ -587,8 +480,8 @@ def cmd_history(args, api: PluralspaceAPI, store: PassStore) -> int:
     if args.json:
         return _emit_json(fronts)
     for f in fronts:
-        name = (f.get("member") or {}).get("display_label", "(hidden)")
-        kind = (f.get("front_type") or {}).get("name", "")
+        name = front_member_label(f)
+        kind = front_type_name(f)
         end = "now" if f.get("is_ongoing") else _day(f["ended_at"])
         print(f"{_day(f['started_at'])} -> {end}  {name}  [{kind}]")
     return 0
