@@ -118,10 +118,10 @@ def test_plan_fronts_classifies_changes():
 
     current = [_cur("a", "t1"), _cur("b", "t1"), _cur("c", "t1")]
     plan = plan_fronts(current, {"a": "t1", "b": "t2", "d": "t1"})
-    assert plan["keep"] == ["a"]
-    assert plan["retype"] == ["b"]
-    assert plan["start"] == ["d"]
-    assert plan["end"] == ["c"]
+    assert plan.keep == ["a"]
+    assert plan.retype == ["b"]
+    assert plan.start == ["d"]
+    assert plan.end == ["c"]
 
 
 def test_format_front_plan_names_and_end_all():

@@ -30,6 +30,7 @@ from . import __version__
 from .api_client import APIError, AuthError, PluralspaceAPI
 from .credentials import CredentialError, Credentials, PassStore
 from .errors import UsageError
+from .fronts import format_front_plan, plan_fronts, replaced_names
 from .render import (
     _day,
     _field_value,
@@ -94,37 +95,6 @@ def cmd_whoami(args, api: PluralspaceAPI, store: PassStore) -> int:
 DEFAULT_FRONT_TYPE = "front"
 
 
-def plan_fronts(current, fronters: dict) -> dict:
-    """Diff the current front list against the requested {member_id: type_id}.
-
-    Returns member-id lists: `start`, `keep` (same type, keeps its start time),
-    `retype` (already fronting, different type) and `end`, plus `current`
-    ({member_id: front} for naming).
-    """
-    now = {f["member_id"]: f for f in current}
-    return {
-        "start": [m for m in fronters if m not in now],
-        "keep": [
-            m
-            for m in fronters
-            if m in now and now[m]["system_front_type_id"] == fronters[m]
-        ],
-        "retype": [
-            m
-            for m in fronters
-            if m in now and now[m]["system_front_type_id"] != fronters[m]
-        ],
-        "end": [m for m in now if m not in fronters],
-        "current": now,
-        "target": fronters,
-    }
-
-
-def replaced_names(plan) -> list:
-    """Names of current fronters a plain `switch` would end."""
-    return [front_member_label(plan["current"][mid]) for mid in plan["end"]]
-
-
 def confirm_replace(names, stdin=None, stdout=None) -> None:
     """Refuse to silently end fronters. Prompts on a terminal; otherwise errors."""
     stdin = stdin or sys.stdin
@@ -140,41 +110,6 @@ def confirm_replace(names, stdin=None, stdout=None) -> None:
     stdout.flush()
     if stdin.readline().strip().lower() not in ("y", "yes"):
         raise UsageError("aborted; nothing changed")
-
-
-def format_front_plan(plan, labels, type_names, comment=None, silent=False):
-    """Human-readable lines for a plan_fronts result. `labels` names members
-    that were resolved from arguments; the rest come from the current fronts."""
-    now = plan["current"]
-
-    def name(mid):
-        """display_label everywhere, so a member reads the same on every line."""
-        shown = (now.get(mid, {}).get("member") or {}).get("display_label")
-        return shown or labels.get(mid) or "(hidden)"
-
-    def tname(tid):
-        return type_names.get(tid, tid)
-
-    lines = ["Dry run: no changes made. Would:"]
-    for mid in plan["start"]:
-        lines.append(f"  + start  {name(mid)}  [{tname(plan['target'][mid])}]")
-    for mid in plan["retype"]:
-        old = tname(now[mid]["system_front_type_id"])
-        lines.append(f"  ~ retype {name(mid)}  [{old} -> {tname(plan['target'][mid])}]")
-    for mid in plan["keep"]:
-        lines.append(
-            f"  = keep   {name(mid)}  [{tname(plan['target'][mid])}]"
-            f"  since {_day(now[mid]['started_at'])}"
-        )
-    for mid in plan["end"]:
-        lines.append(f"  - end    {name(mid)}  [{front_type_name(now[mid])}]")
-    if not any(plan[k] for k in ("start", "retype", "keep", "end")):
-        lines.append("  (nobody fronting before or after)")
-    if comment:
-        lines.append(f"  comment: {comment}")
-    if silent:
-        lines.append("  silent: no notifications")
-    return lines
 
 
 def cmd_switch(args, api: PluralspaceAPI, store: PassStore) -> int:
@@ -212,7 +147,7 @@ def cmd_switch(args, api: PluralspaceAPI, store: PassStore) -> int:
             return
         if not args.add and not args.replace:
             plan = plan_fronts(current, fronters)
-            if plan["end"]:
+            if plan.end:
                 confirm_replace(replaced_names(plan))
         api.set_fronts(fronters, args.comment, args.silent)
 
