@@ -4,6 +4,8 @@ from dataclasses import dataclass
 
 from .render import _day, front_member_label, front_type_name
 
+DRY_RUN_HEADER = "Dry run: no changes made. Would:"
+
 
 @dataclass
 class FrontPlan:
@@ -60,7 +62,7 @@ def format_front_plan(plan, labels, type_names, comment=None, silent=False):
     def tname(tid):
         return type_names.get(tid, tid)
 
-    lines = ["Dry run: no changes made. Would:"]
+    lines = [DRY_RUN_HEADER]
     for mid in plan.start:
         lines.append(f"  + start  {name(mid)}  [{tname(plan.target[mid])}]")
     for mid in plan.retype:

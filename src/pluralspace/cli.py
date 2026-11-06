@@ -30,7 +30,7 @@ from . import __version__
 from .api_client import APIError, AuthError, PluralspaceAPI
 from .credentials import CredentialError, Credentials, PassStore
 from .errors import UsageError
-from .fronts import format_front_plan, plan_fronts, replaced_names
+from .fronts import DRY_RUN_HEADER, format_front_plan, plan_fronts, replaced_names
 from .render import (
     _day,
     _field_value,
@@ -153,36 +153,38 @@ def cmd_switch(args, api: PluralspaceAPI, store: PassStore) -> int:
 
     _authed(api, store, run)
     if not args.dry_run:
-        return cmd_fronting(argparse.Namespace(json=False), api, store)
+        _print_fronting(_authed(api, store, api.current_fronts))
     return 0
 
 
-def cmd_mood(args, api: PluralspaceAPI, store: PassStore) -> int:
-    if args.list:
-        moods = _authed(api, store, api.moods)
-        if args.json:
-            return _emit_json(moods)
-        for m in moods:
-            print(f"{m['name']:<12} {m.get('tagline', '')}")
-        return 0
-    if args.dry_run and not (args.clear or args.name):
+def _mood_list(args, api, store) -> int:
+    moods = _authed(api, store, api.moods)
+    if args.json:
+        return _emit_json(moods)
+    for m in moods:
+        print(f"{m['name']:<12} {m.get('tagline', '')}")
+    return 0
+
+
+def _mood_preview(args, api, store) -> int:
+    if not (args.clear or args.name):
         raise UsageError("--dry-run needs a mood NAME or --clear")
-    if args.dry_run:
 
-        def preview():
-            before = api.atmosphere().get("mood_label") or "(none)"
-            after = (
-                "(none)" if args.clear else resolve_mood(api.moods(), args.name)["name"]
-            )
-            return before, after
+    def preview():
+        before = api.atmosphere().get("mood_label") or "(none)"
+        after = "(none)" if args.clear else resolve_mood(api.moods(), args.name)["name"]
+        return before, after
 
-        before, after = _authed(api, store, preview)
-        print("Dry run: no changes made. Would:")
-        if before.casefold() == after.casefold():
-            print(f"  mood: {before} (unchanged)")
-        else:
-            print(f"  mood: {before} -> {after}")
-        return 0
+    before, after = _authed(api, store, preview)
+    print(DRY_RUN_HEADER)
+    if before.casefold() == after.casefold():
+        print(f"  mood: {before} (unchanged)")
+    else:
+        print(f"  mood: {before} -> {after}")
+    return 0
+
+
+def _mood_apply(args, api, store) -> int:
     if args.clear:
         _authed(api, store, api.clear_mood)
     elif args.name:
@@ -197,6 +199,14 @@ def cmd_mood(args, api: PluralspaceAPI, store: PassStore) -> int:
     return 0
 
 
+def cmd_mood(args, api: PluralspaceAPI, store: PassStore) -> int:
+    if args.list:
+        return _mood_list(args, api, store)
+    if args.dry_run:
+        return _mood_preview(args, api, store)
+    return _mood_apply(args, api, store)
+
+
 def cmd_end(args, api: PluralspaceAPI, store: PassStore) -> int:
     if args.dry_run:
         current = _authed(api, store, api.current_fronts)
@@ -208,6 +218,7 @@ def cmd_end(args, api: PluralspaceAPI, store: PassStore) -> int:
 
 
 def _emit_json(data) -> int:
+    """Print data as JSON; returns the exit status (0) for `return _emit_json(...)`."""
     print(json.dumps(data, indent=2))
     return 0
 
@@ -302,10 +313,7 @@ def cmd_member(args, api: PluralspaceAPI, store: PassStore) -> int:
     return 0
 
 
-def cmd_fronting(args, api: PluralspaceAPI, store: PassStore) -> int:
-    fronts = _authed(api, store, api.current_fronts)
-    if args.json:
-        return _emit_json(fronts)
+def _print_fronting(fronts) -> None:
     if not fronts:
         print("Nobody is fronting")
     for f in fronts:
@@ -313,6 +321,13 @@ def cmd_fronting(args, api: PluralspaceAPI, store: PassStore) -> int:
         kind = front_type_name(f)
         note = f"  - {f['comment']}" if f.get("comment") else ""
         print(f"{name}  [{kind}]  since {_day(f['started_at'])}{note}")
+
+
+def cmd_fronting(args, api: PluralspaceAPI, store: PassStore) -> int:
+    fronts = _authed(api, store, api.current_fronts)
+    if args.json:
+        return _emit_json(fronts)
+    _print_fronting(fronts)
     return 0
 
 
