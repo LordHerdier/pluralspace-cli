@@ -2,6 +2,7 @@ import pytest
 
 from pluralspace import cli
 from pluralspace.api_client import APIError, AuthError
+from pluralspace.cli import app
 from pluralspace.errors import UsageError
 
 
@@ -54,8 +55,8 @@ class FakeAPI:
 @pytest.fixture(autouse=True)
 def fake(monkeypatch):
     FakeAPI.fronts, FakeAPI.raises, FakeAPI.calls = [], None, []
-    monkeypatch.setattr(cli, "PluralspaceAPI", FakeAPI)
-    monkeypatch.setattr(cli, "PassStore", FakeStore)
+    monkeypatch.setattr(app, "PluralspaceAPI", FakeAPI)
+    monkeypatch.setattr(app, "PassStore", FakeStore)
 
 
 def test_usage_error_exits_1_with_message(capsys):

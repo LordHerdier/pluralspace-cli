@@ -33,6 +33,7 @@ def test_resolve_front_type_by_name_or_slug():
 
 def test_resolve_mood_exact_only():
     import pytest
+
     from pluralspace.cli import resolve_mood
     from pluralspace.credentials import CredentialError
 
