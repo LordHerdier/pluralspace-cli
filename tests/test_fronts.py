@@ -33,6 +33,7 @@ def test_resolve_front_type_by_name_or_slug():
 
 def test_resolve_mood_exact_only():
     import pytest
+
     from pluralspace.cli import resolve_mood
     from pluralspace.credentials import CredentialError
 
@@ -118,10 +119,10 @@ def test_plan_fronts_classifies_changes():
 
     current = [_cur("a", "t1"), _cur("b", "t1"), _cur("c", "t1")]
     plan = plan_fronts(current, {"a": "t1", "b": "t2", "d": "t1"})
-    assert plan["keep"] == ["a"]
-    assert plan["retype"] == ["b"]
-    assert plan["start"] == ["d"]
-    assert plan["end"] == ["c"]
+    assert plan.keep == ["a"]
+    assert plan.retype == ["b"]
+    assert plan.start == ["d"]
+    assert plan.end == ["c"]
 
 
 def test_format_front_plan_names_and_end_all():
