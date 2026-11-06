@@ -14,10 +14,12 @@ import re
 import urllib.error
 import urllib.parse
 import urllib.request
-from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Iterable, List, NamedTuple, Optional
 
 from . import __version__
+from .fronts import reopen_body, row_from_calendar
+from .state import state_dir
+from .timeutil import month_of
 
 BASE_URL = "https://pluralspace.app"
 USER_AGENT = f"pluralspace-cli/{__version__}"
@@ -33,14 +35,18 @@ class AuthError(APIError):
     """Login rejected, or the session is missing/expired."""
 
 
+class CalendarState(NamedTuple):
+    """Front rows from the calendar view. `timezone` is the viewer's IANA zone,
+    which the front edit form uses for naive timestamps."""
+
+    timezone: str
+    can_edit: bool
+    rows: Dict[str, Dict[str, Any]]
+
+
 class _NoRedirect(urllib.request.HTTPRedirectHandler):
     def redirect_request(self, *args, **kwargs):
         return None
-
-
-def _state_dir() -> Path:
-    base = os.environ.get("XDG_STATE_HOME") or (Path.home() / ".local" / "state")
-    return Path(base) / "pluralspace"
 
 
 class PluralspaceAPI:
@@ -50,7 +56,7 @@ class PluralspaceAPI:
         self.base_url = base_url.rstrip("/")
         self.debug = debug
         self.version: Optional[str] = None
-        self.jar_path = _state_dir() / f"{profile}.cookies"
+        self.jar_path = state_dir() / f"{profile}.cookies"
         self.jar = http.cookiejar.MozillaCookieJar(str(self.jar_path))
         self._load_jar()
         self._opener = urllib.request.build_opener(
@@ -292,12 +298,58 @@ class PluralspaceAPI:
         )
         return payload["props"]["currentFronts"]
 
-    def front_history(self, month: Optional[str] = None) -> List[Dict[str, Any]]:
-        """Fronts touching the given YYYY-MM month (default: current), newest first."""
+    def fronts_page(self, month: Optional[str] = None) -> Dict[str, Any]:
+        """Props of the front calendar for a YYYY-MM month (default: current)."""
         path = "/space/fronts" + (
             f"?month={urllib.parse.quote(month)}" if month else ""
         )
-        return dedupe_fronts(self.page_deferred(path)["weeks"])
+        return self.page_deferred(path)
+
+    def front_history(self, month: Optional[str] = None) -> List[Dict[str, Any]]:
+        """Fronts touching the given YYYY-MM month (default: current), newest first."""
+        return dedupe_fronts(self.fronts_page(month)["weeks"])
+
+    def calendar_state(self, started_ats: Iterable[str] = ()) -> CalendarState:
+        """Every front row in the current month plus the months the given
+        start times fall in, as normalized rows keyed by id.
+
+        Unlike `current_fronts`, the calendar lists *every* ongoing row, so it
+        shows a member with two live rows (the dashboard hides one).
+        """
+        props = self.fronts_page()
+        tz = props.get("viewerTimezone") or "UTC"
+        can_edit = bool((props.get("permissions") or {}).get("edit_fronts"))
+        current = (props.get("month") or {}).get("value")
+        rows: Dict[str, Dict[str, Any]] = {}
+
+        def add(page_props):
+            for f in dedupe_fronts(page_props["weeks"]):
+                rows.setdefault(f["id"], row_from_calendar(f))
+
+        add(props)
+        for month in sorted({month_of(ts, tz) for ts in started_ats} - {current}):
+            add(self.fronts_page(month))
+        return CalendarState(tz, can_edit, rows)
+
+    def end_front(self, member_id: str) -> None:
+        """End a member's live front. Leaves other fronters untouched."""
+        self._mutate(f"/space/fronts/{urllib.parse.quote(member_id)}/end", {})
+
+    def delete_front(self, front_id: str) -> None:
+        """Delete one front row from the history. There is no undo for this."""
+        self._mutate(
+            f"/space/fronts/{urllib.parse.quote(front_id)}", {}, method="DELETE"
+        )
+
+    def reopen_front(self, row: Dict[str, Any], tz_name: str) -> None:
+        """Make an ended front row live again, keeping its start time."""
+        try:
+            body = reopen_body(row, tz_name)
+        except ValueError as e:
+            raise APIError(f"won't edit front {row['id']}: {e}") from None
+        self._mutate(
+            f"/space/fronts/{urllib.parse.quote(row['id'])}", body, method="PATCH"
+        )
 
     def member(self, member_id: str) -> Dict[str, Any]:
         """Full profile props for one member (by full id)."""

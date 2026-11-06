@@ -7,7 +7,7 @@ from .. import __version__
 from ..api_client import APIError, AuthError, PluralspaceAPI
 from ..credentials import CredentialError, PassStore
 from ..errors import UsageError
-from .commands import auth, fronts, members, mood
+from .commands import auth, fronts, members, mood, undo
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -16,7 +16,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--profile", default="default")
     parser.add_argument("--debug", action="store_true")
     sub = parser.add_subparsers(dest="command", required=True)
-    for module in (auth, members, fronts, mood):
+    for module in (auth, members, fronts, mood, undo):
         module.register(sub)
     return parser
 

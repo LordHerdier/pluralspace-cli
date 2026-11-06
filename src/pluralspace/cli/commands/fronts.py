@@ -5,10 +5,17 @@ import sys
 from ...api_client import PluralspaceAPI
 from ...credentials import PassStore
 from ...errors import UsageError
-from ...fronts import format_front_plan, plan_fronts, replaced_names
+from ...fronts import format_front_plan, plan_fronts, replaced_names, row_from_current
 from ...render import _day, front_member_label, front_type_name
 from ...resolve import resolve_front_type, resolve_member
-from ..common import _authed, _emit_json, add_dry_run, add_json
+from ..common import (
+    _authed,
+    _emit_json,
+    add_dry_run,
+    add_json,
+    snapshot_after,
+    snapshot_before,
+)
 
 DEFAULT_FRONT_TYPE = "front"
 
@@ -31,7 +38,10 @@ def confirm_replace(names, stdin=None, stdout=None) -> None:
 
 
 def cmd_switch(args, api: PluralspaceAPI, store: PassStore) -> int:
+    recorded = False
+
     def run():
+        nonlocal recorded
         types = api.front_types()
         default = resolve_front_type(types, args.type or DEFAULT_FRONT_TYPE)
         current = api.current_fronts()
@@ -63,15 +73,23 @@ def cmd_switch(args, api: PluralspaceAPI, store: PassStore) -> int:
                 )
             )
             return
-        if not args.add and not args.replace:
-            plan = plan_fronts(current, fronters)
-            if plan.end:
-                confirm_replace(replaced_names(plan))
+        plan = plan_fronts(current, fronters)
+        if plan.end and not args.add and not args.replace:
+            confirm_replace(replaced_names(plan))
+        if plan.start or plan.retype or plan.end:
+            # A switch that changes nothing must not replace a useful snapshot.
+            snapshot_before(
+                args, "fronts", "switch", [row_from_current(f) for f in current]
+            )
+            recorded = True
         api.set_fronts(fronters, args.comment, args.silent)
 
     _authed(api, store, run)
     if not args.dry_run:
-        _print_fronting(_authed(api, store, api.current_fronts))
+        fronts = _authed(api, store, api.current_fronts)
+        _print_fronting(fronts)
+        if recorded:
+            snapshot_after(args, [row_from_current(f) for f in fronts])
     return 0
 
 
@@ -80,7 +98,12 @@ def cmd_end(args, api: PluralspaceAPI, store: PassStore) -> int:
         current = _authed(api, store, api.current_fronts)
         print("\n".join(format_front_plan(plan_fronts(current, {}), {}, {})))
         return 0
+    current = _authed(api, store, api.current_fronts)
+    if current:
+        snapshot_before(args, "fronts", "end", [row_from_current(f) for f in current])
     _authed(api, store, api.end_all)
+    if current:
+        snapshot_after(args, [])
     print("Nobody is fronting")
     return 0
 

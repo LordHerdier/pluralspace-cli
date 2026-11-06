@@ -29,15 +29,18 @@ real account with no undo, so they need to be properly safeguarded.
       `mood`, it prints a readable diff against the current state (who starts,
       ends, keeps their start time, or changes type; or the old -> new mood)
       instead of the raw request body. Still to do: `--json` output for dry
-      runs, and confirming whether a type change keeps the start time.
+      runs. (A type change does not keep the start time: the old front ends and
+      a new one starts. The dry run now says so.)
 
 - [x] **Make replace-vs-add hard to hit by accident.** `switch` currently
       replaces the whole front set unless `--add` is passed. We either need a
       confirmation or a explicit flag (`--replace`).
 
-- [ ] **Record the previous state.** Save the prior front/mood to
+- [x] **Record the previous state.** Save the prior front/mood to
       `$XDG_STATE_HOME/pluralspace/<profile>.last-state.json` and add
-      `plsp undo`. Document that it can't restore original start times (yet).
+      `plsp undo`. Undo reopens the original front row, so the original start
+      time and comment are restored. Undo re-reads and checks its own result;
+      `switch`, `end` and `mood` themselves are not verified yet (see below).
 
 - [ ] **Verify writes.** Currently, `_mutate` treats any 200/204/302/303 as a
       success, and the 302/303 case only checks that the redirect isn't to

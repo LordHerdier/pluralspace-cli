@@ -3,8 +3,55 @@
 from dataclasses import dataclass
 
 from .render import _day, front_member_label, front_type_name
+from .timeutil import to_viewer_naive
 
 DRY_RUN_HEADER = "Dry run: no changes made. Would:"
+
+
+def row_from_current(front: dict) -> dict:
+    """Normalize a dashboard `currentFronts` entry into a front row."""
+    return {
+        "id": front["id"],
+        "member_id": front["member_id"],
+        "type_id": front["system_front_type_id"],
+        "started_at": front["started_at"],
+        "ended_at": None,
+        "comment": front.get("comment"),
+        "label": front_member_label(front),
+        "type_name": front_type_name(front),
+    }
+
+
+def row_from_calendar(front: dict) -> dict:
+    """Normalize a calendar (`/space/fronts`) entry into the same row shape."""
+    member = front.get("member") or {}
+    ftype = front.get("front_type") or {}
+    return {
+        "id": front["id"],
+        "member_id": member.get("id"),
+        "type_id": ftype.get("id"),
+        "started_at": front["started_at"],
+        "ended_at": front.get("ended_at"),
+        "comment": front.get("comment"),
+        "label": member.get("display_label") or "(hidden)",
+        "type_name": ftype.get("name", ""),
+    }
+
+
+def reopen_body(row: dict, tz_name: str) -> dict:
+    """Body for PATCH /space/fronts/{id} that makes an ended row live again.
+
+    The endpoint replaces the whole row, so every other field is sent back
+    exactly as read. Raises ValueError if the start time can't be written
+    back exactly (see timeutil.to_viewer_naive).
+    """
+    return {
+        "member_id": row["member_id"],
+        "system_front_type_id": row["type_id"],
+        "started_at": to_viewer_naive(row["started_at"], tz_name),
+        "ended_at": None,
+        "comment": row.get("comment"),
+    }
 
 
 @dataclass
@@ -67,7 +114,12 @@ def format_front_plan(plan, labels, type_names, comment=None, silent=False):
         lines.append(f"  + start  {name(mid)}  [{tname(plan.target[mid])}]")
     for mid in plan.retype:
         old = tname(now[mid]["system_front_type_id"])
-        lines.append(f"  ~ retype {name(mid)}  [{old} -> {tname(plan.target[mid])}]")
+        # Pluralspace ends the old front row and opens a new one on a type
+        # change, so the start time (and comment) do not carry over.
+        lines.append(
+            f"  ~ retype {name(mid)}  [{old} -> {tname(plan.target[mid])}]"
+            "  (start time resets)"
+        )
     for mid in plan.keep:
         lines.append(
             f"  = keep   {name(mid)}  [{tname(plan.target[mid])}]"

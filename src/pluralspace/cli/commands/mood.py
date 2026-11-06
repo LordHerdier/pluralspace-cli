@@ -5,7 +5,14 @@ from ...credentials import PassStore
 from ...errors import UsageError
 from ...fronts import DRY_RUN_HEADER
 from ...resolve import resolve_mood
-from ..common import _authed, _emit_json, add_dry_run, add_json
+from ..common import (
+    _authed,
+    _emit_json,
+    add_dry_run,
+    add_json,
+    snapshot_after,
+    snapshot_before,
+)
 
 
 def _mood_list(args, api, store) -> int:
@@ -35,14 +42,33 @@ def _mood_preview(args, api, store) -> int:
     return 0
 
 
+def mood_state(atmosphere: dict) -> dict:
+    """The {"id", "label"} form of the dashboard's current mood."""
+    return {"id": atmosphere.get("mood"), "label": atmosphere.get("mood_label")}
+
+
 def _mood_apply(args, api, store) -> int:
-    if args.clear:
-        _authed(api, store, api.clear_mood)
-    elif args.name:
-        _authed(
-            api, store, lambda: api.set_mood(resolve_mood(api.moods(), args.name)["id"])
-        )
+    recorded = False
+
+    def write():
+        nonlocal recorded
+        target_id = None
+        if args.name and not args.clear:
+            target_id = resolve_mood(api.moods(), args.name)["id"]
+        before = mood_state(api.atmosphere())
+        if before["id"] != target_id:
+            snapshot_before(args, "mood", "mood", before)
+            recorded = True
+        if args.clear:
+            api.clear_mood()
+        else:
+            api.set_mood(target_id)
+
+    if args.clear or args.name:
+        _authed(api, store, write)
     atmosphere = _authed(api, store, api.atmosphere)
+    if recorded:
+        snapshot_after(args, mood_state(atmosphere))
     if args.json:
         return _emit_json(atmosphere)
     print(f"Mood: {atmosphere.get('mood_label') or '(none)'}")

@@ -58,7 +58,7 @@ def test_format_front_plan_covers_every_kind_of_change():
     assert lines[0] == DRY_RUN_HEADER
     text = "\n".join(lines)
     assert "+ start  Nia  [Front]" in text
-    assert "~ retype Rae  [Front -> Co-Front]" in text
+    assert "~ retype Rae  [Front -> Co-Front]  (start time resets)" in text
     assert "= keep   Kay  [Front]  since " in text
     assert "- end    Gus  [Front]" in text
     assert "comment: hello" in text
