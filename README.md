@@ -99,6 +99,11 @@ Fronters already in the new set keep their original start time and comment, as
 long as their type doesn't change. Changing a fronter's type ends their front and
 starts a new one, so the start time resets (the dry run says so).
 
+**`--add` race:** `--add` reads the current fronters and then writes the full
+set back. If someone changes the front in the app between those two steps, that
+change is overwritten. The window is short, but avoid `--add` while someone else
+may be switching at the same time.
+
 `--dry-run` (on `switch`, `end` and `mood`) fetches the current state and prints
 a diff instead of writing anything: `+ start`, `- end`, `= keep` (with the
 original start time) and `~ retype` for each fronter, or `mood: old -> new`.

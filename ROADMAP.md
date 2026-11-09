@@ -54,9 +54,9 @@ real account with no undo, so they need to be properly safeguarded.
       `delete_front` sends full desired state, so a replay can't double-apply;
       `delete_front` refuses to replay and says the outcome is unknown.
 
-- [ ] **Document the `--add` race.** `--add` reads the current fronts and writes
-      the full set. A change made in the app in between is overwritten. Should
-      either narrow the window or just state the race condition in the README.
+- [x] **Document the `--add` race.** `--add` reads the current fronts and writes
+      the full set. A change made in the app in between is overwritten. The
+      README now states the race condition.
 
 ## Next: fail safely when the site changes
 
