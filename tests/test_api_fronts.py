@@ -40,7 +40,9 @@ def test_end_front_posts_to_the_member_keyed_endpoint(api):
 
 def test_delete_front_sends_a_delete_for_that_row_only(api):
     api.delete_front("row 1")
-    assert api.sent == [(("/space/fronts/row%201", {}), {"method": "DELETE"})]
+    assert api.sent == [
+        (("/space/fronts/row%201", {}), {"method": "DELETE", "retry_on_409": False})
+    ]
 
 
 def test_reopen_front_patches_the_row_with_a_null_end(api):
@@ -99,3 +101,50 @@ def test_calendar_state_fetches_the_months_of_the_given_start_times(api, monkeyp
 def test_calendar_state_reports_missing_edit_permission(api, monkeypatch):
     monkeypatch.setattr(api, "fronts_page", lambda month=None: _props([], edit=False))
     assert api.calendar_state().can_edit is False
+
+
+class TestMutate409:
+    @pytest.fixture
+    def client(self, tmp_path, monkeypatch):
+        monkeypatch.setenv("XDG_STATE_HOME", str(tmp_path))
+        c = PluralspaceAPI("t409")
+        monkeypatch.setattr(c, "has_session", lambda: True)
+        monkeypatch.setattr(c, "_save_jar", lambda: None)
+        c.version = "old"
+        c.calls = []
+        c.boots = 0
+
+        def boot():
+            c.boots += 1
+            c.version = "new"
+
+        monkeypatch.setattr(c, "_bootstrap_version", boot)
+        return c
+
+    def _script(self, client, monkeypatch, statuses):
+        replies = iter(statuses)
+
+        def fake(method, path, **kw):
+            client.calls.append((method, path, client.version))
+            st = next(replies)
+            hdrs = {"X-Inertia-Location": "/space"} if st == 409 else {}
+            return st, hdrs, ""
+
+        monkeypatch.setattr(client, "_request", fake)
+
+    def test_retries_once_with_a_fresh_version(self, client, monkeypatch):
+        self._script(client, monkeypatch, [409, 302])
+        client.end_all()
+        assert [c[2] for c in client.calls] == ["old", "new"]
+
+    def test_second_409_is_an_error_not_a_loop(self, client, monkeypatch):
+        self._script(client, monkeypatch, [409, 409])
+        with pytest.raises(APIError, match="409"):
+            client.end_all()
+        assert len(client.calls) == 2
+
+    def test_delete_is_never_replayed(self, client, monkeypatch):
+        self._script(client, monkeypatch, [409, 302])
+        with pytest.raises(APIError, match="may or may not"):
+            client.delete_front("row1")
+        assert len(client.calls) == 1

@@ -49,10 +49,10 @@ real account with no undo, so they need to be properly safeguarded.
       changed, or a mood that didn't take. The re-read state is still saved
       for `plsp undo`, so a bad write can be rolled back.
 
-- [ ] **Handle a 409 version mismatch on mutations.** `page()` refreshes the
-      Intertia version and retries, but `_mutate` doesn't. A site deploy while
-      mid-session could give a confusing error on writes. We should refresh the
-      version and retry once, only where the retry can't double-apply.
+- [x] **Handle a 409 version mismatch on mutations.** `_mutate` now refreshes
+      the Inertia version and retries once, like `page()`. Every write except
+      `delete_front` sends full desired state, so a replay can't double-apply;
+      `delete_front` refuses to replay and says the outcome is unknown.
 
 - [ ] **Document the `--add` race.** `--add` reads the current fronts and writes
       the full set. A change made in the app in between is overwritten. Should

@@ -338,7 +338,10 @@ class PluralspaceAPI:
     def delete_front(self, front_id: str) -> None:
         """Delete one front row from the history. There is no undo for this."""
         self._mutate(
-            f"/space/fronts/{urllib.parse.quote(front_id)}", {}, method="DELETE"
+            f"/space/fronts/{urllib.parse.quote(front_id)}",
+            {},
+            method="DELETE",
+            retry_on_409=False,  # a replay would 404 and hide that it worked
         )
 
     def reopen_front(self, row: Dict[str, Any], tz_name: str) -> None:
@@ -422,12 +425,31 @@ class PluralspaceAPI:
         self._save_jar()
         return data
 
-    def _mutate(self, path: str, body: dict, method: str = "POST") -> None:
+    def _mutate(
+        self, path: str, body: dict, method: str = "POST", retry_on_409: bool = True
+    ) -> None:
+        """Send a write.
+
+        On a 409 with X-Inertia-Location (the asset version changed under us)
+        refresh the version and send it once more, but only if `retry_on_409`:
+        every caller except `delete_front` sends full desired state, so a
+        replay can't double-apply. Otherwise the outcome is unknown and we say
+        so rather than guess.
+        """
         if not self.has_session():
             raise AuthError("not logged in")
         if self.version is None:
             self._bootstrap_version()
         status, headers, text = self._request(method, path, json_body=body)
+        if status == 409 and headers.get("X-Inertia-Location"):
+            self.version = None
+            self._bootstrap_version()
+            if not retry_on_409:
+                raise APIError(
+                    f"{method} {path} returned 409 (site updated); it may or may "
+                    "not have been applied. Check the current state before retrying."
+                )
+            status, headers, text = self._request(method, path, json_body=body)
         self._check_session(status, headers)
         # Inertia answers a successful form post with a redirect (302, or 303 for DELETE).
         if status not in (200, 204, 302, 303):
