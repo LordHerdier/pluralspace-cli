@@ -60,10 +60,12 @@ real account with no undo, so they need to be properly safeguarded.
 
 ## Next: fail safely when the site changes
 
-- [ ] **Validate response shapes.** A changed payload currently surfaces as a
-      `KeyError` or a `TypeError`. We should check the fields each command needs
-      and raise one clear error: "Pluralspace's response changed. Please update
-      plsp or open an issue." before any write happens.
+- [x] **Validate response shapes.** `schema.py` checks the fields each command
+      reads (current fronts, calendar rows, members, moods, front types, the
+      mood atmosphere, Inertia envelope). A mismatch raises one error, "Pluralspace's
+      response changed. Please update plsp or open an issue.", naming the
+      first bad path (e.g. `currentFronts[0].member_id: missing`) and exits 2.
+      Every read a write depends on is checked before the write is sent.
 
 - [ ] **Flag when the site has been updated.** The page's embedded Inertia JSON
       (`data-page`) carries an asset `"version"` hash that changes whenever the

@@ -16,7 +16,7 @@ import urllib.parse
 import urllib.request
 from typing import Any, Dict, Iterable, List, NamedTuple, Optional
 
-from . import __version__
+from . import __version__, schema
 from .fronts import reopen_body, row_from_calendar
 from .state import state_dir
 from .timeutil import month_of
@@ -33,6 +33,24 @@ class APIError(Exception):
 
 class AuthError(APIError):
     """Login rejected, or the session is missing/expired."""
+
+
+class ResponseShapeError(APIError):
+    """A response lacks something plsp needs: the site has probably changed."""
+
+    def __init__(self, detail: str):
+        super().__init__(
+            "Pluralspace's response changed. Please update plsp or open an "
+            f"issue. ({detail})"
+        )
+
+
+def _shaped(check, value):
+    """Run a schema check, turning its ShapeError into a ResponseShapeError."""
+    try:
+        return check(value)
+    except schema.ShapeError as e:
+        raise ResponseShapeError(str(e)) from None
 
 
 class CalendarState(NamedTuple):
@@ -236,7 +254,7 @@ class PluralspaceAPI:
         except ValueError:
             raise AuthError("session expired") from None  # got HTML, not Inertia JSON
         self._save_jar()  # cookies rotate on every response
-        return payload
+        return _shaped(lambda p: schema.check_deferred(schema.check_page(p)), payload)
 
     def _bootstrap_version(self) -> None:
         status, _, body = self._request("GET", "/space", inertia=False)
@@ -256,11 +274,12 @@ class PluralspaceAPI:
     def page_deferred(self, path: str) -> Dict[str, Any]:
         """Fetch a page plus the props Inertia defers to a follow-up request."""
         first = self.page(path)
-        names = [n for group in first.get("deferredProps", {}).values() for n in group]
+        deferred = first.get("deferredProps") or {}
+        names = [n for group in deferred.values() for n in group]
         if not names:
-            return first.get("props", {})
+            return first["props"]
         second = self.page(path, partial=names, component=first["component"])
-        return {**first.get("props", {}), **second.get("props", {})}
+        return {**first["props"], **second["props"]}
 
     # -- members / fronts -------------------------------------------------
 
@@ -284,7 +303,9 @@ class PluralspaceAPI:
         page = 1
         while True:
             qs = urllib.parse.urlencode({**params, "page": page})
-            members = self.page_deferred(f"/members?{qs}")["members"]
+            members = _shaped(
+                schema.check_members_page, self.page_deferred(f"/members?{qs}")
+            )
             out.extend(members["data"])
             if page >= members["meta"]["last_page"]:
                 return out
@@ -296,14 +317,16 @@ class PluralspaceAPI:
             component="App/Dashboard",
             partial=["currentFronts", "currentFrontsTotal"],
         )
-        return payload["props"]["currentFronts"]
+        return _shaped(
+            schema.check_current_fronts, payload["props"].get("currentFronts")
+        )
 
     def fronts_page(self, month: Optional[str] = None) -> Dict[str, Any]:
         """Props of the front calendar for a YYYY-MM month (default: current)."""
         path = "/space/fronts" + (
             f"?month={urllib.parse.quote(month)}" if month else ""
         )
-        return self.page_deferred(path)
+        return _shaped(schema.check_fronts_page, self.page_deferred(path))
 
     def front_history(self, month: Optional[str] = None) -> List[Dict[str, Any]]:
         """Fronts touching the given YYYY-MM month (default: current), newest first."""
@@ -356,17 +379,20 @@ class PluralspaceAPI:
 
     def member(self, member_id: str) -> Dict[str, Any]:
         """Full profile props for one member (by full id)."""
-        return self.page_deferred(f"/members/{urllib.parse.quote(member_id)}")
+        props = self.page_deferred(f"/members/{urllib.parse.quote(member_id)}")
+        return _shaped(schema.check_member_props, props)
 
     # -- moods ------------------------------------------------------------
 
     def moods(self) -> List[Dict[str, Any]]:
-        return self._get_json("/system/moods/search?q=")["data"]
+        payload = self._get_json("/system/moods/search?q=")
+        _shaped(schema.check_moods, payload)
+        return payload["data"]
 
     def atmosphere(self) -> Dict[str, Any]:
         """The dashboard's headspace summary, including the current mood."""
         payload = self.page("/space", component="App/Dashboard", partial=["atmosphere"])
-        return payload["props"]["atmosphere"]
+        return _shaped(schema.check_atmosphere, payload["props"].get("atmosphere"))
 
     def set_mood(self, mood_id: str) -> None:
         self._mutate("/space/mood", {"mood": mood_id})
@@ -382,13 +408,15 @@ class PluralspaceAPI:
             component="App/Dashboard",
             partial=["frontTypes", "subsystemFrontTypes"],
         )
-        props = payload["props"]
-        return props["frontTypes"] + props.get("subsystemFrontTypes", [])
+        props = _shaped(schema.check_front_types, payload["props"])
+        return props["frontTypes"] + (props.get("subsystemFrontTypes") or [])
 
     def search_members(self, query: str) -> List[Dict[str, Any]]:
         """The front picker's search; includes custom fronts, unlike /members."""
         qs = urllib.parse.urlencode({"tree": "front", "q": query})
-        return self._get_json(f"/space/members/search?{qs}")
+        return _shaped(
+            schema.check_member_search, self._get_json(f"/space/members/search?{qs}")
+        )
 
     def set_fronts(
         self,
