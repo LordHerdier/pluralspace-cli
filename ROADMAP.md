@@ -16,8 +16,9 @@ Priorities:
 
 Once these three are satisfied, _only then_ will more features be added.
 
-## Now (pre-0.1.0): protect live data
-
+<details>
+<summary> <h2><b>First: Protect live data [DONE]</b></h2></summary>
+   
 Every write the CLI makes is `switch`, `end`, and `mood`. All of them act on the
 real account with no undo, so they need to be properly safeguarded.
 
@@ -57,6 +58,8 @@ real account with no undo, so they need to be properly safeguarded.
 - [x] **Document the `--add` race.** `--add` reads the current fronts and writes
       the full set. A change made in the app in between is overwritten. The
       README now states the race condition.
+
+</details>
 
 ## Next: fail safely when the site changes
 
