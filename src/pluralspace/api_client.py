@@ -17,6 +17,7 @@ import urllib.request
 from typing import Any, Dict, Iterable, List, NamedTuple, Optional
 
 from . import __version__, schema
+from .errors import UsageError
 from .fronts import reopen_body, row_from_calendar
 from .state import state_dir
 from .timeutil import month_of
@@ -69,10 +70,15 @@ class _NoRedirect(urllib.request.HTTPRedirectHandler):
 
 class PluralspaceAPI:
     def __init__(
-        self, profile: str = "default", base_url: str = BASE_URL, debug: bool = False
+        self,
+        profile: str = "default",
+        base_url: str = BASE_URL,
+        debug: bool = False,
+        read_only: bool = False,
     ):
         self.base_url = base_url.rstrip("/")
         self.debug = debug
+        self.read_only = read_only
         self.version: Optional[str] = None
         self.notices: List[str] = []  # things the CLI should tell the user
         self.jar_path = state_dir() / f"{profile}.cookies"
@@ -491,6 +497,8 @@ class PluralspaceAPI:
         replay can't double-apply. Otherwise the outcome is unknown and we say
         so rather than guess.
         """
+        if self.read_only:
+            raise UsageError(f"read-only mode: refusing {method} {path}")
         if not self.has_session():
             raise AuthError("not logged in")
         if self.version is None:

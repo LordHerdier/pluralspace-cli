@@ -1,6 +1,7 @@
 """Argument parsing and top-level error handling for `plsp`."""
 
 import argparse
+import os
 import sys
 
 from .. import __version__
@@ -15,6 +16,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--version", action="version", version=__version__)
     parser.add_argument("--profile", default="default")
     parser.add_argument("--debug", action="store_true")
+    parser.add_argument(
+        "--read-only",
+        action="store_true",
+        default=os.environ.get("PLSP_READ_ONLY") == "1",
+        help="refuse all writes (also set by PLSP_READ_ONLY=1)",
+    )
     sub = parser.add_subparsers(dest="command", required=True)
     for module in (auth, members, fronts, mood, undo):
         module.register(sub)
@@ -23,7 +30,11 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv=None) -> int:
     args = build_parser().parse_args(argv)
-    api = PluralspaceAPI(args.profile, debug=args.debug)
+    api = PluralspaceAPI(
+        args.profile,
+        debug=args.debug,
+        read_only=args.read_only,
+    )
     store = PassStore(args.profile)
     try:
         return args.func(args, api, store)

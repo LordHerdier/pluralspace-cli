@@ -17,7 +17,9 @@ class TTY(io.StringIO):
 @pytest.fixture
 def server(monkeypatch):
     srv = FakeServer()
-    monkeypatch.setattr(app, "PluralspaceAPI", lambda profile, debug=False: srv)
+    monkeypatch.setattr(
+        app, "PluralspaceAPI", lambda profile, debug=False, read_only=False: srv
+    )
     monkeypatch.setattr(app, "PassStore", FakeStore)
     return srv
 

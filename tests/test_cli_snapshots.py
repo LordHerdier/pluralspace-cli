@@ -10,7 +10,9 @@ from pluralspace.state import StateError, build_snapshot, load_snapshot, save_sn
 def server(tmp_path, monkeypatch):
     monkeypatch.setenv("XDG_STATE_HOME", str(tmp_path))
     srv = FakeServer()
-    monkeypatch.setattr(app, "PluralspaceAPI", lambda profile, debug=False: srv)
+    monkeypatch.setattr(
+        app, "PluralspaceAPI", lambda profile, debug=False, read_only=False: srv
+    )
     monkeypatch.setattr(app, "PassStore", FakeStore)
     return srv
 

@@ -26,7 +26,7 @@ class FakeAPI:
     raises = None
     calls = []
 
-    def __init__(self, profile, debug=False):
+    def __init__(self, profile, debug=False, read_only=False):
         pass
 
     def _maybe_raise(self):
