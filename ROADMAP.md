@@ -18,7 +18,7 @@ Once these three are satisfied, _only then_ will more features be added.
 
 <details>
 <summary> <h2><b>First: Protect live data [DONE]</b></h2></summary>
-   
+
 Every write the CLI makes is `switch`, `end`, and `mood`. All of them act on the
 real account with no undo, so they need to be properly safeguarded.
 
@@ -98,7 +98,7 @@ real account with no undo, so they need to be properly safeguarded.
 
 - [x] **Add a LICENSE.**
 
-- [ ] **CI.** The usual Github Actions with `pytest` on Python 3.9 through the
+- [x] **CI.** The usual Github Actions with `pytest` on Python 3.9 through the
       latest release. Also add a `nix flake check` since nix is a thing.
 
 - [ ] **Cut `v0.1.0`.** Tag it, write a _good_ changelog
