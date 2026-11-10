@@ -78,7 +78,7 @@ real account with no undo, so they need to be properly safeguarded.
       filenames (`/build/assets/Dashboard-*.js`, etc.) to say _which_ page
       changed.
 
-- [ ] **Read-only mode.** An env var or a `--read-only` flag to refuse mutations
+- [x] **Read-only mode.** An env var or a `--read-only` flag to refuse mutations
       should be added. Useful for scripts and testing.
 
 - [ ] **Offline client tests.** Fake the HTTP layer and cover login, session
