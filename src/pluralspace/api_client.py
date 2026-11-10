@@ -74,7 +74,9 @@ class PluralspaceAPI:
         self.base_url = base_url.rstrip("/")
         self.debug = debug
         self.version: Optional[str] = None
+        self.notices: List[str] = []  # things the CLI should tell the user
         self.jar_path = state_dir() / f"{profile}.cookies"
+        self.version_path = state_dir() / f"{profile}.site-version"
         self.jar = http.cookiejar.MozillaCookieJar(str(self.jar_path))
         self._load_jar()
         self._opener = urllib.request.build_opener(
@@ -173,6 +175,31 @@ class PluralspaceAPI:
         m = _PAGE_RE.search(body)
         if m:
             self.version = json.loads(html.unescape(m.group(1))).get("version")
+            self._note_site_version()
+
+    def _note_site_version(self) -> None:
+        """Compare the asset version from /login with the last one seen for this
+        profile; a change means the frontend was rebuilt, so endpoints may have
+        changed. Never fatal: failing to read or store it only skips the check."""
+        if not isinstance(self.version, str) or not self.version:
+            return
+        try:
+            last = self.version_path.read_text().strip()
+        except OSError:
+            last = ""
+        if last == self.version:
+            return
+        if last:
+            self.notices.append(
+                "Pluralspace has been updated since plsp last logged in "
+                f"(asset version {last[:12]} -> {self.version[:12]}). "
+                "Its endpoints may have changed; review before trusting writes."
+            )
+        try:
+            self.version_path.parent.mkdir(parents=True, exist_ok=True)
+            self.version_path.write_text(self.version + "\n")
+        except OSError:
+            pass
 
     def login(self, email: str, password: str, remember: bool = True) -> None:
         self.clear_session()

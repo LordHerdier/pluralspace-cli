@@ -67,12 +67,13 @@ real account with no undo, so they need to be properly safeguarded.
       first bad path (e.g. `currentFronts[0].member_id: missing`) and exits 2.
       Every read a write depends on is checked before the write is sent.
 
-- [ ] **Flag when the site has been updated.** The page's embedded Inertia JSON
-      (`data-page`) carries an asset `"version"` hash that changes whenever the
-      frontend is rebuilt. Store the last-seen version per profile (next to the
-      cookie file) and warn when `/login` returns a different one, so I know to
-      review the endpoints for changes. The hashed Vite filenames
-      (`/build/assets/Dashboard-*.js`, etc.) could say _which_ page changed.
+- [x] **Flag when the site has been updated.** `/login` returns the page's
+      Inertia asset `"version"` hash, which changes whenever the frontend is
+      rebuilt. The last-seen version is stored per profile
+      (`<profile>.site-version`, next to the cookie file) and `plsp login`
+      warns on stderr when it differs. Still to do: use the hashed Vite
+      filenames (`/build/assets/Dashboard-*.js`, etc.) to say _which_ page
+      changed.
 
 - [ ] **Read-only mode.** An env var or a `--read-only` flag to refuse mutations
       should be added. Useful for scripts and testing.

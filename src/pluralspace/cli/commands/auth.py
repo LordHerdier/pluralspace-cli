@@ -1,6 +1,7 @@
 """login, logout, whoami."""
 
 import getpass
+import sys
 
 from ...api_client import PluralspaceAPI
 from ...credentials import Credentials, PassStore
@@ -15,6 +16,8 @@ def cmd_login(args, api: PluralspaceAPI, store: PassStore) -> int:
         password = getpass.getpass("Password: ")
         creds = Credentials(email, password)
     api.login(creds.email, creds.password)
+    for notice in api.notices:
+        print(f"warning: {notice}", file=sys.stderr)
     user = api.whoami()
     print(f"Logged in as {user.get('name')} ({user.get('email')})")
     if not store.exists() or args.email:
