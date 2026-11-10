@@ -1,5 +1,6 @@
 # Pluralspace CLI
 
+[![CI](https://github.com/LordHerdier/pluralspace-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/LordHerdier/pluralspace-cli/actions/workflows/ci.yml)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 
 Command Line Interface for [Pluralspace](https://pluralspace.app).
