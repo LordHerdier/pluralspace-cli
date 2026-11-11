@@ -87,8 +87,12 @@ real account with no undo, so they need to be properly safeguarded.
       endpoint to test against and surface breakage (distinct from `*.har` files
       since those contain live creds)
 
-- [ ] **Auditing.** Confirm that `--debug` and error paths _never_ print
-      cookies, XSRF tokens, or passwords, then add a test for it.
+- [x] **Auditing.** `--debug` prints only `METHOD path -> status`, and error
+      messages carry paths, statuses and schema paths, never headers or bodies.
+      The one gap was server-supplied text (login and write errors), which is
+      now scrubbed of the typed password and every cookie value.
+      `tests/test_no_secret_leaks.py` runs the CLI against a hostile fake
+      server that echoes those secrets, and fails if any reach stdout/stderr.
 
 - [ ] **Harden the cookie jar.** Write it atomically with 0600 from the
       beginning. Handle corruption or half-written cookies by starting a fresh

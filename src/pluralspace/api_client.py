@@ -81,6 +81,7 @@ class PluralspaceAPI:
         self.read_only = read_only
         self.version: Optional[str] = None
         self.notices: List[str] = []  # things the CLI should tell the user
+        self._secrets: List[str] = []  # typed credentials, scrubbed from messages
         self.jar_path = state_dir() / f"{profile}.cookies"
         self.version_path = state_dir() / f"{profile}.site-version"
         self.jar = http.cookiejar.MozillaCookieJar(str(self.jar_path))
@@ -117,6 +118,18 @@ class PluralspaceAPI:
             if c.name == name:
                 return c.value
         return None
+
+    def _scrub(self, text: str) -> str:
+        """Remove anything secret from text that came from the server before it
+        is shown: the password we sent and every cookie value we hold."""
+        secrets = list(self._secrets)
+        for c in self.jar:
+            if c.value:
+                secrets += [c.value, urllib.parse.unquote(c.value)]
+        for secret in sorted(set(secrets), key=len, reverse=True):
+            if secret:
+                text = text.replace(secret, "[redacted]")
+        return text
 
     def has_session(self) -> bool:
         return self._cookie("pluralspace-session") is not None
@@ -209,6 +222,7 @@ class PluralspaceAPI:
 
     def login(self, email: str, password: str, remember: bool = True) -> None:
         self.clear_session()
+        self._secrets.append(password)
         self._bootstrap()
         status, headers, body = self._request(
             "POST",
@@ -240,7 +254,7 @@ class PluralspaceAPI:
                 _, _, body = self._request("GET", "/login")
             errors = json.loads(body).get("props", {}).get("errors", {})
             if errors:
-                return "; ".join(f"{k}: {v}" for k, v in errors.items())
+                return self._scrub("; ".join(f"{k}: {v}" for k, v in errors.items()))
         except (ValueError, APIError):
             pass
         return "login failed"
@@ -523,7 +537,9 @@ class PluralspaceAPI:
                 )
             except (ValueError, AttributeError):
                 pass
-            raise APIError(f"{method} {path} returned {status} {detail}".strip())
+            raise APIError(
+                self._scrub(f"{method} {path} returned {status} {detail}").strip()
+            )
         self._save_jar()
 
     @staticmethod
