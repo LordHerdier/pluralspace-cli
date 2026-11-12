@@ -3,13 +3,15 @@
 [![CI](https://github.com/LordHerdier/pluralspace-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/LordHerdier/pluralspace-cli/actions/workflows/ci.yml)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 
-Command Line Interface for [Pluralspace](https://pluralspace.app).
+Command Line Interface for [Pluralspace](https://pluralspace.app). 
 
 > **Unofficial and experimental.** Pluralspace's public API isn't released yet,
 > so this drives the web app's own session and [Inertia](https://inertiajs.com)
 > endpoints. Expect breakage when the site changes. Once API tokens ship, the
 > client will move over to them. I'm just a terminal-junkie, so I wanted this a
 > bit early >:3
+
+<img alt="Cats dancing" src="https://64.media.tumblr.com/c08b22a167d7bf1c09f30c8770f2c541/4160be3cc2b84620-5c/s400x600/f5bd93c0608dc29a87abb3239251467ef69b722f.gifv" width=100%>
 
 ## Install
 
