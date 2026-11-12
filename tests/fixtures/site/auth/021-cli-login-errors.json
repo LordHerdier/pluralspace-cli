@@ -1,0 +1,267 @@
+{
+  "component": "App/Auth/Login",
+  "props": {
+    "defaultLogoUrl": "https://example.invalid/1",
+    "errors": {
+      "email": "user2@example.invalid"
+    },
+    "currentUser": null,
+    "currentSystem": null,
+    "currentMember": null,
+    "canSelectCurrentMember": false,
+    "customFieldLimits": {
+      "text": 5000,
+      "number": 5000,
+      "date": 5000,
+      "link": 5000,
+      "color": 5000,
+      "textarea": 5000,
+      "markdown": 10000,
+      "block_editor": 1000000
+    },
+    "availableMembers": [],
+    "availableSystems": [],
+    "sidebarNav": [],
+    "notifications": {
+      "unreadCount": 0,
+      "recent": []
+    },
+    "flash": {
+      "success": null,
+      "error": null,
+      "info": null
+    },
+    "csrf_token": "[redacted]",
+    "locale": "en",
+    "availableLocales": [
+      {
+        "code": "en",
+        "label": "English"
+      },
+      {
+        "code": "de",
+        "label": "Deutsch"
+      },
+      {
+        "code": "es",
+        "label": "Español"
+      },
+      {
+        "code": "fr",
+        "label": "Français"
+      },
+      {
+        "code": "it",
+        "label": "Italiano"
+      },
+      {
+        "code": "nl",
+        "label": "Dutch"
+      },
+      {
+        "code": "ru",
+        "label": "Русский"
+      },
+      {
+        "code": "sv",
+        "label": "Svenska"
+      }
+    ],
+    "theme": {
+      "value": "system",
+      "background": "grid",
+      "backgroundImage": null,
+      "isDark": false,
+      "fluxAppearance": "system",
+      "options": [
+        {
+          "value": "light",
+          "label": "Light",
+          "description": "Text 1",
+          "icon": "sun",
+          "isDark": false
+        },
+        {
+          "value": "dark",
+          "label": "Dark",
+          "description": "Text 2",
+          "icon": "moon",
+          "isDark": true
+        },
+        {
+          "value": "dim",
+          "label": "Dim",
+          "description": "Text 3",
+          "icon": "eye-low-vision",
+          "isDark": true
+        },
+        {
+          "value": "paper",
+          "label": "Paper",
+          "description": "Text 4",
+          "icon": "pen-ruler",
+          "isDark": false
+        },
+        {
+          "value": "high-contrast",
+          "label": "High contrast",
+          "description": "Text 5",
+          "icon": "circle-half-stroke",
+          "isDark": true
+        },
+        {
+          "value": "sepia",
+          "label": "Sepia",
+          "description": "Text 6",
+          "icon": "book-open",
+          "isDark": false
+        },
+        {
+          "value": "tron",
+          "label": "Tron",
+          "description": "Text 7",
+          "icon": "cubes",
+          "isDark": true
+        },
+        {
+          "value": "cyberpunk",
+          "label": "Cyberpunk",
+          "description": "Text 8",
+          "icon": "microchip",
+          "isDark": true
+        },
+        {
+          "value": "space",
+          "label": "Space",
+          "description": "Text 9",
+          "icon": "rocket",
+          "isDark": true
+        },
+        {
+          "value": "terminal",
+          "label": "Terminal",
+          "description": "Text 10",
+          "icon": "terminal",
+          "isDark": true
+        },
+        {
+          "value": "forest",
+          "label": "Forest",
+          "description": "Text 11",
+          "icon": "tree",
+          "isDark": true
+        },
+        {
+          "value": "myspace",
+          "label": "MySpace",
+          "description": "Text 12",
+          "icon": "users",
+          "isDark": false
+        },
+        {
+          "value": "system",
+          "label": "System",
+          "description": "Text 13",
+          "icon": "desktop",
+          "isDark": false
+        },
+        {
+          "value": "custom",
+          "label": "Custom",
+          "description": "Text 14",
+          "icon": "palette",
+          "isDark": true
+        }
+      ],
+      "custom": null,
+      "customTokens": [
+        "bg",
+        "bg-2",
+        "surface",
+        "surface-2",
+        "surface-3",
+        "surface-4",
+        "border",
+        "text-heading",
+        "text",
+        "text-secondary",
+        "text-muted",
+        "accent",
+        "accent-foreground"
+      ],
+      "deltaCss": "",
+      "presetDeltaCss": ""
+    },
+    "banner": null,
+    "features": {
+      "two_factor": true,
+      "api_tokens": false
+    },
+    "terminology": {
+      "member": "member",
+      "Member": "Member",
+      "members": "members",
+      "Members": "Members",
+      "system": "system",
+      "System": "System",
+      "systems": "systems",
+      "Systems": "Systems",
+      "front": "front",
+      "Front": "Front",
+      "fronts": "fronts",
+      "Fronts": "Fronts",
+      "fronting": "fronting",
+      "Fronting": "Fronting",
+      "switch": "switch",
+      "Switch": "Switch",
+      "switches": "switches",
+      "Switches": "Switches",
+      "location": "location",
+      "Location": "Location",
+      "locations": "locations",
+      "Locations": "Locations",
+      "innerworld": "innerworld",
+      "Innerworld": "Innerworld",
+      "innerworlds": "innerworlds",
+      "Innerworlds": "Innerworlds"
+    },
+    "tours": [],
+    "urls": {
+      "app": "https://pluralspace.app",
+      "logout": "https://pluralspace.app/logout",
+      "settings": "https://pluralspace.app/settings/profile",
+      "dashboard": "https://pluralspace.app/space",
+      "notificationsHistory": "https://pluralspace.app/notifications"
+    },
+    "invitation": null,
+    "canResetPassword": true,
+    "canRegister": true,
+    "status": null,
+    "redirect": null
+  },
+  "url": "/login",
+  "version": "5369c460e0b8c26fbefcc14d99a70f0a",
+  "sharedProps": [
+    "defaultLogoUrl",
+    "errors",
+    "currentUser",
+    "currentSystem",
+    "currentMember",
+    "canSelectCurrentMember",
+    "customFieldLimits",
+    "availableMembers",
+    "availableSystems",
+    "sidebarNav",
+    "notifications",
+    "flash",
+    "csrf_token",
+    "locale",
+    "availableLocales",
+    "theme",
+    "banner",
+    "features",
+    "terminology",
+    "tours",
+    "urls"
+  ]
+}

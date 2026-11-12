@@ -1,0 +1,302 @@
+{
+  "scenario": "moods",
+  "exchanges": [
+    {
+      "seq": 113,
+      "label": "ui-login",
+      "method": "GET",
+      "path": "/login",
+      "status": 200,
+      "headers": {
+        "content-type": "text/html; charset=utf-8"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "001-ui-login.html"
+    },
+    {
+      "seq": 114,
+      "label": "ui-login",
+      "method": "POST",
+      "path": "/login",
+      "status": 409,
+      "headers": {
+        "content-type": "text/html; charset=utf-8",
+        "x-inertia-location": "/space"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "request_body": {
+        "email": "user1@example.invalid",
+        "password": "[redacted]",
+        "remember": false
+      }
+    },
+    {
+      "seq": 115,
+      "label": "ui-login",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "text/html; charset=utf-8"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "003-ui-login.html"
+    },
+    {
+      "seq": 116,
+      "label": "ui-login",
+      "method": "POST",
+      "path": "/broadcasting/auth",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "set_cookies": ["pluralspace-session"],
+      "request_body": "socket_id=0.0&channel_name=private-fronts.00000000-0000-4000-8000-000000000002.5",
+      "body_file": "004-ui-login.json"
+    },
+    {
+      "seq": 117,
+      "label": "ui-login",
+      "method": "POST",
+      "path": "/broadcasting/auth",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "set_cookies": ["pluralspace-session"],
+      "request_body": "socket_id=0.0&channel_name=private-App.Models.User.00000000-0000-4000-8000-000000000001",
+      "body_file": "005-ui-login.json"
+    },
+    {
+      "seq": 118,
+      "label": "ui-login",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "006-ui-login.json"
+    },
+    {
+      "seq": 119,
+      "label": "ui-login",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "007-ui-login.json"
+    },
+    {
+      "seq": 120,
+      "label": "ui-login",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "008-ui-login.json"
+    },
+    {
+      "seq": 121,
+      "label": "ui-login",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "009-ui-login.json"
+    },
+    {
+      "seq": 122,
+      "label": "ui-login",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "010-ui-login.json"
+    },
+    {
+      "seq": 123,
+      "label": "ui-login",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "011-ui-login.json"
+    },
+    {
+      "seq": 124,
+      "label": "dashboard-document",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "text/html; charset=utf-8"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "012-dashboard-document.html"
+    },
+    {
+      "seq": 125,
+      "label": "moods",
+      "method": "GET",
+      "path": "/system/moods/search?q=",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "013-moods.json"
+    },
+    {
+      "seq": 126,
+      "label": "baseline-atmosphere",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "014-baseline-atmosphere.json"
+    },
+    {
+      "seq": 127,
+      "label": "set-mood",
+      "method": "POST",
+      "path": "/space/mood",
+      "status": 302,
+      "headers": {
+        "content-type": "text/html; charset=utf-8",
+        "location": "https://pluralspace.app/"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "request_body": {
+        "mood": "00000000-0000-4000-8000-000000000123"
+      },
+      "body_file": "015-set-mood.html"
+    },
+    {
+      "seq": 128,
+      "label": "set-mood-verify",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "016-set-mood-verify.json"
+    },
+    {
+      "seq": 129,
+      "label": "change-mood",
+      "method": "POST",
+      "path": "/space/mood",
+      "status": 302,
+      "headers": {
+        "content-type": "text/html; charset=utf-8",
+        "location": "https://pluralspace.app/"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "request_body": {
+        "mood": "00000000-0000-4000-8000-000000000124"
+      },
+      "body_file": "017-change-mood.html"
+    },
+    {
+      "seq": 130,
+      "label": "change-mood-verify",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "018-change-mood-verify.json"
+    },
+    {
+      "seq": 131,
+      "label": "clear-mood",
+      "method": "DELETE",
+      "path": "/space/mood",
+      "status": 303,
+      "headers": {
+        "content-type": "text/html; charset=utf-8",
+        "location": "https://pluralspace.app/"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "request_body": {},
+      "body_file": "019-clear-mood.html"
+    },
+    {
+      "seq": 132,
+      "label": "clear-mood-verify",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "020-clear-mood-verify.json"
+    },
+    {
+      "seq": 133,
+      "label": "set-unknown-mood",
+      "method": "POST",
+      "path": "/space/mood",
+      "status": 302,
+      "headers": {
+        "content-type": "text/html; charset=utf-8",
+        "location": "https://pluralspace.app/"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "request_body": {
+        "mood": "00000000-0000-4000-8000-000000000134"
+      },
+      "body_file": "021-set-unknown-mood.html"
+    },
+    {
+      "seq": 134,
+      "label": "cleanup-mood",
+      "method": "DELETE",
+      "path": "/space/mood",
+      "status": 303,
+      "headers": {
+        "content-type": "text/html; charset=utf-8",
+        "location": "https://pluralspace.app/"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "request_body": {},
+      "body_file": "022-cleanup-mood.html"
+    }
+  ]
+}

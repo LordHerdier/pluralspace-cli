@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+    <head>
+<meta charset="utf-8" />
+
+<title inertia>Page Not Found | PluralSpace</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<script>if(window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone){document.querySelector('meta[name=viewport]').content+=', user-scalable=no'}</script>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0c0618">
+<link rel="manifest" href="/manifest.json">
+<meta name="description" content="PluralSpace - A free app for plural systems, DID, and OSDD." />
+<meta property="og:title" content="Page Not Found" />
+<meta property="og:description" content="PluralSpace - A free app for plural systems, DID, and OSDD." />
+<meta property="og:image" content="https://example.invalid/2" />
+<meta property="og:url" content="https://pluralspace.app/space/fronts/00000000-0000-4000-8000-000000000131" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="PluralSpace" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@pluralspaceapp" />
+<link rel="canonical" href="https://pluralspace.app/space/fronts/00000000-0000-4000-8000-000000000131" />
+
+
+<script type="application/ld+json">{
+    "@context": "https://example.invalid/3",
+    "@graph": [
+        {
+            "@type": "Organization",
+            "name": "PluralSpace",
+            "alternateName": [
+                "Plural Space",
+                "PluralSpace App",
+                "PluralSpace LLC"
+            ],
+            "url": "https://pluralspace.app",
+            "logo": "https://pluralspace.app/icons/pluralspace_icon.jpg",
+            "sameAs": [
+                "https://example.invalid/5",
+                "https://example.invalid/6"
+            ]
+        },
+        {
+            "@type": "WebSite",
+            "name": "PluralSpace",
+            "url": "https://pluralspace.app",
+            "description": "PluralSpace is a free app for plural systems, DID, and OSDD. Track fronting, keep alter profiles, journal, and chat - all in one cozy space."
+        }
+    ]
+}</script>
+
+<link rel="icon" href="https://example.invalid/12" sizes="any">
+<link rel="apple-touch-icon" href="https://example.invalid/12">
+<link rel="preconnect" href="https://example.invalid/7">
+<link href="https://example.invalid/8" rel="stylesheet" defer />
+<link rel="preload" as="style" href="https://example.invalid/9" /><link rel="modulepreload" as="script" href="https://example.invalid/14" /><link rel="modulepreload" as="script" href="https://example.invalid/11" /><link rel="modulepreload" as="script" href="https://example.invalid/15" /><link rel="modulepreload" as="script" href="https://example.invalid/16" /><link rel="modulepreload" as="script" href="https://example.invalid/17" /><link rel="modulepreload" as="script" href="https://example.invalid/18" /><link rel="modulepreload" as="script" href="https://example.invalid/19" /><link rel="modulepreload" as="script" href="https://example.invalid/20" /><link rel="stylesheet" href="https://example.invalid/9" data-navigate-track="reload" /><script type="module" src="https://example.invalid/14" data-navigate-track="reload"></script><style>
+    :root.dark {
+        color-scheme: dark;
+    }
+</style>
+<script>
+    window.Flux = {
+        applyAppearance (appearance) {
+            let applyDark = () => document.documentElement.classList.add('dark')
+            let applyLight = () => document.documentElement.classList.remove('dark')
+
+            if (appearance === 'system') {
+                let media = window.matchMedia('(prefers-color-scheme: dark)')
+
+                window.localStorage.removeItem('flux.appearance')
+
+                media.matches ? applyDark() : applyLight()
+            } else if (appearance === 'dark') {
+                window.localStorage.setItem('flux.appearance', 'dark')
+
+                applyDark()
+            } else if (appearance === 'light') {
+                window.localStorage.setItem('flux.appearance', 'light')
+
+                applyLight()
+            }
+        }
+    }
+
+    window.Flux.applyAppearance(window.localStorage.getItem('flux.appearance') || 'system')
+</script>
+<script data-navigate-once>
+(function() {
+    var darkThemes = { dark: true, dim: true };
+
+    function syncFlux(resolved) {
+        if (!window.Flux) return;
+        // Flux 2 replaces window.Flux with a reactive object after flux.js loads,
+        // dropping the imperative applyAppearance() stub from the @fluxAppearance directive.
+        if (typeof window.Flux.applyAppearance === 'function') {
+            window.Flux.applyAppearance(resolved);
+        } else {
+            window.Flux.appearance = resolved;
+        }
+    }
+
+    function applyTheme() {
+        var el = document.documentElement;
+        var pref = el.getAttribute('data-appearance');
+        if (!pref) return;
+
+        if (pref === 'system') {
+            var osDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            var resolved = osDark ? 'dark' : 'light';
+            el.setAttribute('data-theme', resolved);
+            el.classList.toggle('dark', !!darkThemes[resolved]);
+            syncFlux(resolved);
+        } else {
+            el.setAttribute('data-theme', pref);
+            el.classList.toggle('dark', !!darkThemes[pref]);
+            syncFlux(darkThemes[pref] ? 'dark' : 'light');
+        }
+    }
+
+    // Apply on initial load
+    applyTheme();
+
+    // Re-apply after every wire:navigate page swap
+    document.addEventListener('livewire:navigated', applyTheme);
+
+    // Listen for OS preference changes (system theme)
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function() {
+        var el = document.documentElement;
+        if (el.getAttribute('data-appearance') === 'system') applyTheme();
+    });
+
+    // Expose for theme-changed events
+    window.__applyTheme = applyTheme;
+})();
+</script>
+    <meta name="csrf-token" content="[redacted]">
+    <script>window.vapidPublicKey = 'BEatcmDcyS6RM0K6I9N50rGiDML05xaRtCe_P40UWSz24yVP47QvrGap6D7towfhkXEWzgqG939SHmlyI1jr9qc=';</script>
+    </head>
+    <body class="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 antialiased">
+
+        
+        <div class="bg-violet-50 dark:bg-violet-950/40 border-b border-violet-200 dark:border-violet-800/60">
+            <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-center gap-2 text-sm">
+                <span class="shrink-0 text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-violet-200 dark:bg-violet-800 text-violet-700 dark:text-violet-300">Beta</span>
+                <p class="text-violet-700 dark:text-violet-300">
+                    PluralSpace is in beta - expect bugs, missing features, and frequent updates.
+                </p>
+            </div>
+        </div>
+
+        
+        <header class="sticky top-0 z-50 border-b border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-sm">
+            <nav class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+                
+                <a href="https://pluralspace.app" wire:navigate class="flex items-center gap-2.5 group">
+                    <img src="/icons/pluralspace_pride_bg.png" alt="PluralSpace" class="size-8 rounded-sm object-cover shadow-sm" />
+                    <span class="font-semibold text-zinc-900 dark:text-white">PluralSpace</span>
+                </a>
+
+                
+                <div class="hidden sm:flex items-center gap-6 text-sm text-zinc-600 dark:text-zinc-400">
+                    <a href="https://pluralspace.app" wire:navigate class="hover:text-zinc-900 dark:hover:text-white transition-colors">Home</a>
+
+                    
+                    <div class="relative group/features">
+                        <a href="https://pluralspace.app/features" wire:navigate class="flex items-center gap-1 hover:text-zinc-900 dark:hover:text-white transition-colors">
+                            Features
+                            <svg class="size-3.5 transition-transform group-hover/features:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                            </svg>
+                        </a>
+
+                        <div class="invisible opacity-0 translate-y-1 group-hover/features:visible group-hover/features:opacity-100 group-hover/features:translate-y-0 transition-all duration-150 absolute left-1/2 -translate-x-1/2 top-full pt-3 z-50">
+                            <div class="w-[540px] rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 shadow-xl shadow-zinc-900/10 dark:shadow-black/30 p-4">
+                                <div class="grid grid-cols-2 gap-1">
+                                                                            <a href="https://pluralspace.app/features/members"  wire:navigate class="flex items-start gap-3 p-3 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors group/item">
+                                            <span class="text-lg leading-none mt-0.5">🪪</span>
+                                            <div>
+                                                <span class="text-sm font-medium text-zinc-900 dark:text-white group-hover/item:text-violet-600 dark:group-hover/item:text-violet-400 transition-colors">Member Profiles</span>
+                                                <p class="text-xs text-zinc-400 dark:text-zinc-500 mt-0.5">Rich profiles for every alter</p>
+                                            </div>
+                                        </a>
+                                                                            <a href="https://pluralspace.app/features/fronting"  wire:navigate class="flex items-start gap-3 p-3 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors group/item">
+                                            <span class="text-lg leading-none mt-0.5">🔄</span>
+                                            <div>
+                                                <span class="text-sm font-medium text-zinc-900 dark:text-white group-hover/item:text-violet-600 dark:group-hover/item:text-violet-400 transition-colors">Front Tracking</span>
+                                                <p class="text-xs text-zinc-400 dark:text-zinc-500 mt-0.5">Log who&#039;s here with one tap</p>
+                                            </div>
+                                        </a>
+                                                                            <a href="https://pluralspace.app/features/stats"  wire:navigate class="flex items-start gap-3 p-3 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors group/item">
+                                            <span class="text-lg leading-none mt-0.5">📊</span>
+                                            <div>
+                                                <span class="text-sm font-medium text-zinc-900 dark:text-white group-hover/item:text-violet-600 dark:group-hover/item:text-violet-400 transition-colors">Stats &amp; Insights</span>
+                                                <p class="text-xs text-zinc-400 dark:text-zinc-500 mt-0.5">Patterns and analytics</p>
+                                            </div>
+                                        </a>
+                                                                            <a href="https://pluralspace.app/features/journal"  wire:navigate class="flex items-start gap-3 p-3 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors group/item">
+                                            <span class="text-lg leading-none mt-0.5">📖</span>
+                                            <div>
+                                                <span class="text-sm font-medium text-zinc-900 dark:text-white group-hover/item:text-violet-600 dark:group-hover/item:text-violet-400 transition-colors">Journal</span>
+                                                <p class="text-xs text-zinc-400 dark:text-zinc-500 mt-0.5">Shared writing space</p>
+                                            </div>
+                                        </a>
+                                                                            <a href="https://pluralspace.app/features/chat"  wire:navigate class="flex items-start gap-3 p-3 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors group/item">
+                                            <span class="text-lg leading-none mt-0.5">💬</span>
+                                            <div>
+                                                <span class="text-sm font-medium text-zinc-900 dark:text-white group-hover/item:text-violet-600 dark:group-hover/item:text-violet-400 transition-colors">System Chat</span>
+                                                <p class="text-xs text-zinc-400 dark:text-zinc-500 mt-0.5">Real-time messaging</p>
+                                            </div>
+                                        </a>
+                                                                            <a href="https://pluralspace.app/features/polls"  wire:navigate class="flex items-start gap-3 p-3 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors group/item">
+                                            <span class="text-lg leading-none mt-0.5">📊</span>
+                                            <div>
+                                                <span class="text-sm font-medium text-zinc-900 dark:text-white group-hover/item:text-violet-600 dark:group-hover/item:text-violet-400 transition-colors">Polls</span>
+                                                <p class="text-xs text-zinc-400 dark:text-zinc-500 mt-0.5">Decide things together</p>
+                                            </div>
+                                        </a>
+                                                                    </div>
+                                <div class="mt-2 pt-2 border-t border-zinc-100 dark:border-zinc-800">
+                                    <a href="https://pluralspace.app/features" wire:navigate class="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors group/all">
+                                        <span class="text-sm font-medium text-zinc-600 dark:text-zinc-300 group-hover/all:text-violet-600 dark:group-hover/all:text-violet-400 transition-colors">View all features</span>
+                                        <svg class="size-4 text-zinc-400 group-hover/all:text-violet-500 group-hover/all:translate-x-0.5 transition-all" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="https://pluralspace.app/migrate" wire:navigate class="hover:text-zinc-900 dark:hover:text-white transition-colors">Migrate</a>
+                    <a href="https://pluralspace.app/about" wire:navigate class="hover:text-zinc-900 dark:hover:text-white transition-colors">About</a>
+                    <a href="https://pluralspace.app/faq" wire:navigate class="hover:text-zinc-900 dark:hover:text-white transition-colors">FAQ</a>
+                </div>
+
+                
+                <div class="flex items-center gap-3">
+                                            <a href="https://pluralspace.app/space"
+                           class="text-sm px-4 py-2 rounded-xl bg-linear-to-br from-violet-500 to-purple-600 text-white font-medium shadow-sm hover:from-violet-600 hover:to-purple-700 transition-all">
+                            My Space <svg class="shrink-0 [:where(&amp;)]:size-6 inline size-4 ml-1 -mr-1" data-flux-icon xmlns="https://example.invalid/21" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25"/>
+</svg>
+
+                                </a>
+                                    </div>
+            </nav>
+        </header>
+
+        
+        <main>
+            <section class="py-24 sm:py-32">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 text-center">
+            <div class="mx-auto max-w-lg">
+                <h1 class="text-4xl sm:text-5xl font-semibold tracking-tight text-zinc-900 dark:text-white">
+                    This page wandered off
+                </h1>
+
+                <p class="mt-4 text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                    The page you're looking for doesn't exist or may have been moved. Let's get you back on track.
+                </p>
+
+                <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="https://pluralspace.app"
+                       class="w-full sm:w-auto text-center px-6 py-3 rounded-xl bg-purple-600 text-white font-medium shadow-sm hover:bg-purple-700 transition-colors">
+                        Back to home
+                    </a>
+
+                                            <a href="https://pluralspace.app/space"
+                           class="w-full sm:w-auto text-center px-6 py-3 rounded-xl border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 font-medium hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-all">
+                            View your space
+                        </a>
+                                    </div>
+            </div>
+        </div>
+    </section>
+        </main>
+
+        
+        <footer class="border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 mt-24">
+            <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12">
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-10">
+
+                    
+                    <div class="col-span-2 sm:col-span-1">
+                        <a href="https://pluralspace.app" wire:navigate class="flex items-center gap-2.5 mb-4">
+                            <img src="https://pluralspace.app/icons/pluralspace_icon.jpg" alt="PluralSpace" class="size-7 rounded-lg object-cover" />
+                            <span class="font-semibold text-sm text-zinc-900 dark:text-white">PluralSpace</span>
+                        </a>
+                        <p class="text-xs text-zinc-400 dark:text-zinc-500 leading-relaxed">
+                            A free app for plural systems, DID, and OSDD. Track fronting, manage profiles, journal, and chat - all in one place.
+                        </p>
+                    </div>
+
+                    
+                    <div>
+                        <h4 class="text-xs font-semibold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider mb-4">PluralSpace</h4>
+                        <nav class="flex flex-col gap-2.5 text-sm text-zinc-500 dark:text-zinc-400">
+                            <a href="https://pluralspace.app/features" wire:navigate class="hover:text-zinc-900 dark:hover:text-white transition-colors">Features</a>
+                            <a href="https://pluralspace.app/migrate" wire:navigate class="hover:text-zinc-900 dark:hover:text-white transition-colors">Migrate</a>
+                            <a href="https://pluralspace.app/developers" wire:navigate class="hover:text-zinc-900 dark:hover:text-white transition-colors">Developers</a>
+                            <a href="https://example.invalid/22" target="_blank" class="hover:text-zinc-900 dark:hover:text-white transition-colors">Status</a>
+                        </nav>
+                    </div>
+
+                    
+                    <div>
+                        <nav class="flex flex-col gap-2.5 text-sm text-zinc-500 dark:text-zinc-400 mt-8">
+                            <a href="https://pluralspace.app/about" wire:navigate class="hover:text-zinc-900 dark:hover:text-white transition-colors">About</a>
+                            <a href="https://pluralspace.app/security" wire:navigate class="hover:text-zinc-900 dark:hover:text-white transition-colors">Security</a>
+                            <a href="https://pluralspace.app/faq" wire:navigate class="hover:text-zinc-900 dark:hover:text-white transition-colors">FAQ</a>
+                            <a href="https://example.invalid/23" target="_blank" class="hover:text-zinc-900 dark:hover:text-white transition-colors">Patreon</a>
+                        </nav>
+                    </div>
+
+                    
+                    <div>
+                        <h4 class="text-xs font-semibold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider mb-4">Legal</h4>
+                        <nav class="flex flex-col gap-2.5 text-sm text-zinc-500 dark:text-zinc-400">
+                            <a href="https://pluralspace.app/terms" wire:navigate class="hover:text-zinc-900 dark:hover:text-white transition-colors">Terms of Service</a>
+                            <a href="https://pluralspace.app/privacy" wire:navigate class="hover:text-zinc-900 dark:hover:text-white transition-colors">Privacy Policy</a>
+                            <a href="https://pluralspace.app/cookies" wire:navigate class="hover:text-zinc-900 dark:hover:text-white transition-colors">Cookie Policy</a>
+                        </nav>
+                    </div>
+                </div>
+
+                <div class="mt-10 pt-8 border-t border-zinc-200 dark:border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-400 dark:text-zinc-500">
+                    <p>&copy; 2026 PluralSpace LLC. PluralSpace - Free tools for plural systems, DID, and OSDD. All rights reserved.</p>
+                                    </div>
+            </div>
+        </footer>
+
+        <script src="https://pluralspace.app/livewire-5e7cdeb9/livewire.min.js?id=a964a3c8"   data-csrf="AbFgQxcLkaGKVj4j50WKa8HC4VjSkc0FD8Md8WjX" data-module-url="https://pluralspace.app/livewire-5e7cdeb9" data-update-uri="https://pluralspace.app/livewire-5e7cdeb9/update" data-navigate-once="true"></script>
+    </body>
+</html>

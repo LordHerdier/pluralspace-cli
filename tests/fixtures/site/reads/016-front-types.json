@@ -1,0 +1,117 @@
+{
+  "component": "App/Dashboard",
+  "props": {
+    "errors": {},
+    "currentUser": {
+      "id": "00000000-0000-4000-8000-000000000001",
+      "name": "Member 1",
+      "active_supporter": false,
+      "email": "user1@example.invalid",
+      "initials": "Member 2",
+      "avatar_url": "https://example.invalid/image-1.png",
+      "avatar_still_url": null,
+      "appearance": "dark",
+      "timezone": "America/Chicago",
+      "timezone_auto": false,
+      "ui_preferences": {
+        "background_style": "waves",
+        "logo": "pride",
+        "sidebarCollapsed": false,
+        "memberViewMode": "compact",
+        "frontHistoryViewMode": "calendar"
+      },
+      "logoUrl": "https://example.invalid/12"
+    },
+    "frontTypes": [
+      {
+        "id": "00000000-0000-4000-8000-000000000051",
+        "slug": "front",
+        "name": "Front",
+        "color": "#7c3aed",
+        "emoji": "✦"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000052",
+        "slug": "co_front",
+        "name": "Co-Front",
+        "color": "#3b82f6",
+        "emoji": "⚡"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000053",
+        "slug": "co_con",
+        "name": "Co-Con",
+        "color": "#f59e0b",
+        "emoji": "◐"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000054",
+        "slug": "fronting",
+        "name": "Fronting",
+        "color": "#f59e0b",
+        "emoji": null
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000055",
+        "slug": "co_fronting",
+        "name": "Co-fronting",
+        "color": "#8b5cf6",
+        "emoji": null
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000056",
+        "slug": "co_conscious",
+        "name": "Co-conscious",
+        "color": "#0ea5e9",
+        "emoji": null
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000057",
+        "slug": "blurry",
+        "name": "Blurry",
+        "color": "#94a3b8",
+        "emoji": null
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000058",
+        "slug": "influencing",
+        "name": "Influencing",
+        "color": "#ec4899",
+        "emoji": null
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000059",
+        "slug": "custom_front",
+        "name": "custom-front",
+        "color": "#7c3aed",
+        "emoji": null
+      }
+    ],
+    "subsystemFrontTypes": []
+  },
+  "url": "/space",
+  "version": "5369c460e0b8c26fbefcc14d99a70f0a",
+  "sharedProps": [
+    "defaultLogoUrl",
+    "errors",
+    "currentUser",
+    "currentSystem",
+    "currentMember",
+    "canSelectCurrentMember",
+    "customFieldLimits",
+    "availableMembers",
+    "availableSystems",
+    "sidebarNav",
+    "notifications",
+    "flash",
+    "csrf_token",
+    "locale",
+    "availableLocales",
+    "theme",
+    "banner",
+    "features",
+    "terminology",
+    "tours",
+    "urls"
+  ]
+}

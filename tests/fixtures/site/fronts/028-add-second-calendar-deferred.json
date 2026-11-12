@@ -1,0 +1,1275 @@
+{
+  "component": "App/Fronts/History",
+  "props": {
+    "errors": {},
+    "currentUser": {
+      "id": "00000000-0000-4000-8000-000000000001",
+      "name": "Member 1",
+      "active_supporter": false,
+      "email": "user1@example.invalid",
+      "initials": "Member 2",
+      "avatar_url": "https://example.invalid/image-1.png",
+      "avatar_still_url": null,
+      "appearance": "dark",
+      "timezone": "America/Chicago",
+      "timezone_auto": false,
+      "ui_preferences": {
+        "background_style": "waves",
+        "logo": "pride",
+        "sidebarCollapsed": false,
+        "memberViewMode": "compact",
+        "frontHistoryViewMode": "calendar"
+      },
+      "logoUrl": "https://example.invalid/12"
+    },
+    "weeks": [
+      [
+        {
+          "date": "2026-11-01",
+          "day": 1,
+          "in_month": true,
+          "is_today": false,
+          "is_future": false,
+          "fronts": [
+            {
+              "id": "00000000-0000-4000-8000-000000000105",
+              "started_at": "2026-09-08T17:30:24+00:00",
+              "ended_at": "2026-11-03T02:09:35+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000004",
+                "display_label": "Member 5",
+                "is_custom_front": false,
+                "color": "#7c3aed",
+                "avatar_url": "https://example.invalid/image-4.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000052",
+                "name": "Co-Front",
+                "color": "#3b82f6",
+                "emoji": "⚡"
+              },
+              "system": null
+            },
+            {
+              "id": "00000000-0000-4000-8000-000000000106",
+              "started_at": "2026-09-08T17:30:24+00:00",
+              "ended_at": "2026-11-03T02:09:35+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000041",
+                "display_label": "Member 39",
+                "is_custom_front": false,
+                "color": "#a855f7",
+                "avatar_url": "https://example.invalid/image-39.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000051",
+                "name": "Front",
+                "color": "#7c3aed",
+                "emoji": "✦"
+              },
+              "system": null
+            },
+            {
+              "id": "00000000-0000-4000-8000-000000000107",
+              "started_at": "2026-10-09T15:47:15+00:00",
+              "ended_at": "2026-11-03T02:09:35+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000037",
+                "display_label": "Member 35",
+                "is_custom_front": false,
+                "color": "#c2903f",
+                "avatar_url": "https://example.invalid/image-35.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000051",
+                "name": "Front",
+                "color": "#7c3aed",
+                "emoji": "✦"
+              },
+              "system": null
+            }
+          ]
+        },
+        {
+          "date": "2026-11-02",
+          "day": 2,
+          "in_month": true,
+          "is_today": false,
+          "is_future": false,
+          "fronts": [
+            {
+              "id": "00000000-0000-4000-8000-000000000105",
+              "started_at": "2026-09-08T17:30:24+00:00",
+              "ended_at": "2026-11-03T02:09:35+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000004",
+                "display_label": "Member 5",
+                "is_custom_front": false,
+                "color": "#7c3aed",
+                "avatar_url": "https://example.invalid/image-4.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000052",
+                "name": "Co-Front",
+                "color": "#3b82f6",
+                "emoji": "⚡"
+              },
+              "system": null
+            },
+            {
+              "id": "00000000-0000-4000-8000-000000000106",
+              "started_at": "2026-09-08T17:30:24+00:00",
+              "ended_at": "2026-11-03T02:09:35+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000041",
+                "display_label": "Member 39",
+                "is_custom_front": false,
+                "color": "#a855f7",
+                "avatar_url": "https://example.invalid/image-39.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000051",
+                "name": "Front",
+                "color": "#7c3aed",
+                "emoji": "✦"
+              },
+              "system": null
+            },
+            {
+              "id": "00000000-0000-4000-8000-000000000107",
+              "started_at": "2026-10-09T15:47:15+00:00",
+              "ended_at": "2026-11-03T02:09:35+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000037",
+                "display_label": "Member 35",
+                "is_custom_front": false,
+                "color": "#c2903f",
+                "avatar_url": "https://example.invalid/image-35.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000051",
+                "name": "Front",
+                "color": "#7c3aed",
+                "emoji": "✦"
+              },
+              "system": null
+            },
+            {
+              "id": "00000000-0000-4000-8000-000000000108",
+              "started_at": "2026-11-03T02:08:47+00:00",
+              "ended_at": "2026-11-03T02:09:35+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": "Text 28",
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000026",
+                "display_label": "Member 25",
+                "is_custom_front": false,
+                "color": "#ff6b6b",
+                "avatar_url": "https://example.invalid/image-24.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000051",
+                "name": "Front",
+                "color": "#7c3aed",
+                "emoji": "✦"
+              },
+              "system": null
+            },
+            {
+              "id": "00000000-0000-4000-8000-000000000110",
+              "started_at": "2026-11-03T02:14:48+00:00",
+              "ended_at": "2026-11-03T02:21:28+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000008",
+                "display_label": "Member 8",
+                "is_custom_front": false,
+                "color": "#818cf8",
+                "avatar_url": "https://example.invalid/image-7.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000058",
+                "name": "Influencing",
+                "color": "#ec4899",
+                "emoji": null
+              },
+              "system": null
+            },
+            {
+              "id": "00000000-0000-4000-8000-000000000109",
+              "started_at": "2026-11-03T02:14:48+00:00",
+              "ended_at": "2026-11-03T02:21:28+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000038",
+                "display_label": "Member 36",
+                "is_custom_front": false,
+                "color": "#c4b5fd",
+                "avatar_url": "https://example.invalid/image-36.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000059",
+                "name": "custom-front",
+                "color": "#7c3aed",
+                "emoji": null
+              },
+              "system": null
+            },
+            {
+              "id": "00000000-0000-4000-8000-000000000111",
+              "started_at": "2026-11-03T02:21:27+00:00",
+              "ended_at": "2026-11-03T02:21:28+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": "Text 29",
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000026",
+                "display_label": "Member 25",
+                "is_custom_front": false,
+                "color": "#ff6b6b",
+                "avatar_url": "https://example.invalid/image-24.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000051",
+                "name": "Front",
+                "color": "#7c3aed",
+                "emoji": "✦"
+              },
+              "system": null
+            },
+            {
+              "id": "00000000-0000-4000-8000-000000000113",
+              "started_at": "2026-11-03T02:21:32+00:00",
+              "ended_at": "2026-11-05T19:19:40+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000008",
+                "display_label": "Member 8",
+                "is_custom_front": false,
+                "color": "#818cf8",
+                "avatar_url": "https://example.invalid/image-7.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000058",
+                "name": "Influencing",
+                "color": "#ec4899",
+                "emoji": null
+              },
+              "system": null
+            },
+            {
+              "id": "00000000-0000-4000-8000-000000000112",
+              "started_at": "2026-11-03T02:21:32+00:00",
+              "ended_at": "2026-11-05T19:19:41+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000038",
+                "display_label": "Member 36",
+                "is_custom_front": false,
+                "color": "#c4b5fd",
+                "avatar_url": "https://example.invalid/image-36.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000059",
+                "name": "custom-front",
+                "color": "#7c3aed",
+                "emoji": null
+              },
+              "system": null
+            },
+            {
+              "id": "00000000-0000-4000-8000-000000000114",
+              "started_at": "2026-11-03T03:04:19+00:00",
+              "ended_at": "2026-11-05T19:19:40+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000009",
+                "display_label": "blurry",
+                "is_custom_front": true,
+                "color": "#94a3b8",
+                "avatar_url": "https://example.invalid/image-8.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000051",
+                "name": "Front",
+                "color": "#7c3aed",
+                "emoji": "✦"
+              },
+              "system": null
+            }
+          ]
+        },
+        {
+          "date": "2026-11-03",
+          "day": 3,
+          "in_month": true,
+          "is_today": false,
+          "is_future": false,
+          "fronts": [
+            {
+              "id": "00000000-0000-4000-8000-000000000113",
+              "started_at": "2026-11-03T02:21:32+00:00",
+              "ended_at": "2026-11-05T19:19:40+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000008",
+                "display_label": "Member 8",
+                "is_custom_front": false,
+                "color": "#818cf8",
+                "avatar_url": "https://example.invalid/image-7.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000058",
+                "name": "Influencing",
+                "color": "#ec4899",
+                "emoji": null
+              },
+              "system": null
+            },
+            {
+              "id": "00000000-0000-4000-8000-000000000112",
+              "started_at": "2026-11-03T02:21:32+00:00",
+              "ended_at": "2026-11-05T19:19:41+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000038",
+                "display_label": "Member 36",
+                "is_custom_front": false,
+                "color": "#c4b5fd",
+                "avatar_url": "https://example.invalid/image-36.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000059",
+                "name": "custom-front",
+                "color": "#7c3aed",
+                "emoji": null
+              },
+              "system": null
+            },
+            {
+              "id": "00000000-0000-4000-8000-000000000114",
+              "started_at": "2026-11-03T03:04:19+00:00",
+              "ended_at": "2026-11-05T19:19:40+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000009",
+                "display_label": "blurry",
+                "is_custom_front": true,
+                "color": "#94a3b8",
+                "avatar_url": "https://example.invalid/image-8.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000051",
+                "name": "Front",
+                "color": "#7c3aed",
+                "emoji": "✦"
+              },
+              "system": null
+            }
+          ]
+        },
+        {
+          "date": "2026-11-04",
+          "day": 4,
+          "in_month": true,
+          "is_today": false,
+          "is_future": false,
+          "fronts": [
+            {
+              "id": "00000000-0000-4000-8000-000000000113",
+              "started_at": "2026-11-03T02:21:32+00:00",
+              "ended_at": "2026-11-05T19:19:40+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000008",
+                "display_label": "Member 8",
+                "is_custom_front": false,
+                "color": "#818cf8",
+                "avatar_url": "https://example.invalid/image-7.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000058",
+                "name": "Influencing",
+                "color": "#ec4899",
+                "emoji": null
+              },
+              "system": null
+            },
+            {
+              "id": "00000000-0000-4000-8000-000000000112",
+              "started_at": "2026-11-03T02:21:32+00:00",
+              "ended_at": "2026-11-05T19:19:41+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000038",
+                "display_label": "Member 36",
+                "is_custom_front": false,
+                "color": "#c4b5fd",
+                "avatar_url": "https://example.invalid/image-36.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000059",
+                "name": "custom-front",
+                "color": "#7c3aed",
+                "emoji": null
+              },
+              "system": null
+            },
+            {
+              "id": "00000000-0000-4000-8000-000000000114",
+              "started_at": "2026-11-03T03:04:19+00:00",
+              "ended_at": "2026-11-05T19:19:40+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000009",
+                "display_label": "blurry",
+                "is_custom_front": true,
+                "color": "#94a3b8",
+                "avatar_url": "https://example.invalid/image-8.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000051",
+                "name": "Front",
+                "color": "#7c3aed",
+                "emoji": "✦"
+              },
+              "system": null
+            }
+          ]
+        },
+        {
+          "date": "2026-11-05",
+          "day": 5,
+          "in_month": true,
+          "is_today": false,
+          "is_future": false,
+          "fronts": [
+            {
+              "id": "00000000-0000-4000-8000-000000000113",
+              "started_at": "2026-11-03T02:21:32+00:00",
+              "ended_at": "2026-11-05T19:19:40+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000008",
+                "display_label": "Member 8",
+                "is_custom_front": false,
+                "color": "#818cf8",
+                "avatar_url": "https://example.invalid/image-7.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000058",
+                "name": "Influencing",
+                "color": "#ec4899",
+                "emoji": null
+              },
+              "system": null
+            },
+            {
+              "id": "00000000-0000-4000-8000-000000000112",
+              "started_at": "2026-11-03T02:21:32+00:00",
+              "ended_at": "2026-11-05T19:19:41+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000038",
+                "display_label": "Member 36",
+                "is_custom_front": false,
+                "color": "#c4b5fd",
+                "avatar_url": "https://example.invalid/image-36.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000059",
+                "name": "custom-front",
+                "color": "#7c3aed",
+                "emoji": null
+              },
+              "system": null
+            },
+            {
+              "id": "00000000-0000-4000-8000-000000000114",
+              "started_at": "2026-11-03T03:04:19+00:00",
+              "ended_at": "2026-11-05T19:19:40+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000009",
+                "display_label": "blurry",
+                "is_custom_front": true,
+                "color": "#94a3b8",
+                "avatar_url": "https://example.invalid/image-8.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000051",
+                "name": "Front",
+                "color": "#7c3aed",
+                "emoji": "✦"
+              },
+              "system": null
+            },
+            {
+              "id": "00000000-0000-4000-8000-000000000115",
+              "started_at": "2026-11-05T19:29:36+00:00",
+              "ended_at": "2026-11-06T19:39:28+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000038",
+                "display_label": "Member 36",
+                "is_custom_front": false,
+                "color": "#c4b5fd",
+                "avatar_url": "https://example.invalid/image-36.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000051",
+                "name": "Front",
+                "color": "#7c3aed",
+                "emoji": "✦"
+              },
+              "system": null
+            },
+            {
+              "id": "00000000-0000-4000-8000-000000000116",
+              "started_at": "2026-11-06T00:18:08+00:00",
+              "ended_at": "2026-11-06T19:39:41+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000026",
+                "display_label": "Member 25",
+                "is_custom_front": false,
+                "color": "#ff6b6b",
+                "avatar_url": "https://example.invalid/image-24.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000051",
+                "name": "Front",
+                "color": "#7c3aed",
+                "emoji": "✦"
+              },
+              "system": null
+            }
+          ]
+        },
+        {
+          "date": "2026-11-06",
+          "day": 6,
+          "in_month": true,
+          "is_today": false,
+          "is_future": false,
+          "fronts": [
+            {
+              "id": "00000000-0000-4000-8000-000000000115",
+              "started_at": "2026-11-05T19:29:36+00:00",
+              "ended_at": "2026-11-06T19:39:28+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000038",
+                "display_label": "Member 36",
+                "is_custom_front": false,
+                "color": "#c4b5fd",
+                "avatar_url": "https://example.invalid/image-36.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000051",
+                "name": "Front",
+                "color": "#7c3aed",
+                "emoji": "✦"
+              },
+              "system": null
+            },
+            {
+              "id": "00000000-0000-4000-8000-000000000116",
+              "started_at": "2026-11-06T00:18:08+00:00",
+              "ended_at": "2026-11-06T19:39:41+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000026",
+                "display_label": "Member 25",
+                "is_custom_front": false,
+                "color": "#ff6b6b",
+                "avatar_url": "https://example.invalid/image-24.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000051",
+                "name": "Front",
+                "color": "#7c3aed",
+                "emoji": "✦"
+              },
+              "system": null
+            },
+            {
+              "id": "00000000-0000-4000-8000-000000000117",
+              "started_at": "2026-11-06T18:48:25+00:00",
+              "ended_at": "2026-11-06T19:48:52+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000026",
+                "display_label": "Member 25",
+                "is_custom_front": false,
+                "color": "#ff6b6b",
+                "avatar_url": "https://example.invalid/image-24.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000051",
+                "name": "Front",
+                "color": "#7c3aed",
+                "emoji": "✦"
+              },
+              "system": null
+            },
+            {
+              "id": "00000000-0000-4000-8000-000000000118",
+              "started_at": "2026-11-06T19:42:49+00:00",
+              "ended_at": "2026-11-06T19:46:25+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": "Text 30",
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000026",
+                "display_label": "Member 25",
+                "is_custom_front": false,
+                "color": "#ff6b6b",
+                "avatar_url": "https://example.invalid/image-24.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000051",
+                "name": "Front",
+                "color": "#7c3aed",
+                "emoji": "✦"
+              },
+              "system": null
+            },
+            {
+              "id": "00000000-0000-4000-8000-000000000119",
+              "started_at": "2026-11-06T19:45:17+00:00",
+              "ended_at": "2026-11-06T19:45:27+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": "Text 31",
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000038",
+                "display_label": "Member 36",
+                "is_custom_front": false,
+                "color": "#c4b5fd",
+                "avatar_url": "https://example.invalid/image-36.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000051",
+                "name": "Front",
+                "color": "#7c3aed",
+                "emoji": "✦"
+              },
+              "system": null
+            },
+            {
+              "id": "00000000-0000-4000-8000-000000000120",
+              "started_at": "2026-11-06T19:45:27+00:00",
+              "ended_at": "2026-11-06T19:45:39+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000038",
+                "display_label": "Member 36",
+                "is_custom_front": false,
+                "color": "#c4b5fd",
+                "avatar_url": "https://example.invalid/image-36.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000052",
+                "name": "Co-Front",
+                "color": "#3b82f6",
+                "emoji": "⚡"
+              },
+              "system": null
+            },
+            {
+              "id": "00000000-0000-4000-8000-000000000121",
+              "started_at": "2026-11-06T19:47:46+00:00",
+              "ended_at": "2026-11-06T19:48:25+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000036",
+                "display_label": "Member 34",
+                "is_custom_front": false,
+                "color": "#ec4899",
+                "avatar_url": "https://example.invalid/image-34.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000051",
+                "name": "Front",
+                "color": "#7c3aed",
+                "emoji": "✦"
+              },
+              "system": null
+            },
+            {
+              "id": "00000000-0000-4000-8000-000000000122",
+              "started_at": "2026-11-06T19:48:25+00:00",
+              "ended_at": "2026-11-06T19:52:14+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000038",
+                "display_label": "Member 36",
+                "is_custom_front": false,
+                "color": "#c4b5fd",
+                "avatar_url": "https://example.invalid/image-36.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000051",
+                "name": "Front",
+                "color": "#7c3aed",
+                "emoji": "✦"
+              },
+              "system": null
+            },
+            {
+              "id": "00000000-0000-4000-8000-000000000050",
+              "started_at": "2026-11-06T19:52:44+00:00",
+              "ended_at": "2026-11-12T02:42:57+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000004",
+                "display_label": "Member 5",
+                "is_custom_front": false,
+                "color": "#7c3aed",
+                "avatar_url": "https://example.invalid/image-4.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000051",
+                "name": "Front",
+                "color": "#7c3aed",
+                "emoji": "✦"
+              },
+              "system": null
+            }
+          ]
+        },
+        {
+          "date": "2026-11-07",
+          "day": 7,
+          "in_month": true,
+          "is_today": false,
+          "is_future": false,
+          "fronts": [
+            {
+              "id": "00000000-0000-4000-8000-000000000050",
+              "started_at": "2026-11-06T19:52:44+00:00",
+              "ended_at": "2026-11-12T02:42:57+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000004",
+                "display_label": "Member 5",
+                "is_custom_front": false,
+                "color": "#7c3aed",
+                "avatar_url": "https://example.invalid/image-4.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000051",
+                "name": "Front",
+                "color": "#7c3aed",
+                "emoji": "✦"
+              },
+              "system": null
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "date": "2026-11-08",
+          "day": 8,
+          "in_month": true,
+          "is_today": false,
+          "is_future": false,
+          "fronts": [
+            {
+              "id": "00000000-0000-4000-8000-000000000050",
+              "started_at": "2026-11-06T19:52:44+00:00",
+              "ended_at": "2026-11-12T02:42:57+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000004",
+                "display_label": "Member 5",
+                "is_custom_front": false,
+                "color": "#7c3aed",
+                "avatar_url": "https://example.invalid/image-4.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000051",
+                "name": "Front",
+                "color": "#7c3aed",
+                "emoji": "✦"
+              },
+              "system": null
+            }
+          ]
+        },
+        {
+          "date": "2026-11-09",
+          "day": 9,
+          "in_month": true,
+          "is_today": false,
+          "is_future": false,
+          "fronts": [
+            {
+              "id": "00000000-0000-4000-8000-000000000050",
+              "started_at": "2026-11-06T19:52:44+00:00",
+              "ended_at": "2026-11-12T02:42:57+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000004",
+                "display_label": "Member 5",
+                "is_custom_front": false,
+                "color": "#7c3aed",
+                "avatar_url": "https://example.invalid/image-4.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000051",
+                "name": "Front",
+                "color": "#7c3aed",
+                "emoji": "✦"
+              },
+              "system": null
+            }
+          ]
+        },
+        {
+          "date": "2026-11-10",
+          "day": 10,
+          "in_month": true,
+          "is_today": false,
+          "is_future": false,
+          "fronts": [
+            {
+              "id": "00000000-0000-4000-8000-000000000050",
+              "started_at": "2026-11-06T19:52:44+00:00",
+              "ended_at": "2026-11-12T02:42:57+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000004",
+                "display_label": "Member 5",
+                "is_custom_front": false,
+                "color": "#7c3aed",
+                "avatar_url": "https://example.invalid/image-4.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000051",
+                "name": "Front",
+                "color": "#7c3aed",
+                "emoji": "✦"
+              },
+              "system": null
+            }
+          ]
+        },
+        {
+          "date": "2026-11-11",
+          "day": 11,
+          "in_month": true,
+          "is_today": true,
+          "is_future": false,
+          "fronts": [
+            {
+              "id": "00000000-0000-4000-8000-000000000050",
+              "started_at": "2026-11-06T19:52:44+00:00",
+              "ended_at": "2026-11-12T02:42:57+00:00",
+              "is_ongoing": false,
+              "is_live": false,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000004",
+                "display_label": "Member 5",
+                "is_custom_front": false,
+                "color": "#7c3aed",
+                "avatar_url": "https://example.invalid/image-4.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000051",
+                "name": "Front",
+                "color": "#7c3aed",
+                "emoji": "✦"
+              },
+              "system": null
+            },
+            {
+              "id": "00000000-0000-4000-8000-000000000131",
+              "started_at": "2026-11-12T02:42:57+00:00",
+              "ended_at": null,
+              "is_ongoing": true,
+              "is_live": true,
+              "comment": "Text 32",
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000042",
+                "display_label": "Member 5",
+                "is_custom_front": false,
+                "color": "#0ea5e9",
+                "avatar_url": "https://example.invalid/image-40.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000051",
+                "name": "Front",
+                "color": "#7c3aed",
+                "emoji": "✦"
+              },
+              "system": null
+            },
+            {
+              "id": "00000000-0000-4000-8000-000000000132",
+              "started_at": "2026-11-12T02:43:04+00:00",
+              "ended_at": null,
+              "is_ongoing": true,
+              "is_live": true,
+              "comment": null,
+              "member": {
+                "id": "00000000-0000-4000-8000-000000000004",
+                "display_label": "Member 5",
+                "is_custom_front": false,
+                "color": "#7c3aed",
+                "avatar_url": "https://example.invalid/image-4.png",
+                "avatar_still_url": null
+              },
+              "front_type": {
+                "id": "00000000-0000-4000-8000-000000000051",
+                "name": "Front",
+                "color": "#7c3aed",
+                "emoji": "✦"
+              },
+              "system": null
+            }
+          ]
+        },
+        {
+          "date": "2026-11-12",
+          "day": 12,
+          "in_month": true,
+          "is_today": false,
+          "is_future": true,
+          "fronts": []
+        },
+        {
+          "date": "2026-11-13",
+          "day": 13,
+          "in_month": true,
+          "is_today": false,
+          "is_future": true,
+          "fronts": []
+        },
+        {
+          "date": "2026-11-14",
+          "day": 14,
+          "in_month": true,
+          "is_today": false,
+          "is_future": true,
+          "fronts": []
+        }
+      ],
+      [
+        {
+          "date": "2026-11-15",
+          "day": 15,
+          "in_month": true,
+          "is_today": false,
+          "is_future": true,
+          "fronts": []
+        },
+        {
+          "date": "2026-11-16",
+          "day": 16,
+          "in_month": true,
+          "is_today": false,
+          "is_future": true,
+          "fronts": []
+        },
+        {
+          "date": "2026-11-17",
+          "day": 17,
+          "in_month": true,
+          "is_today": false,
+          "is_future": true,
+          "fronts": []
+        },
+        {
+          "date": "2026-11-18",
+          "day": 18,
+          "in_month": true,
+          "is_today": false,
+          "is_future": true,
+          "fronts": []
+        },
+        {
+          "date": "2026-11-19",
+          "day": 19,
+          "in_month": true,
+          "is_today": false,
+          "is_future": true,
+          "fronts": []
+        },
+        {
+          "date": "2026-11-20",
+          "day": 20,
+          "in_month": true,
+          "is_today": false,
+          "is_future": true,
+          "fronts": []
+        },
+        {
+          "date": "2026-11-21",
+          "day": 21,
+          "in_month": true,
+          "is_today": false,
+          "is_future": true,
+          "fronts": []
+        }
+      ],
+      [
+        {
+          "date": "2026-11-22",
+          "day": 22,
+          "in_month": true,
+          "is_today": false,
+          "is_future": true,
+          "fronts": []
+        },
+        {
+          "date": "2026-11-23",
+          "day": 23,
+          "in_month": true,
+          "is_today": false,
+          "is_future": true,
+          "fronts": []
+        },
+        {
+          "date": "2026-11-24",
+          "day": 24,
+          "in_month": true,
+          "is_today": false,
+          "is_future": true,
+          "fronts": []
+        },
+        {
+          "date": "2026-11-25",
+          "day": 25,
+          "in_month": true,
+          "is_today": false,
+          "is_future": true,
+          "fronts": []
+        },
+        {
+          "date": "2026-11-26",
+          "day": 26,
+          "in_month": true,
+          "is_today": false,
+          "is_future": true,
+          "fronts": []
+        },
+        {
+          "date": "2026-11-27",
+          "day": 27,
+          "in_month": true,
+          "is_today": false,
+          "is_future": true,
+          "fronts": []
+        },
+        {
+          "date": "2026-11-28",
+          "day": 28,
+          "in_month": true,
+          "is_today": false,
+          "is_future": true,
+          "fronts": []
+        }
+      ],
+      [
+        {
+          "date": "2026-11-29",
+          "day": 29,
+          "in_month": true,
+          "is_today": false,
+          "is_future": true,
+          "fronts": []
+        },
+        {
+          "date": "2026-11-30",
+          "day": 30,
+          "in_month": true,
+          "is_today": false,
+          "is_future": true,
+          "fronts": []
+        },
+        {
+          "date": "2026-12-01",
+          "day": 1,
+          "in_month": false,
+          "is_today": false,
+          "is_future": true,
+          "fronts": []
+        },
+        {
+          "date": "2026-12-02",
+          "day": 2,
+          "in_month": false,
+          "is_today": false,
+          "is_future": true,
+          "fronts": []
+        },
+        {
+          "date": "2026-12-03",
+          "day": 3,
+          "in_month": false,
+          "is_today": false,
+          "is_future": true,
+          "fronts": []
+        },
+        {
+          "date": "2026-12-04",
+          "day": 4,
+          "in_month": false,
+          "is_today": false,
+          "is_future": true,
+          "fronts": []
+        },
+        {
+          "date": "2026-12-05",
+          "day": 5,
+          "in_month": false,
+          "is_today": false,
+          "is_future": true,
+          "fronts": []
+        }
+      ]
+    ],
+    "timelineStartDate": null
+  },
+  "url": "/space/fronts",
+  "version": "5369c460e0b8c26fbefcc14d99a70f0a",
+  "sharedProps": [
+    "defaultLogoUrl",
+    "errors",
+    "currentUser",
+    "currentSystem",
+    "currentMember",
+    "canSelectCurrentMember",
+    "customFieldLimits",
+    "availableMembers",
+    "availableSystems",
+    "sidebarNav",
+    "notifications",
+    "flash",
+    "csrf_token",
+    "locale",
+    "availableLocales",
+    "theme",
+    "banner",
+    "features",
+    "terminology",
+    "tours",
+    "urls"
+  ]
+}

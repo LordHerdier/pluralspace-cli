@@ -1,0 +1,114 @@
+{
+  "component": "App/Members/Index",
+  "props": {
+    "errors": {},
+    "currentUser": {
+      "id": "00000000-0000-4000-8000-000000000001",
+      "name": "Member 1",
+      "active_supporter": false,
+      "email": "user1@example.invalid",
+      "initials": "Member 2",
+      "avatar_url": "https://example.invalid/image-1.png",
+      "avatar_still_url": null,
+      "appearance": "dark",
+      "timezone": "America/Chicago",
+      "timezone_auto": false,
+      "ui_preferences": {
+        "background_style": "waves",
+        "logo": "pride",
+        "sidebarCollapsed": false,
+        "memberViewMode": "compact",
+        "frontHistoryViewMode": "calendar"
+      },
+      "logoUrl": "https://example.invalid/12"
+    },
+    "members": {
+      "data": [
+        {
+          "id": "00000000-0000-4000-8000-000000000076",
+          "name": "Member 74",
+          "display_name": null,
+          "display_label": "Member 74",
+          "pronouns": null,
+          "color": "#7c6fee",
+          "avatar_url": "https://example.invalid/image-41.png",
+          "avatar_still_url": null,
+          "banner_url": null,
+          "banner_still_url": null,
+          "role": [],
+          "is_pinned": false,
+          "is_archived": true,
+          "is_template": false,
+          "is_custom_front": false,
+          "visibility_level": 5,
+          "system": null,
+          "urls": {
+            "show": "https://pluralspace.app/members/00000000-0000-4000-8000-000000000076",
+            "edit": "https://pluralspace.app/members/00000000-0000-4000-8000-000000000076/edit"
+          },
+          "active_front": null
+        }
+      ],
+      "links": {
+        "first": "https://pluralspace.app/members?status=archived&page=1",
+        "last": "https://pluralspace.app/members?status=archived&page=1",
+        "prev": null,
+        "next": null
+      },
+      "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "links": [
+          {
+            "url": null,
+            "label": "&laquo; Previous",
+            "page": null,
+            "active": false
+          },
+          {
+            "url": "https://pluralspace.app/members?status=archived&page=1",
+            "label": "1",
+            "page": 1,
+            "active": true
+          },
+          {
+            "url": null,
+            "label": "Next &raquo;",
+            "page": null,
+            "active": false
+          }
+        ],
+        "path": "https://pluralspace.app/members",
+        "per_page": 50,
+        "to": 1,
+        "total": 1
+      }
+    }
+  },
+  "url": "/members?page=1&status=archived",
+  "version": "5369c460e0b8c26fbefcc14d99a70f0a",
+  "sharedProps": [
+    "defaultLogoUrl",
+    "errors",
+    "currentUser",
+    "currentSystem",
+    "currentMember",
+    "canSelectCurrentMember",
+    "customFieldLimits",
+    "availableMembers",
+    "availableSystems",
+    "sidebarNav",
+    "notifications",
+    "flash",
+    "csrf_token",
+    "locale",
+    "availableLocales",
+    "theme",
+    "banner",
+    "features",
+    "terminology",
+    "tours",
+    "urls"
+  ]
+}

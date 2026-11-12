@@ -1,0 +1,76 @@
+{
+  "component": "App/Dashboard",
+  "props": {
+    "errors": {},
+    "currentUser": {
+      "id": "00000000-0000-4000-8000-000000000001",
+      "name": "Member 1",
+      "active_supporter": false,
+      "email": "user1@example.invalid",
+      "initials": "Member 2",
+      "avatar_url": "https://example.invalid/image-1.png",
+      "avatar_still_url": null,
+      "appearance": "dark",
+      "timezone": "America/Chicago",
+      "timezone_auto": false,
+      "ui_preferences": {
+        "background_style": "waves",
+        "logo": "pride",
+        "sidebarCollapsed": false,
+        "memberViewMode": "compact",
+        "frontHistoryViewMode": "calendar"
+      },
+      "logoUrl": "https://example.invalid/12"
+    },
+    "currentFronts": [
+      {
+        "id": "00000000-0000-4000-8000-000000000131",
+        "member_id": "00000000-0000-4000-8000-000000000042",
+        "can_view_member": true,
+        "system_front_type_id": "00000000-0000-4000-8000-000000000051",
+        "started_at": "2026-11-12T02:42:57+00:00",
+        "comment": "Text 32",
+        "member": {
+          "id": "00000000-0000-4000-8000-000000000042",
+          "display_label": "Member 5",
+          "color": "#0ea5e9",
+          "avatar_url": "https://example.invalid/image-40.png",
+          "avatar_still_url": null
+        },
+        "front_type": {
+          "id": "00000000-0000-4000-8000-000000000051",
+          "name": "Front",
+          "color": "#7c3aed",
+          "emoji": "✦"
+        },
+        "system": null
+      }
+    ],
+    "currentFrontsTotal": 1
+  },
+  "url": "/space",
+  "version": "5369c460e0b8c26fbefcc14d99a70f0a",
+  "sharedProps": [
+    "defaultLogoUrl",
+    "errors",
+    "currentUser",
+    "currentSystem",
+    "currentMember",
+    "canSelectCurrentMember",
+    "customFieldLimits",
+    "availableMembers",
+    "availableSystems",
+    "sidebarNav",
+    "notifications",
+    "flash",
+    "csrf_token",
+    "locale",
+    "availableLocales",
+    "theme",
+    "banner",
+    "features",
+    "terminology",
+    "tours",
+    "urls"
+  ]
+}

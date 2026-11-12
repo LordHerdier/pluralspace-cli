@@ -1,0 +1,161 @@
+{
+  "component": "App/Dashboard",
+  "props": {
+    "errors": {},
+    "currentUser": {
+      "id": "00000000-0000-4000-8000-000000000001",
+      "name": "Member 1",
+      "active_supporter": false,
+      "email": "user1@example.invalid",
+      "initials": "Member 2",
+      "avatar_url": "https://example.invalid/image-1.png",
+      "avatar_still_url": null,
+      "appearance": "dark",
+      "timezone": "America/Chicago",
+      "timezone_auto": false,
+      "ui_preferences": {
+        "background_style": "waves",
+        "logo": "pride",
+        "sidebarCollapsed": false,
+        "memberViewMode": "compact",
+        "frontHistoryViewMode": "calendar"
+      },
+      "logoUrl": "https://example.invalid/12"
+    },
+    "recentActivity": [
+      {
+        "type": "fronting",
+        "timestamp": "2026-11-06T19:52:44+00:00",
+        "members": [
+          {
+            "id": "00000000-0000-4000-8000-000000000004",
+            "display_label": "Member 5",
+            "color": "#7c3aed",
+            "avatar_url": "https://example.invalid/image-4.png"
+          }
+        ],
+        "members_total": 1,
+        "front_type": {
+          "name": "Front",
+          "color": "#7c3aed"
+        },
+        "duration_human": null
+      },
+      {
+        "type": "left",
+        "timestamp": "2026-11-06T19:52:14+00:00",
+        "members": [
+          {
+            "id": "00000000-0000-4000-8000-000000000038",
+            "display_label": "Member 36",
+            "color": "#c4b5fd",
+            "avatar_url": "https://example.invalid/image-36.png"
+          }
+        ],
+        "members_total": 1,
+        "front_type": {
+          "name": "Front",
+          "color": "#7c3aed"
+        },
+        "duration_human": "3m 49s"
+      },
+      {
+        "type": "left",
+        "timestamp": "2026-11-06T19:48:52+00:00",
+        "members": [
+          {
+            "id": "00000000-0000-4000-8000-000000000026",
+            "display_label": "Member 25",
+            "color": "#ff6b6b",
+            "avatar_url": "https://example.invalid/image-24.png"
+          }
+        ],
+        "members_total": 1,
+        "front_type": {
+          "name": "Front",
+          "color": "#7c3aed"
+        },
+        "duration_human": "1h 27s"
+      },
+      {
+        "type": "entered",
+        "timestamp": "2026-11-06T19:48:25+00:00",
+        "members": [
+          {
+            "id": "00000000-0000-4000-8000-000000000038",
+            "display_label": "Member 36",
+            "color": "#c4b5fd",
+            "avatar_url": "https://example.invalid/image-36.png"
+          }
+        ],
+        "members_total": 1,
+        "front_type": {
+          "name": "Front",
+          "color": "#7c3aed"
+        },
+        "duration_human": null
+      },
+      {
+        "type": "left",
+        "timestamp": "2026-11-06T19:48:25+00:00",
+        "members": [
+          {
+            "id": "00000000-0000-4000-8000-000000000036",
+            "display_label": "Member 34",
+            "color": "#ec4899",
+            "avatar_url": "https://example.invalid/image-34.png"
+          }
+        ],
+        "members_total": 1,
+        "front_type": {
+          "name": "Front",
+          "color": "#7c3aed"
+        },
+        "duration_human": "39s"
+      },
+      {
+        "type": "entered",
+        "timestamp": "2026-11-06T19:47:46+00:00",
+        "members": [
+          {
+            "id": "00000000-0000-4000-8000-000000000036",
+            "display_label": "Member 34",
+            "color": "#ec4899",
+            "avatar_url": "https://example.invalid/image-34.png"
+          }
+        ],
+        "members_total": 1,
+        "front_type": {
+          "name": "Front",
+          "color": "#7c3aed"
+        },
+        "duration_human": null
+      }
+    ]
+  },
+  "url": "/space",
+  "version": "5369c460e0b8c26fbefcc14d99a70f0a",
+  "sharedProps": [
+    "defaultLogoUrl",
+    "errors",
+    "currentUser",
+    "currentSystem",
+    "currentMember",
+    "canSelectCurrentMember",
+    "customFieldLimits",
+    "availableMembers",
+    "availableSystems",
+    "sidebarNav",
+    "notifications",
+    "flash",
+    "csrf_token",
+    "locale",
+    "availableLocales",
+    "theme",
+    "banner",
+    "features",
+    "terminology",
+    "tours",
+    "urls"
+  ]
+}

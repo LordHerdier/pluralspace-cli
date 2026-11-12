@@ -1,0 +1,4 @@
+{
+  "site_version": "5369c460e0b8c26fbefcc14d99a70f0a",
+  "scenarios": ["auth", "fronts", "moods", "reads"]
+}

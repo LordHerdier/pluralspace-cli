@@ -1,0 +1,88 @@
+{
+  "component": "App/Dashboard",
+  "props": {
+    "errors": {},
+    "currentUser": {
+      "id": "00000000-0000-4000-8000-000000000001",
+      "name": "Member 1",
+      "active_supporter": false,
+      "email": "user1@example.invalid",
+      "initials": "Member 2",
+      "avatar_url": "https://example.invalid/image-1.png",
+      "avatar_still_url": null,
+      "appearance": "dark",
+      "timezone": "America/Chicago",
+      "timezone_auto": false,
+      "ui_preferences": {
+        "background_style": "waves",
+        "logo": "pride",
+        "sidebarCollapsed": false,
+        "memberViewMode": "compact",
+        "frontHistoryViewMode": "calendar"
+      },
+      "logoUrl": "https://example.invalid/12"
+    },
+    "latestPoll": {
+      "id": "00000000-0000-4000-8000-000000000060",
+      "title": "Text 22",
+      "type": "standard",
+      "is_voting_open": true,
+      "allows_multiple_votes": false,
+      "total_votes": 6,
+      "ranked_choice_result": null,
+      "created_by_member": {
+        "id": "00000000-0000-4000-8000-000000000008",
+        "display_label": "Member 8",
+        "color": "#818cf8"
+      },
+      "options": [
+        {
+          "id": "00000000-0000-4000-8000-000000000061",
+          "text": "Text 23",
+          "votes_count": 2,
+          "voter_member_ids": [
+            "00000000-0000-4000-8000-000000000008",
+            "00000000-0000-4000-8000-000000000021"
+          ]
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000062",
+          "text": "Text 24",
+          "votes_count": 4,
+          "voter_member_ids": [
+            "00000000-0000-4000-8000-000000000004",
+            "00000000-0000-4000-8000-000000000010",
+            "00000000-0000-4000-8000-000000000023",
+            "00000000-0000-4000-8000-000000000035"
+          ]
+        }
+      ],
+      "url": "https://pluralspace.app/polls/00000000-0000-4000-8000-000000000060"
+    }
+  },
+  "url": "/space",
+  "version": "5369c460e0b8c26fbefcc14d99a70f0a",
+  "sharedProps": [
+    "defaultLogoUrl",
+    "errors",
+    "currentUser",
+    "currentSystem",
+    "currentMember",
+    "canSelectCurrentMember",
+    "customFieldLimits",
+    "availableMembers",
+    "availableSystems",
+    "sidebarNav",
+    "notifications",
+    "flash",
+    "csrf_token",
+    "locale",
+    "availableLocales",
+    "theme",
+    "banner",
+    "features",
+    "terminology",
+    "tours",
+    "urls"
+  ]
+}

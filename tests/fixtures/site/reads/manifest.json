@@ -1,0 +1,432 @@
+{
+  "scenario": "reads",
+  "exchanges": [
+    {
+      "seq": 26,
+      "label": "ui-login",
+      "method": "GET",
+      "path": "/login",
+      "status": 200,
+      "headers": {
+        "content-type": "text/html; charset=utf-8"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "001-ui-login.html"
+    },
+    {
+      "seq": 27,
+      "label": "ui-login",
+      "method": "POST",
+      "path": "/login",
+      "status": 409,
+      "headers": {
+        "content-type": "text/html; charset=utf-8",
+        "x-inertia-location": "/space"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "request_body": {
+        "email": "user1@example.invalid",
+        "password": "[redacted]",
+        "remember": false
+      }
+    },
+    {
+      "seq": 28,
+      "label": "ui-login",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "text/html; charset=utf-8"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "003-ui-login.html"
+    },
+    {
+      "seq": 29,
+      "label": "ui-login",
+      "method": "POST",
+      "path": "/broadcasting/auth",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "set_cookies": ["pluralspace-session"],
+      "request_body": "socket_id=0.0&channel_name=private-fronts.00000000-0000-4000-8000-000000000002.5",
+      "body_file": "004-ui-login.json"
+    },
+    {
+      "seq": 30,
+      "label": "ui-login",
+      "method": "POST",
+      "path": "/broadcasting/auth",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "set_cookies": ["pluralspace-session"],
+      "request_body": "socket_id=0.0&channel_name=private-App.Models.User.00000000-0000-4000-8000-000000000001",
+      "body_file": "005-ui-login.json"
+    },
+    {
+      "seq": 31,
+      "label": "ui-login",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "006-ui-login.json"
+    },
+    {
+      "seq": 32,
+      "label": "ui-login",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "007-ui-login.json"
+    },
+    {
+      "seq": 33,
+      "label": "ui-login",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "008-ui-login.json"
+    },
+    {
+      "seq": 34,
+      "label": "ui-login",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "009-ui-login.json"
+    },
+    {
+      "seq": 35,
+      "label": "ui-login",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "010-ui-login.json"
+    },
+    {
+      "seq": 36,
+      "label": "ui-login",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "011-ui-login.json"
+    },
+    {
+      "seq": 37,
+      "label": "dashboard-document",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "text/html; charset=utf-8"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "012-dashboard-document.html"
+    },
+    {
+      "seq": 38,
+      "label": "whoami",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "013-whoami.json"
+    },
+    {
+      "seq": 39,
+      "label": "current-fronts",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "014-current-fronts.json"
+    },
+    {
+      "seq": 40,
+      "label": "atmosphere",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "015-atmosphere.json"
+    },
+    {
+      "seq": 41,
+      "label": "front-types",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "016-front-types.json"
+    },
+    {
+      "seq": 42,
+      "label": "members-page-1",
+      "method": "GET",
+      "path": "/members?page=1",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "017-members-page-1.json"
+    },
+    {
+      "seq": 43,
+      "label": "members-page-1-deferred",
+      "method": "GET",
+      "path": "/members?page=1",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "018-members-page-1-deferred.json"
+    },
+    {
+      "seq": 44,
+      "label": "members-search",
+      "method": "GET",
+      "path": "/members?page=1&q=query",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "019-members-search.json"
+    },
+    {
+      "seq": 45,
+      "label": "members-search-deferred",
+      "method": "GET",
+      "path": "/members?page=1&q=query",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "020-members-search-deferred.json"
+    },
+    {
+      "seq": 46,
+      "label": "members-archived",
+      "method": "GET",
+      "path": "/members?page=1&status=archived",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "021-members-archived.json"
+    },
+    {
+      "seq": 47,
+      "label": "members-archived-deferred",
+      "method": "GET",
+      "path": "/members?page=1&status=archived",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "022-members-archived-deferred.json"
+    },
+    {
+      "seq": 48,
+      "label": "members-fronting",
+      "method": "GET",
+      "path": "/members?page=1&fronting=1",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "023-members-fronting.json"
+    },
+    {
+      "seq": 49,
+      "label": "members-fronting-deferred",
+      "method": "GET",
+      "path": "/members?page=1&fronting=1",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "024-members-fronting-deferred.json"
+    },
+    {
+      "seq": 50,
+      "label": "member-profile",
+      "method": "GET",
+      "path": "/members/00000000-0000-4000-8000-000000000042",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "025-member-profile.json"
+    },
+    {
+      "seq": 51,
+      "label": "member-profile-deferred",
+      "method": "GET",
+      "path": "/members/00000000-0000-4000-8000-000000000042",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "026-member-profile-deferred.json"
+    },
+    {
+      "seq": 52,
+      "label": "fronts-calendar",
+      "method": "GET",
+      "path": "/space/fronts",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "027-fronts-calendar.json"
+    },
+    {
+      "seq": 53,
+      "label": "fronts-calendar-deferred",
+      "method": "GET",
+      "path": "/space/fronts",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "028-fronts-calendar-deferred.json"
+    },
+    {
+      "seq": 54,
+      "label": "fronts-calendar-month",
+      "method": "GET",
+      "path": "/space/fronts?month=2026-11",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "029-fronts-calendar-month.json"
+    },
+    {
+      "seq": 55,
+      "label": "fronts-calendar-month-deferred",
+      "method": "GET",
+      "path": "/space/fronts?month=2026-11",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "030-fronts-calendar-month-deferred.json"
+    },
+    {
+      "seq": 56,
+      "label": "moods",
+      "method": "GET",
+      "path": "/system/moods/search?q=",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "031-moods.json"
+    },
+    {
+      "seq": 57,
+      "label": "member-search",
+      "method": "GET",
+      "path": "/space/members/search?tree=front&q=",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "032-member-search.json"
+    },
+    {
+      "seq": 58,
+      "label": "member-search-query",
+      "method": "GET",
+      "path": "/space/members/search?tree=front&q=query",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "033-member-search-query.json"
+    }
+  ]
+}

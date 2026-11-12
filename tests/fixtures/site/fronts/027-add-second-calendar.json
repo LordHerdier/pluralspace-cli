@@ -1,0 +1,846 @@
+{
+  "component": "App/Fronts/History",
+  "props": {
+    "defaultLogoUrl": "https://example.invalid/1",
+    "errors": {},
+    "currentUser": {
+      "id": "00000000-0000-4000-8000-000000000001",
+      "name": "Member 1",
+      "active_supporter": false,
+      "email": "user1@example.invalid",
+      "initials": "Member 2",
+      "avatar_url": "https://example.invalid/image-1.png",
+      "avatar_still_url": null,
+      "appearance": "dark",
+      "timezone": "America/Chicago",
+      "timezone_auto": false,
+      "ui_preferences": {
+        "background_style": "waves",
+        "logo": "pride",
+        "sidebarCollapsed": false,
+        "memberViewMode": "compact",
+        "frontHistoryViewMode": "calendar"
+      },
+      "logoUrl": "https://example.invalid/12"
+    },
+    "currentSystem": {
+      "id": "00000000-0000-4000-8000-000000000002",
+      "name": "Member 3",
+      "color": "#f2ebc1",
+      "avatar_url": "https://example.invalid/image-2.png",
+      "avatar_still_url": null,
+      "is_owner": true,
+      "access_level": 5
+    },
+    "currentMember": {
+      "id": "00000000-0000-4000-8000-000000000003",
+      "name": "Member 4",
+      "display_label": "Member 4",
+      "avatar_url": "https://example.invalid/image-3.png",
+      "avatar_still_url": null,
+      "color": "#00bbf9"
+    },
+    "canSelectCurrentMember": true,
+    "customFieldLimits": {
+      "text": 5000,
+      "number": 5000,
+      "date": 5000,
+      "link": 5000,
+      "color": 5000,
+      "textarea": 5000,
+      "markdown": 10000,
+      "block_editor": 1000000
+    },
+    "availableMembers": [
+      {
+        "id": "00000000-0000-4000-8000-000000000004",
+        "display_label": "Member 5",
+        "avatar_url": "https://example.invalid/image-4.png",
+        "avatar_still_url": null,
+        "color": "#7c3aed"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000005",
+        "display_label": "Member 6",
+        "avatar_url": "https://example.invalid/image-5.png",
+        "avatar_still_url": null,
+        "color": "#94a3b8"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000006",
+        "display_label": "Member 7",
+        "avatar_url": "https://example.invalid/image-6.png",
+        "avatar_still_url": null,
+        "color": "#7c3aed"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000007",
+        "display_label": "Member 8",
+        "avatar_url": "https://example.invalid/image-6.png",
+        "avatar_still_url": null,
+        "color": "#7c3aed"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000008",
+        "display_label": "Member 8",
+        "avatar_url": "https://example.invalid/image-7.png",
+        "avatar_still_url": null,
+        "color": "#818cf8"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000009",
+        "display_label": "blurry",
+        "avatar_url": "https://example.invalid/image-8.png",
+        "avatar_still_url": null,
+        "color": "#94a3b8"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000010",
+        "display_label": "Member 9",
+        "avatar_url": "https://example.invalid/image-9.png",
+        "avatar_still_url": null,
+        "color": "#34d399"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000011",
+        "display_label": "Member 10",
+        "avatar_url": "https://example.invalid/image-8.png",
+        "avatar_still_url": null,
+        "color": "#94a3b8"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000012",
+        "display_label": "Member 11",
+        "avatar_url": "https://example.invalid/image-10.png",
+        "avatar_still_url": null,
+        "color": "#34d399"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000013",
+        "display_label": "Member 12",
+        "avatar_url": "https://example.invalid/image-11.png",
+        "avatar_still_url": null,
+        "color": "#94a3b8"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000014",
+        "display_label": "Member 13",
+        "avatar_url": "https://example.invalid/image-12.png",
+        "avatar_still_url": null,
+        "color": "#f87171"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000015",
+        "display_label": "Member 14",
+        "avatar_url": "https://example.invalid/image-13.png",
+        "avatar_still_url": null,
+        "color": "#f8e45c"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000016",
+        "display_label": "Member 15",
+        "avatar_url": "https://example.invalid/image-14.png",
+        "avatar_still_url": null,
+        "color": "#818cf8"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000017",
+        "display_label": "Member 16",
+        "avatar_url": "https://example.invalid/image-15.png",
+        "avatar_still_url": null,
+        "color": "#7c6fee"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000018",
+        "display_label": "Member 17",
+        "avatar_url": "https://example.invalid/image-16.png",
+        "avatar_still_url": null,
+        "color": "#7c6fee"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000019",
+        "display_label": "Member 18",
+        "avatar_url": "https://example.invalid/image-17.png",
+        "avatar_still_url": null,
+        "color": "#e07856"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000020",
+        "display_label": "Member 19",
+        "avatar_url": "https://example.invalid/image-18.png",
+        "avatar_still_url": null,
+        "color": "#56b6c2"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000021",
+        "display_label": "Member 20",
+        "avatar_url": "https://example.invalid/image-19.png",
+        "avatar_still_url": null,
+        "color": "#4caf82"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000022",
+        "display_label": "Member 21",
+        "avatar_url": "https://example.invalid/image-20.png",
+        "avatar_still_url": null,
+        "color": "#d64550"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000023",
+        "display_label": "Member 22",
+        "avatar_url": "https://example.invalid/image-21.png",
+        "avatar_still_url": null,
+        "color": "#f2b134"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000024",
+        "display_label": "Member 23",
+        "avatar_url": "https://example.invalid/image-22.png",
+        "avatar_still_url": null,
+        "color": "#8e6c88"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000025",
+        "display_label": "Member 24",
+        "avatar_url": "https://example.invalid/image-23.png",
+        "avatar_still_url": null,
+        "color": "#3a86ff"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000026",
+        "display_label": "Member 25",
+        "avatar_url": "https://example.invalid/image-24.png",
+        "avatar_still_url": null,
+        "color": "#ff6b6b"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000027",
+        "display_label": "Member 26",
+        "avatar_url": "https://example.invalid/image-25.png",
+        "avatar_still_url": null,
+        "color": "#06d6a0"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000028",
+        "display_label": "Member 27",
+        "avatar_url": "https://example.invalid/image-26.png",
+        "avatar_still_url": null,
+        "color": "#ffb703"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000029",
+        "display_label": "Member 28",
+        "avatar_url": "https://example.invalid/image-27.png",
+        "avatar_still_url": null,
+        "color": "#9b5de5"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000003",
+        "display_label": "Member 4",
+        "avatar_url": "https://example.invalid/image-3.png",
+        "avatar_still_url": null,
+        "color": "#00bbf9"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000030",
+        "display_label": "Member 29",
+        "avatar_url": "https://example.invalid/image-28.png",
+        "avatar_still_url": null,
+        "color": "#f15bb5"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000031",
+        "display_label": "Member 30",
+        "avatar_url": "https://example.invalid/image-29.png",
+        "avatar_still_url": null,
+        "color": "#fee440"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000032",
+        "display_label": "Member 31",
+        "avatar_url": "https://example.invalid/image-30.png",
+        "avatar_still_url": null,
+        "color": "#43aa8b"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000033",
+        "display_label": "Member 32",
+        "avatar_url": "https://example.invalid/image-31.png",
+        "avatar_still_url": null,
+        "color": "#577590"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000034",
+        "display_label": "Member 33",
+        "avatar_url": "https://example.invalid/image-32.png",
+        "avatar_still_url": null,
+        "color": "#b5838d"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000035",
+        "display_label": "Member 7",
+        "avatar_url": "https://example.invalid/image-33.png",
+        "avatar_still_url": null,
+        "color": "#6a4c93"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000036",
+        "display_label": "Member 34",
+        "avatar_url": "https://example.invalid/image-34.png",
+        "avatar_still_url": null,
+        "color": "#ec4899"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000037",
+        "display_label": "Member 35",
+        "avatar_url": "https://example.invalid/image-35.png",
+        "avatar_still_url": null,
+        "color": "#c2903f"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000038",
+        "display_label": "Member 36",
+        "avatar_url": "https://example.invalid/image-36.png",
+        "avatar_still_url": null,
+        "color": "#c4b5fd"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000039",
+        "display_label": "Member 37",
+        "avatar_url": "https://example.invalid/image-37.png",
+        "avatar_still_url": null,
+        "color": "#111111"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000040",
+        "display_label": "Member 38",
+        "avatar_url": "https://example.invalid/image-38.png",
+        "avatar_still_url": null,
+        "color": "#22c55e"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000041",
+        "display_label": "Member 39",
+        "avatar_url": "https://example.invalid/image-39.png",
+        "avatar_still_url": null,
+        "color": "#a855f7"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000042",
+        "display_label": "Member 5",
+        "avatar_url": "https://example.invalid/image-40.png",
+        "avatar_still_url": null,
+        "color": "#0ea5e9"
+      }
+    ],
+    "availableSystems": [
+      {
+        "id": "00000000-0000-4000-8000-000000000002",
+        "name": "Member 3",
+        "color": "#f2ebc1",
+        "avatar_url": "https://example.invalid/image-2.png",
+        "parent_id": null,
+        "avatar_still_url": null,
+        "hidden": false
+      }
+    ],
+    "sidebarNav": [
+      {
+        "key": "dashboard",
+        "label": "Dashboard",
+        "icon": "grid",
+        "href": "https://pluralspace.app/space",
+        "active": false
+      },
+      {
+        "key": "members",
+        "label": "Members",
+        "icon": "users",
+        "href": "https://pluralspace.app/members",
+        "active": false
+      },
+      {
+        "key": "fronts",
+        "label": "Fronting History",
+        "icon": "calendar",
+        "href": "https://pluralspace.app/space/fronts",
+        "active": true
+      },
+      {
+        "key": "members.map",
+        "label": "System Map",
+        "icon": "map",
+        "href": "https://pluralspace.app/members/map",
+        "active": false
+      },
+      {
+        "key": "innerworld",
+        "label": "Innerworld",
+        "icon": "map-location-dot",
+        "href": "https://pluralspace.app/innerworld",
+        "active": false
+      },
+      {
+        "key": "journal",
+        "label": "Journals",
+        "icon": "book-open",
+        "href": "https://pluralspace.app/journal",
+        "active": false
+      },
+      {
+        "key": "todos",
+        "label": "Reminders",
+        "icon": "list-check",
+        "href": "https://pluralspace.app/reminders",
+        "active": false
+      },
+      {
+        "key": "notes",
+        "label": "Notes",
+        "icon": "note",
+        "href": "https://pluralspace.app/notes",
+        "active": false
+      },
+      {
+        "key": "chat",
+        "label": "Chat",
+        "icon": "comments",
+        "href": "https://pluralspace.app/chat",
+        "active": false
+      },
+      {
+        "key": "polls",
+        "label": "Polls",
+        "icon": "square-check",
+        "href": "https://pluralspace.app/polls",
+        "active": false
+      },
+      {
+        "key": "stats",
+        "label": "System Insights",
+        "icon": "chart-column",
+        "href": "https://pluralspace.app/stats",
+        "active": false
+      },
+      {
+        "key": "activity",
+        "label": "Activity",
+        "icon": "clock",
+        "href": "https://pluralspace.app/activity",
+        "active": false
+      },
+      {
+        "key": "system.settings",
+        "label": "System Settings",
+        "icon": "gear",
+        "href": "https://pluralspace.app/system/settings",
+        "active": false
+      }
+    ],
+    "notifications": {
+      "unreadCount": 1,
+      "recent": [
+        {
+          "id": "00000000-0000-4000-8000-000000000043",
+          "type": "data-export-completed",
+          "title": "Text 15",
+          "body": "Text 16",
+          "action_url": null,
+          "snooze": null,
+          "read_at": null,
+          "created_at": "2026-09-08T13:32:21+00:00"
+        }
+      ]
+    },
+    "flash": {
+      "success": null,
+      "error": null,
+      "info": null
+    },
+    "csrf_token": "[redacted]",
+    "locale": "en",
+    "availableLocales": [
+      {
+        "code": "en",
+        "label": "English"
+      },
+      {
+        "code": "de",
+        "label": "Deutsch"
+      },
+      {
+        "code": "es",
+        "label": "Español"
+      },
+      {
+        "code": "fr",
+        "label": "Français"
+      },
+      {
+        "code": "it",
+        "label": "Italiano"
+      },
+      {
+        "code": "nl",
+        "label": "Dutch"
+      },
+      {
+        "code": "ru",
+        "label": "Русский"
+      },
+      {
+        "code": "sv",
+        "label": "Svenska"
+      }
+    ],
+    "theme": {
+      "value": "dark",
+      "background": "waves",
+      "backgroundImage": null,
+      "isDark": true,
+      "fluxAppearance": "dark",
+      "options": [
+        {
+          "value": "light",
+          "label": "Light",
+          "description": "Text 1",
+          "icon": "sun",
+          "isDark": false
+        },
+        {
+          "value": "dark",
+          "label": "Dark",
+          "description": "Text 2",
+          "icon": "moon",
+          "isDark": true
+        },
+        {
+          "value": "dim",
+          "label": "Dim",
+          "description": "Text 3",
+          "icon": "eye-low-vision",
+          "isDark": true
+        },
+        {
+          "value": "paper",
+          "label": "Paper",
+          "description": "Text 4",
+          "icon": "pen-ruler",
+          "isDark": false
+        },
+        {
+          "value": "high-contrast",
+          "label": "High contrast",
+          "description": "Text 5",
+          "icon": "circle-half-stroke",
+          "isDark": true
+        },
+        {
+          "value": "sepia",
+          "label": "Sepia",
+          "description": "Text 6",
+          "icon": "book-open",
+          "isDark": false
+        },
+        {
+          "value": "tron",
+          "label": "Tron",
+          "description": "Text 7",
+          "icon": "cubes",
+          "isDark": true
+        },
+        {
+          "value": "cyberpunk",
+          "label": "Cyberpunk",
+          "description": "Text 8",
+          "icon": "microchip",
+          "isDark": true
+        },
+        {
+          "value": "space",
+          "label": "Space",
+          "description": "Text 9",
+          "icon": "rocket",
+          "isDark": true
+        },
+        {
+          "value": "terminal",
+          "label": "Terminal",
+          "description": "Text 10",
+          "icon": "terminal",
+          "isDark": true
+        },
+        {
+          "value": "forest",
+          "label": "Forest",
+          "description": "Text 11",
+          "icon": "tree",
+          "isDark": true
+        },
+        {
+          "value": "myspace",
+          "label": "MySpace",
+          "description": "Text 12",
+          "icon": "users",
+          "isDark": false
+        },
+        {
+          "value": "system",
+          "label": "System",
+          "description": "Text 13",
+          "icon": "desktop",
+          "isDark": false
+        },
+        {
+          "value": "custom",
+          "label": "Custom",
+          "description": "Text 14",
+          "icon": "palette",
+          "isDark": true
+        }
+      ],
+      "custom": {
+        "palette": {
+          "bg": "#fff0f6",
+          "bg-2": "#ffbcd9",
+          "surface": "#ffffff",
+          "surface-2": "#ffe6f1",
+          "surface-3": "#ffcce2",
+          "surface-4": "#fff3bf",
+          "border": "#f3bed5",
+          "text-heading": "#3d0f23",
+          "text": "#422431",
+          "text-secondary": "#6b4757",
+          "text-muted": "#846270",
+          "accent": "#d41166",
+          "accent-foreground": "#ffffff"
+        },
+        "radius": 36,
+        "density": 1.15,
+        "font": "inter",
+        "fontStack": "Inter, system-ui, sans-serif",
+        "titleFont": "caveat_brush",
+        "titleFontStack": "\"Caveat Brush\", Caveat, cursive",
+        "fontSizeBody": 1,
+        "fontSizeTitle": 1.35,
+        "avatarRadius": null,
+        "avatarCircle": true
+      },
+      "customTokens": [
+        "bg",
+        "bg-2",
+        "surface",
+        "surface-2",
+        "surface-3",
+        "surface-4",
+        "border",
+        "text-heading",
+        "text",
+        "text-secondary",
+        "text-muted",
+        "accent",
+        "accent-foreground"
+      ],
+      "deltaCss": "--color-primary: #fb923c;\n    --color-accent: #fb923c;",
+      "presetDeltaCss": "--color-primary: #fb923c;\n    --color-accent: #fb923c;"
+    },
+    "banner": null,
+    "features": {
+      "two_factor": true,
+      "api_tokens": false
+    },
+    "terminology": {
+      "member": "member",
+      "Member": "Member",
+      "members": "members",
+      "Members": "Members",
+      "system": "system",
+      "System": "System",
+      "systems": "systems",
+      "Systems": "Systems",
+      "front": "front",
+      "Front": "Front",
+      "fronts": "fronts",
+      "Fronts": "Fronts",
+      "fronting": "fronting",
+      "Fronting": "Fronting",
+      "switch": "switch",
+      "Switch": "Switch",
+      "switches": "switches",
+      "Switches": "Switches",
+      "location": "location",
+      "Location": "Location",
+      "locations": "locations",
+      "Locations": "Locations",
+      "innerworld": "innerworld",
+      "Innerworld": "Innerworld",
+      "innerworlds": "innerworlds",
+      "Innerworlds": "Innerworlds"
+    },
+    "tours": {
+      "activity": {
+        "seen_steps": ["intro", "filters"],
+        "completed_at": "2026-09-08T13:57:26.000000Z",
+        "dismissed_at": null
+      },
+      "dashboard": {
+        "seen_steps": ["welcome"],
+        "completed_at": null,
+        "dismissed_at": "2026-09-08T13:27:53.000000Z"
+      },
+      "fronting_history": {
+        "seen_steps": ["graph-view"],
+        "completed_at": "2026-11-05T19:31:19.000000Z",
+        "dismissed_at": null
+      },
+      "insights": {
+        "seen_steps": ["date-picker"],
+        "completed_at": null,
+        "dismissed_at": "2026-09-08T13:49:12.000000Z"
+      },
+      "system_settings": {
+        "seen_steps": ["new_ui"],
+        "completed_at": null,
+        "dismissed_at": "2026-09-08T13:28:36.000000Z"
+      }
+    },
+    "urls": {
+      "index": "https://pluralspace.app/space/fronts",
+      "store": "https://pluralspace.app/space/fronts",
+      "memberSearch": "https://pluralspace.app/space/members/search"
+    },
+    "month": {
+      "value": "2026-11",
+      "label": "November 2026",
+      "prev": "2026-10",
+      "next": "2026-12",
+      "is_current": true,
+      "today": "2026-11-11"
+    },
+    "year": {
+      "prev": "2025-11",
+      "next": "2027-11"
+    },
+    "bounds": {
+      "min": "1980-01",
+      "max": "2027-11"
+    },
+    "weekdays": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    "months": [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+    ],
+    "view": "calendar",
+    "timelineEnabled": true,
+    "viewerTimezone": "America/Chicago",
+    "permissions": {
+      "edit_fronts": true
+    },
+    "frontTypes": [
+      {
+        "id": "00000000-0000-4000-8000-000000000051",
+        "slug": "front",
+        "name": "Front",
+        "color": "#7c3aed",
+        "emoji": "✦"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000052",
+        "slug": "co_front",
+        "name": "Co-Front",
+        "color": "#3b82f6",
+        "emoji": "⚡"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000053",
+        "slug": "co_con",
+        "name": "Co-Con",
+        "color": "#f59e0b",
+        "emoji": "◐"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000054",
+        "slug": "fronting",
+        "name": "Fronting",
+        "color": "#f59e0b",
+        "emoji": null
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000055",
+        "slug": "co_fronting",
+        "name": "Co-fronting",
+        "color": "#8b5cf6",
+        "emoji": null
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000056",
+        "slug": "co_conscious",
+        "name": "Co-conscious",
+        "color": "#0ea5e9",
+        "emoji": null
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000057",
+        "slug": "blurry",
+        "name": "Blurry",
+        "color": "#94a3b8",
+        "emoji": null
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000058",
+        "slug": "influencing",
+        "name": "Influencing",
+        "color": "#ec4899",
+        "emoji": null
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000059",
+        "slug": "custom_front",
+        "name": "custom-front",
+        "color": "#7c3aed",
+        "emoji": null
+      }
+    ],
+    "subsystemFrontTypes": [],
+    "scope": [],
+    "scopeOptions": []
+  },
+  "url": "/space/fronts",
+  "version": "5369c460e0b8c26fbefcc14d99a70f0a",
+  "sharedProps": [
+    "defaultLogoUrl",
+    "errors",
+    "currentUser",
+    "currentSystem",
+    "currentMember",
+    "canSelectCurrentMember",
+    "customFieldLimits",
+    "availableMembers",
+    "availableSystems",
+    "sidebarNav",
+    "notifications",
+    "flash",
+    "csrf_token",
+    "locale",
+    "availableLocales",
+    "theme",
+    "banner",
+    "features",
+    "terminology",
+    "tours",
+    "urls"
+  ],
+  "deferredProps": {
+    "default": ["weeks", "timelineStartDate"]
+  }
+}

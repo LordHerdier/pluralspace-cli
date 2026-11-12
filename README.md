@@ -161,6 +161,8 @@ The layout:
 - `src/pluralspace/fronts.py`, `undo.py`, `state.py`, `timeutil.py`: pure planning
   for switches and undo, and the saved-state file
 - `src/pluralspace/cli/`: argument parsing, one module per group of commands
+- `tools/`: dev-only helpers, e.g. `record_fixtures.py` records scrubbed site
+  fixtures with Playwright (see [tools/README.md](tools/README.md))
 
 Endpoints were worked out from browser HAR captures. Keep captures out of git:
 they contain live session cookies, and `*.har` is already in `.gitignore`.

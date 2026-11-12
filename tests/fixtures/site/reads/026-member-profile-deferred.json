@@ -1,0 +1,132 @@
+{
+  "component": "App/Members/Show",
+  "props": {
+    "errors": {},
+    "currentUser": {
+      "id": "00000000-0000-4000-8000-000000000001",
+      "name": "Member 1",
+      "active_supporter": false,
+      "email": "user1@example.invalid",
+      "initials": "Member 2",
+      "avatar_url": "https://example.invalid/image-1.png",
+      "avatar_still_url": null,
+      "appearance": "dark",
+      "timezone": "America/Chicago",
+      "timezone_auto": false,
+      "ui_preferences": {
+        "background_style": "waves",
+        "logo": "pride",
+        "sidebarCollapsed": false,
+        "memberViewMode": "compact",
+        "frontHistoryViewMode": "calendar"
+      },
+      "logoUrl": "https://example.invalid/12"
+    },
+    "frontHistory": [
+      {
+        "id": "00000000-0000-4000-8000-000000000097",
+        "comment": "Text 27",
+        "started_at": "2026-08-12T16:04:45+00:00",
+        "ended_at": "2026-09-08T08:49:23+00:00",
+        "duration_human": "3w 5d 16h 44m 38s",
+        "front_type": {
+          "id": "00000000-0000-4000-8000-000000000051",
+          "name": "Front",
+          "color": "#7c3aed"
+        },
+        "members": [
+          {
+            "id": "00000000-0000-4000-8000-000000000042",
+            "display_label": "Member 5",
+            "color": "#0ea5e9",
+            "avatar_url": "https://example.invalid/image-40.png",
+            "avatar_still_url": null
+          }
+        ],
+        "members_total": 1
+      }
+    ],
+    "assignedGroups": [],
+    "groupTree": [],
+    "relationships": [],
+    "relationshipTypes": [
+      {
+        "id": "00000000-0000-4000-8000-000000000098",
+        "name": "Member 95",
+        "inverse_name": "Member 95",
+        "is_reciprocal": true,
+        "color": "#FF69B4"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000099",
+        "name": "Member 96",
+        "inverse_name": "Member 96",
+        "is_reciprocal": false,
+        "color": null
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000100",
+        "name": "Member 97",
+        "inverse_name": "Member 98",
+        "is_reciprocal": false,
+        "color": "#1E90FF"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000101",
+        "name": "Member 99",
+        "inverse_name": "Member 100",
+        "is_reciprocal": false,
+        "color": "#32CD32"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000102",
+        "name": "Member 101",
+        "inverse_name": "Member 101",
+        "is_reciprocal": true,
+        "color": "#FFD700"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000103",
+        "name": "Member 102",
+        "inverse_name": "Member 103",
+        "is_reciprocal": false,
+        "color": "#FF8C00"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000104",
+        "name": "Member 104",
+        "inverse_name": "Member 104",
+        "is_reciprocal": true,
+        "color": "#8A2BE2"
+      }
+    ],
+    "connectedSystems": [],
+    "locationHistory": [],
+    "moveHistory": []
+  },
+  "url": "/members/00000000-0000-4000-8000-000000000042",
+  "version": "5369c460e0b8c26fbefcc14d99a70f0a",
+  "sharedProps": [
+    "defaultLogoUrl",
+    "errors",
+    "currentUser",
+    "currentSystem",
+    "currentMember",
+    "canSelectCurrentMember",
+    "customFieldLimits",
+    "availableMembers",
+    "availableSystems",
+    "sidebarNav",
+    "notifications",
+    "flash",
+    "csrf_token",
+    "locale",
+    "availableLocales",
+    "theme",
+    "banner",
+    "features",
+    "terminology",
+    "tours",
+    "urls"
+  ]
+}

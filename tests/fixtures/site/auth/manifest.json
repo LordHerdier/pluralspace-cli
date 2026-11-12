@@ -1,0 +1,340 @@
+{
+  "scenario": "auth",
+  "exchanges": [
+    {
+      "seq": 1,
+      "label": "ui-login",
+      "method": "GET",
+      "path": "/login",
+      "status": 200,
+      "headers": {
+        "content-type": "text/html; charset=utf-8"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "001-ui-login.html"
+    },
+    {
+      "seq": 2,
+      "label": "ui-login",
+      "method": "POST",
+      "path": "/login",
+      "status": 409,
+      "headers": {
+        "content-type": "text/html; charset=utf-8",
+        "x-inertia-location": "/space"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "request_body": {
+        "email": "user1@example.invalid",
+        "password": "[redacted]",
+        "remember": false
+      }
+    },
+    {
+      "seq": 3,
+      "label": "ui-login",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "text/html; charset=utf-8"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "003-ui-login.html"
+    },
+    {
+      "seq": 4,
+      "label": "ui-login",
+      "method": "POST",
+      "path": "/broadcasting/auth",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "set_cookies": ["pluralspace-session"],
+      "request_body": "socket_id=0.0&channel_name=private-App.Models.User.00000000-0000-4000-8000-000000000001",
+      "body_file": "004-ui-login.json"
+    },
+    {
+      "seq": 5,
+      "label": "ui-login",
+      "method": "POST",
+      "path": "/broadcasting/auth",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "set_cookies": ["pluralspace-session"],
+      "request_body": "socket_id=0.0&channel_name=private-fronts.00000000-0000-4000-8000-000000000002.5",
+      "body_file": "005-ui-login.json"
+    },
+    {
+      "seq": 6,
+      "label": "ui-login",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "006-ui-login.json"
+    },
+    {
+      "seq": 7,
+      "label": "ui-login",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "007-ui-login.json"
+    },
+    {
+      "seq": 8,
+      "label": "ui-login",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "008-ui-login.json"
+    },
+    {
+      "seq": 9,
+      "label": "ui-login",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "009-ui-login.json"
+    },
+    {
+      "seq": 10,
+      "label": "ui-login",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "010-ui-login.json"
+    },
+    {
+      "seq": 11,
+      "label": "ui-login",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "011-ui-login.json"
+    },
+    {
+      "seq": 12,
+      "label": "session-dashboard",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "text/html; charset=utf-8"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "012-session-dashboard.html"
+    },
+    {
+      "seq": 13,
+      "label": "whoami",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "013-whoami.json"
+    },
+    {
+      "seq": 14,
+      "label": "xsrf-bad-token",
+      "method": "POST",
+      "path": "/logout",
+      "status": 419,
+      "headers": {
+        "content-type": "text/html; charset=utf-8"
+      },
+      "set_cookies": ["pluralspace-session"],
+      "request_body": {},
+      "body_file": "014-xsrf-bad-token.html"
+    },
+    {
+      "seq": 15,
+      "label": "version-mismatch",
+      "method": "GET",
+      "path": "/space",
+      "status": 409,
+      "headers": {
+        "content-type": "text/html; charset=utf-8",
+        "x-inertia-location": "https://pluralspace.app/space"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"]
+    },
+    {
+      "seq": 16,
+      "label": "logout",
+      "method": "POST",
+      "path": "/logout",
+      "status": 302,
+      "headers": {
+        "content-type": "text/html; charset=utf-8",
+        "location": "https://pluralspace.app"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "request_body": {},
+      "body_file": "016-logout.html"
+    },
+    {
+      "seq": 17,
+      "label": "after-logout",
+      "method": "GET",
+      "path": "/space",
+      "status": 302,
+      "headers": {
+        "content-type": "text/html; charset=utf-8",
+        "location": "https://pluralspace.app/login"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "017-after-logout.html"
+    },
+    {
+      "seq": 18,
+      "label": "after-logout-document",
+      "method": "GET",
+      "path": "/space",
+      "status": 302,
+      "headers": {
+        "content-type": "text/html; charset=utf-8",
+        "location": "https://pluralspace.app/login"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "018-after-logout-document.html"
+    },
+    {
+      "seq": 19,
+      "label": "cli-login-page",
+      "method": "GET",
+      "path": "/login",
+      "status": 200,
+      "headers": {
+        "content-type": "text/html; charset=utf-8"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "019-cli-login-page.html"
+    },
+    {
+      "seq": 20,
+      "label": "cli-login-bad-password",
+      "method": "POST",
+      "path": "/login",
+      "status": 302,
+      "headers": {
+        "content-type": "text/html; charset=utf-8",
+        "location": "https://pluralspace.app/"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "request_body": {
+        "email": "user1@example.invalid",
+        "password": "[redacted]",
+        "remember": true
+      },
+      "body_file": "020-cli-login-bad-password.html"
+    },
+    {
+      "seq": 21,
+      "label": "cli-login-errors",
+      "method": "GET",
+      "path": "/login",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inertia": "true"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "021-cli-login-errors.json"
+    },
+    {
+      "seq": 22,
+      "label": "cli-login-page-again",
+      "method": "GET",
+      "path": "/login",
+      "status": 200,
+      "headers": {
+        "content-type": "text/html; charset=utf-8"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "022-cli-login-page-again.html"
+    },
+    {
+      "seq": 23,
+      "label": "cli-login",
+      "method": "POST",
+      "path": "/login",
+      "status": 409,
+      "headers": {
+        "content-type": "text/html; charset=utf-8",
+        "x-inertia-location": "https://pluralspace.app/space"
+      },
+      "set_cookies": [
+        "XSRF-TOKEN",
+        "pluralspace-session",
+        "remember_web_59ba36addc2b2f9401580f014c7f58ea4e30989d"
+      ],
+      "request_body": {
+        "email": "user1@example.invalid",
+        "password": "[redacted]",
+        "remember": true
+      }
+    },
+    {
+      "seq": 24,
+      "label": "cli-login-dashboard",
+      "method": "GET",
+      "path": "/space",
+      "status": 200,
+      "headers": {
+        "content-type": "text/html; charset=utf-8"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "024-cli-login-dashboard.html"
+    },
+    {
+      "seq": 25,
+      "label": "ui-login-bad-password",
+      "method": "GET",
+      "path": "/login",
+      "status": 200,
+      "headers": {
+        "content-type": "text/html; charset=utf-8"
+      },
+      "set_cookies": ["XSRF-TOKEN", "pluralspace-session"],
+      "body_file": "025-ui-login-bad-password.html"
+    }
+  ]
+}
